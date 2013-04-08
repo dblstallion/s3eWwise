@@ -1,0 +1,87 @@
+include:
+#include "s3eTypes.h"
+
+/**
+ * AK::MemoryMgr
+ */
+struct s3eWwiseMemSettings
+{
+	uint32 uMaxNumPools;
+};
+
+/**
+ * AK::StreamMgr
+ */
+struct s3eWwiseStreamMgrSettings
+{
+	uint32 uMemorySize;
+};
+
+/**
+ * AK::SoundEngine
+ */
+struct s3eWwiseInitSettings
+{
+	// Missing: pfnAssertHook
+	uint32 uMaxNumPaths;
+	uint32 uMaxNumTransitions;
+	uint32 uDefaultPoolSize;
+	float fDefaultPoolRatioThreshold;
+	uint32 uCommandQueueSize;
+	// Missing: uPrepareEventMemoryPoolID
+	bool bEnableGameSyncPreperation;
+	uint32 uContinuousPlaybackLookAhead;
+	uint32 uMonitorPoolSize;
+	uint32 uMonitorQueuePoolSize;
+};
+
+struct s3eWwisePlatformInitSettings
+{
+	// Missing: s3eWwiseThreadProperties threadLEngine;
+	// Missing: s3eWwiseThreadProperties threadBankManager;
+	// Missing: s3eWwiseThreadProperties threadMonitor;
+	float fLEngineDefaultPoolRatioThreshold;
+	uint32 uLEngineDefaultPoolSize;
+	uint32 uSampleRate;
+	uint16 uNumRefillsInVoice;
+	bool bMuteOtherApps;
+};
+
+/**
+ * AK::MusicEngine
+ */
+struct s3eWwiseMusicSettings
+{
+	float fStreamingLookAheadRatio;
+};
+ 
+functions:
+/**
+ * AK::MemoryMgr
+ */
+s3eBool s3eWwiseMemoryMgrIsInitialized() S3E_BOOL_FALSE
+void s3eWwiseMemoryMgrTerm()
+s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings) S3E_RESULT_ERROR
+
+/**
+ * AK::StreamMgr
+ */
+s3eResult s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings) S3E_RESULT_ERROR
+void s3eWwiseStreamMgrDestroy()
+void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings)
+
+/**
+ * AK::SoundEngine
+ */
+s3eBool s3eWwiseSoundEngineIsInitialized() S3E_BOOL_FALSE
+s3eResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings) S3E_RESULT_ERROR
+void s3eWwiseSoundEngineGetDefaultInitSettings(s3eWwiseInitSettings* out_settings)
+void s3eWwiseSoundEngineGetDefaultPlatformInitSettings(s3eWwiseInitSettings* out_settings)
+void s3eWwiseSoundEngineTerm()
+
+/**
+ * AK::MusicEngine
+ */
+s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings) S3E_RESULT_ERROR
+void s3eWwsieMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
+void s3eWwiseMusicEngineTerm()
