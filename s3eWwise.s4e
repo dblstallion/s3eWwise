@@ -40,13 +40,13 @@ typedef void (*s3eWwiseAssertHook)(const char *in_pszExpression, const char *in_
  
 struct s3eWwiseInitSettings
 {
-	s3eWwiseAssertHook pfnAssertHook
+	s3eWwiseAssertHook pfnAssertHook;
 	uint32 uMaxNumPaths;
 	uint32 uMaxNumTransitions;
 	uint32 uDefaultPoolSize;
 	float fDefaultPoolRatioThreshold;
 	uint32 uCommandQueueSize;
-	s3eWwiseMemPoolId uPrepareEventMemoryPoolID
+	s3eWwiseMemPoolId uPrepareEventMemoryPoolID;
 	s3eBool bEnableGameSyncPreperation;
 	uint32 uContinuousPlaybackLookAhead;
 	uint32 uMonitorPoolSize;
@@ -104,8 +104,7 @@ s3eResult s3eWwiseSoundEngineRenderAudio() S3E_RESULT_ERROR
 s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID) S3E_WWISE_INVALID_PLAYING_ID
 
 // Game Objects
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID) S3E_RESULT_ERROR
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName) S3E_RESULT_ERROR
+s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName = NULL) S3E_RESULT_ERROR
 s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID) S3E_RESULT_ERROR
 s3eResult s3eWwiseSoundEngineUnregisterAllGameObj() S3E_RESULT_ERROR
 
