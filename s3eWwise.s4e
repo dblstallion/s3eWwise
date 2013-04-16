@@ -2,6 +2,22 @@ include:
 #include "s3eTypes.h"
 
 /**
+ * AK Common Types
+ */
+typedef uint32 s3eWwiseUniqueID;
+static const s3eWwiseUniqueID S3E_WWISE_INVALID_UNIQUE_ID = 0;
+
+typedef int32 s3eWwiseMemPoolId;
+static const s3eWwiseMemPoolId S3E_WWISE_INVALID_POOL_ID = -1;
+static const s3eWwiseMemPoolId S3E_WWISE_DEFAULT_POOL_ID = -1;
+
+typedef uint32* s3eWwiseGameObjectID;
+static const s3eWwiseGameObjectID S3E_WWISE_INVALID_GAME_OBJECT = (s3eWwiseGameObjectID)-1;
+
+typedef uint32 s3eWwisePlayingID;
+static const s3eWwisePlayingID S3E_WWISE_INVALID_PLAYING_ID = S3E_WWISE_INVALID_UNIQUE_ID;
+
+/**
  * AK::MemoryMgr
  */
 struct s3eWwiseMemSettings
@@ -20,16 +36,18 @@ struct s3eWwiseStreamMgrSettings
 /**
  * AK::SoundEngine
  */
+typedef void (*s3eWwiseAssertHook)(const char *in_pszExpression, const char *in_pszFileName, int in_lineNumber);
+ 
 struct s3eWwiseInitSettings
 {
-	// Missing: pfnAssertHook
+	s3eWwiseAssertHook pfnAssertHook
 	uint32 uMaxNumPaths;
 	uint32 uMaxNumTransitions;
 	uint32 uDefaultPoolSize;
 	float fDefaultPoolRatioThreshold;
 	uint32 uCommandQueueSize;
-	// Missing: uPrepareEventMemoryPoolID
-	bool bEnableGameSyncPreperation;
+	s3eWwiseMemPoolId uPrepareEventMemoryPoolID
+	s3eBool bEnableGameSyncPreperation;
 	uint32 uContinuousPlaybackLookAhead;
 	uint32 uMonitorPoolSize;
 	uint32 uMonitorQueuePoolSize;
@@ -44,7 +62,7 @@ struct s3eWwisePlatformInitSettings
 	uint32 uLEngineDefaultPoolSize;
 	uint32 uSampleRate;
 	uint16 uNumRefillsInVoice;
-	bool bMuteOtherApps;
+	s3eBool bMuteOtherApps;
 };
 
 /**
@@ -59,7 +77,7 @@ functions:
 /**
  * AK::MemoryMgr
  */
-s3eBool s3eWwiseMemoryMgrIsInitialized() S3E_BOOL_FALSE
+s3eBool s3eWwiseMemoryMgrIsInitialized() S3E_FALSE
 void s3eWwiseMemoryMgrTerm()
 s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings) S3E_RESULT_ERROR
 
@@ -73,11 +91,27 @@ void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings
 /**
  * AK::SoundEngine
  */
-s3eBool s3eWwiseSoundEngineIsInitialized() S3E_BOOL_FALSE
+ 
+// Functions
+s3eBool s3eWwiseSoundEngineIsInitialized() S3E_FALSE
 s3eResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings) S3E_RESULT_ERROR
 void s3eWwiseSoundEngineGetDefaultInitSettings(s3eWwiseInitSettings* out_settings)
-void s3eWwiseSoundEngineGetDefaultPlatformInitSettings(s3eWwiseInitSettings* out_settings)
+void s3eWwiseSoundEngineGetDefaultPlatformInitSettings(s3eWwisePlatformInitSettings* out_settings)
 void s3eWwiseSoundEngineTerm()
+s3eResult s3eWwiseSoundEngineRenderAudio() S3E_RESULT_ERROR
+
+// Event Management
+s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID) S3E_WWISE_INVALID_PLAYING_ID
+
+// Game Objects
+s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID) S3E_RESULT_ERROR
+s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName) S3E_RESULT_ERROR
+s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID) S3E_RESULT_ERROR
+s3eResult s3eWwiseSoundEngineUnregisterAllGameObj() S3E_RESULT_ERROR
+
+// Bank Management
+s3eResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId) S3E_RESULT_ERROR
+s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString) S3E_RESULT_ERROR
 
 /**
  * AK::MusicEngine
