@@ -1,0 +1,19 @@
+#!/usr/bin/env mkb
+files
+{
+    s3eWwise.cpp
+}
+
+subprojects
+{
+    s3eWwise
+	iwgx
+}
+#### AUTO GENERATED deployment settings from DeployTool.exe. Do not edit below this line ####
+deployments
+{
+	["Default"]
+	android-manifest='AndroidManifest.xml'
+	app-icf='data/app.icf'
+	caption='s3eApsalar'
+}
