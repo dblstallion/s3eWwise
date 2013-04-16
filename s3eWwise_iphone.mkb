@@ -2,6 +2,8 @@
 # Builder mkb file for the s3eWwise extension on iphone
 platform IPHONE
 
+includepath Wwise/SDK/include
+
 options
 {
     lib

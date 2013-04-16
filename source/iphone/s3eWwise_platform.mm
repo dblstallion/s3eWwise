@@ -8,6 +8,9 @@
  */
 #include "s3eWwise_internal.h"
 
+#include <AK/SoundEngine/Common/AkMemoryMgr.h>
+#include <AK/SoundEngine/Common/AkModule.h>
+
 s3eResult s3eWwiseInit_platform()
 {
     // Add any platform-specific initialisation code here
@@ -21,16 +24,20 @@ void s3eWwiseTerminate_platform()
 
 s3eBool s3eWwiseMemoryMgrIsInitialized_platform()
 {
-    return S3E_FALSE;
+    return AK::MemoryMgr::IsInitialized();
 }
 
 void s3eWwiseMemoryMgrTerm_platform()
 {
+	AK::MemoryMgr::Term();
 }
 
 s3eResult s3eWwiseMemoryMgrInit_platform(s3eWwiseMemSettings* in_pSettings)
 {
-    return S3E_RESULT_ERROR;
+	AkMemSettings memSettings;
+	memSettings.uMaxNumPools = in_pSettings->uMaxNumPools;
+	
+    return AK::MemoryMgr::Init(&memSettings) == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
 }
 
 s3eResult s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings)

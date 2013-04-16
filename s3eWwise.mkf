@@ -12,7 +12,6 @@
 display_name "Extensions/s3eWwise"
 
 includepath h
-includepath Wwise/SDK/include
 
 files
 {
@@ -38,6 +37,11 @@ if {{ not defined IW_MKF_IWCRT}}
 deployments
 {
     #iphone-link-opts="-framework X" #Use this to bring in any additional link options needed
+	iphone-link-lib="AkSoundEngine"
+	iphone-link-lib="AkMusicEngine"
+	iphone-link-lib="AkStreamMgr"
+	iphone-link-lib="AkMemoryMgr"
     iphone-link-lib="s3eWwise"
     iphone-link-libdir="lib/iphone"
+	iphone-link-libdir="Wwise/SDK/iOS/Release-iphoneos/lib"
 }
