@@ -32,7 +32,7 @@ typedef  s3eResult(*s3eWwiseSoundEngineUnregisterAllGameObj_t)();
 typedef  s3eResult(*s3eWwiseSoundEngineLoadBank_t)(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId);
 typedef  s3eResult(*s3eWwiseSoundEngineUnloadBank_t)(const char* in_pszString);
 typedef  s3eResult(*s3eWwiseMusicEngineInit_t)(s3eWwiseMusicSettings* in_pSettings);
-typedef       void(*s3eWwsieMusicEngineGetDefaultInitSettings_t)(s3eWwiseMusicSettings* out_settings);
+typedef       void(*s3eWwiseMusicEngineGetDefaultInitSettings_t)(s3eWwiseMusicSettings* out_settings);
 typedef       void(*s3eWwiseMusicEngineTerm_t)();
 
 /**
@@ -59,7 +59,7 @@ typedef struct s3eWwiseFuncs
     s3eWwiseSoundEngineLoadBank_t m_s3eWwiseSoundEngineLoadBank;
     s3eWwiseSoundEngineUnloadBank_t m_s3eWwiseSoundEngineUnloadBank;
     s3eWwiseMusicEngineInit_t m_s3eWwiseMusicEngineInit;
-    s3eWwsieMusicEngineGetDefaultInitSettings_t m_s3eWwsieMusicEngineGetDefaultInitSettings;
+    s3eWwiseMusicEngineGetDefaultInitSettings_t m_s3eWwiseMusicEngineGetDefaultInitSettings;
     s3eWwiseMusicEngineTerm_t m_s3eWwiseMusicEngineTerm;
 } s3eWwiseFuncs;
 
@@ -524,9 +524,9 @@ s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
     return ret;
 }
 
-void s3eWwsieMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
+void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[19] func: s3eWwsieMusicEngineGetDefaultInitSettings"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[19] func: s3eWwiseMusicEngineGetDefaultInitSettings"));
 
     if (!_extLoad())
         return;
@@ -537,7 +537,7 @@ void s3eWwsieMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settin
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    g_Ext.m_s3eWwsieMusicEngineGetDefaultInitSettings(out_settings);
+    g_Ext.m_s3eWwiseMusicEngineGetDefaultInitSettings(out_settings);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);

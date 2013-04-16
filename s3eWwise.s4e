@@ -118,5 +118,5 @@ s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString) S3E_RESULT_ERR
  * AK::MusicEngine
  */
 s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings) S3E_RESULT_ERROR
-void s3eWwsieMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
+void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
 void s3eWwiseMusicEngineTerm()

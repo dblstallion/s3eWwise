@@ -11,14 +11,12 @@
  * be overwritten (unless --force is specified) and is intended to be modified.
  */
 
-
 #ifndef S3EWWISE_INTERNAL_H
 #define S3EWWISE_INTERNAL_H
 
 #include "s3eTypes.h"
 #include "s3eWwise.h"
 #include "s3eWwise_autodefs.h"
-
 
 /**
  * Initialise the extension.  This is called once then the extension is first
@@ -82,9 +80,8 @@ s3eResult s3eWwiseSoundEngineUnloadBank_platform(const char* in_pszString);
 
 s3eResult s3eWwiseMusicEngineInit_platform(s3eWwiseMusicSettings* in_pSettings);
 
-void s3eWwsieMusicEngineGetDefaultInitSettings_platform(s3eWwiseMusicSettings* out_settings);
+void s3eWwiseMusicEngineGetDefaultInitSettings_platform(s3eWwiseMusicSettings* out_settings);
 
 void s3eWwiseMusicEngineTerm_platform();
-
 
 #endif /* !S3EWWISE_INTERNAL_H */

@@ -37,10 +37,19 @@ void initWwise()
         s3eDebugOutputString("Failed to init Wwise");
     else
         s3eDebugOutputString("Init Wwise Successfully");
+
+    s3eWwiseMusicSettings musicSettings;
+    s3eWwiseMusicEngineGetDefaultInitSettings(&musicSettings);
+    if( s3eWwiseMusicEngineInit(&musicSettings) == S3E_RESULT_ERROR )
+        s3eDebugOutputString("Failed to init music");
+    else
+        s3eDebugOutputString("Init Music Successfully");
 }
 
 void shutdownWwise()
 {
+    s3eWwiseMusicEngineTerm();
+
     s3eWwiseSoundEngineTerm();
 
     s3eWwiseStreamMgrDestroy(streamMgr);

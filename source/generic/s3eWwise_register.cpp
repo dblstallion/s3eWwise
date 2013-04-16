@@ -41,7 +41,7 @@ void s3eWwiseRegisterExt()
     funcPtrs[16] = (void*)s3eWwiseSoundEngineLoadBank;
     funcPtrs[17] = (void*)s3eWwiseSoundEngineUnloadBank;
     funcPtrs[18] = (void*)s3eWwiseMusicEngineInit;
-    funcPtrs[19] = (void*)s3eWwsieMusicEngineGetDefaultInitSettings;
+    funcPtrs[19] = (void*)s3eWwiseMusicEngineGetDefaultInitSettings;
     funcPtrs[20] = (void*)s3eWwiseMusicEngineTerm;
 
     /*

@@ -17,6 +17,8 @@
 
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
 
+#include <AK/MusicEngine/Common/AkMusicEngine.h>
+
 #include <stdlib.h>
 
 s3eResult s3eWwiseInit_platform()
@@ -193,13 +195,21 @@ s3eResult s3eWwiseSoundEngineUnloadBank_platform(const char* in_pszString)
 
 s3eResult s3eWwiseMusicEngineInit_platform(s3eWwiseMusicSettings* in_pSettings)
 {
-    return S3E_RESULT_ERROR;
+	AkMusicSettings settings;
+	settings.fStreamingLookAheadRatio = in_pSettings->fStreamingLookAheadRatio;
+
+    return AK::MusicEngine::Init(&settings) == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
 }
 
-void s3eWwsieMusicEngineGetDefaultInitSettings_platform(s3eWwiseMusicSettings* out_settings)
+void s3eWwiseMusicEngineGetDefaultInitSettings_platform(s3eWwiseMusicSettings* out_settings)
 {
+	AkMusicSettings settings;
+	AK::MusicEngine::GetDefaultInitSettings(settings);
+
+	out_settings->fStreamingLookAheadRatio = settings.fStreamingLookAheadRatio;
 }
 
 void s3eWwiseMusicEngineTerm_platform()
 {
+	AK::MusicEngine::Term();
 }

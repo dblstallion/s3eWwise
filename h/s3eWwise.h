@@ -150,7 +150,7 @@ s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString);
  */
 s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings);
 
-void s3eWwsieMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings);
+void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings);
 
 void s3eWwiseMusicEngineTerm();
 

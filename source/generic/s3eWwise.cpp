@@ -9,7 +9,6 @@ This file should perform any platform-indepedentent functionality
  * be overwritten (unless --force is specified) and is intended to be modified.
  */
 
-
 #include "s3eWwise_internal.h"
 s3eResult s3eWwiseInit()
 {
@@ -123,9 +122,9 @@ s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
 	return s3eWwiseMusicEngineInit_platform(in_pSettings);
 }
 
-void s3eWwsieMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
+void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
 {
-	s3eWwsieMusicEngineGetDefaultInitSettings_platform(out_settings);
+	s3eWwiseMusicEngineGetDefaultInitSettings_platform(out_settings);
 }
 
 void s3eWwiseMusicEngineTerm()
