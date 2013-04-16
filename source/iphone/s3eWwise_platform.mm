@@ -15,6 +15,8 @@
 #include <AK/SoundEngine/Common/IAkStreamMgr.h>
 #include <AK/Tools/Common/AkPlatformFuncs.h>
 
+#include <AK/SoundEngine/Common/AkSoundEngine.h>
+
 #include <stdlib.h>
 
 s3eResult s3eWwiseInit_platform()
@@ -85,29 +87,73 @@ void s3eWwiseStreamMgrGetDefaultSettings_platform(s3eWwiseStreamMgrSettings* out
 
 s3eBool s3eWwiseSoundEngineIsInitialized_platform()
 {
-    return S3E_FALSE;
+    return AK::SoundEngine::IsInitialized();
 }
 
 s3eResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
-    return S3E_RESULT_ERROR;
+	AkInitSettings initSettings;
+	initSettings.pfnAssertHook					= in_pSettings->pfnAssertHook;
+	initSettings.uMaxNumPaths					= in_pSettings->uMaxNumPaths;
+	initSettings.uMaxNumTransitions				= in_pSettings->uMaxNumTransitions;
+	initSettings.uDefaultPoolSize				= in_pSettings->uDefaultPoolSize;
+	initSettings.fDefaultPoolRatioThreshold		= in_pSettings->fDefaultPoolRatioThreshold;
+	initSettings.uCommandQueueSize				= in_pSettings->uCommandQueueSize;
+	initSettings.uPrepareEventMemoryPoolID		= in_pSettings->uPrepareEventMemoryPoolID;
+	initSettings.bEnableGameSyncPreparation		= in_pSettings->bEnableGameSyncPreparation;
+	initSettings.uContinuousPlaybackLookAhead	= in_pSettings->uContinuousPlaybackLookAhead;
+	initSettings.uMonitorPoolSize				= in_pSettings->uMonitorPoolSize;
+	initSettings.uMonitorQueuePoolSize			= in_pSettings->uMonitorQueuePoolSize;
+	
+	AkPlatformInitSettings platformInitSettings;
+	AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
+	platformInitSettings.fLEngineDefaultPoolRatioThreshold	= in_pPlatformSettings->fLEngineDefaultPoolRatioThreshold;
+	platformInitSettings.uLEngineDefaultPoolSize			= in_pPlatformSettings->uLEngineDefaultPoolSize;
+	platformInitSettings.uSampleRate						= in_pPlatformSettings->uSampleRate;
+	platformInitSettings.uNumRefillsInVoice					= in_pPlatformSettings->uNumRefillsInVoice;
+	platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
+	
+    return AK::SoundEngine::Init(&initSettings, &platformInitSettings) == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
 }
 
 void s3eWwiseSoundEngineGetDefaultInitSettings_platform(s3eWwiseInitSettings* out_settings)
 {
+	AkInitSettings initSettings;
+	AK::SoundEngine::GetDefaultInitSettings(initSettings);
+	
+	out_settings->pfnAssertHook					= initSettings.pfnAssertHook;
+	out_settings->uMaxNumPaths					= initSettings.uMaxNumPaths;
+	out_settings->uMaxNumTransitions			= initSettings.uMaxNumTransitions;
+	out_settings->uDefaultPoolSize				= initSettings.uDefaultPoolSize;
+	out_settings->fDefaultPoolRatioThreshold	= initSettings.fDefaultPoolRatioThreshold;
+	out_settings->uCommandQueueSize				= initSettings.uCommandQueueSize;
+	out_settings->uPrepareEventMemoryPoolID		= initSettings.uPrepareEventMemoryPoolID;
+	out_settings->bEnableGameSyncPreparation	= initSettings.bEnableGameSyncPreparation;
+	out_settings->uContinuousPlaybackLookAhead	= initSettings.uContinuousPlaybackLookAhead;
+	out_settings->uMonitorPoolSize				= initSettings.uMonitorPoolSize;
+	out_settings->uMonitorQueuePoolSize			= initSettings.uMonitorQueuePoolSize;
 }
 
 void s3eWwiseSoundEngineGetDefaultPlatformInitSettings_platform(s3eWwisePlatformInitSettings* out_settings)
 {
+	AkPlatformInitSettings platformInitSettings;
+	AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
+
+	out_settings->fLEngineDefaultPoolRatioThreshold	= platformInitSettings.fLEngineDefaultPoolRatioThreshold;
+	out_settings->uLEngineDefaultPoolSize			= platformInitSettings.uLEngineDefaultPoolSize;
+	out_settings->uSampleRate						= platformInitSettings.uSampleRate;
+	out_settings->uNumRefillsInVoice				= platformInitSettings.uNumRefillsInVoice;
+	out_settings->bMuteOtherApps					= platformInitSettings.bMuteOtherApps;
 }
 
 void s3eWwiseSoundEngineTerm_platform()
 {
+	AK::SoundEngine::Term();
 }
 
 s3eResult s3eWwiseSoundEngineRenderAudio_platform()
 {
-    return S3E_RESULT_ERROR;
+    return AK::SoundEngine::RenderAudio() == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
 }
 
 s3eWwisePlayingID PostEvent_platform(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)

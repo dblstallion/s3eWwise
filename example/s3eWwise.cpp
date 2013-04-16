@@ -27,11 +27,22 @@ void initWwise()
     s3eWwiseStreamMgrSettings streamSettings;
     s3eWwiseStreamMgrGetDefaultSettings(&streamSettings);
     streamMgr = s3eWwiseStreamMgrCreate(&streamSettings);
-    s3eDebugOutputString("Wwise stream manager init");
+    s3eDebugOutputString(streamMgr ? "Wwise stream manager init" : "FAILED TO INIT STREAM");
+
+    s3eWwiseInitSettings settings;
+    s3eWwisePlatformInitSettings platformSettings;
+    s3eWwiseSoundEngineGetDefaultInitSettings(&settings);
+    s3eWwiseSoundEngineGetDefaultPlatformInitSettings(&platformSettings);
+    if( s3eWwiseSoundEngineInit(&settings, &platformSettings) == S3E_RESULT_ERROR )
+        s3eDebugOutputString("Failed to init Wwise");
+    else
+        s3eDebugOutputString("Init Wwise Successfully");
 }
 
 void shutdownWwise()
 {
+    s3eWwiseSoundEngineTerm();
+
     s3eWwiseStreamMgrDestroy(streamMgr);
 
     s3eWwiseMemoryMgrTerm();
@@ -53,6 +64,9 @@ int main()
 
     while(!s3eDeviceCheckQuitRequest())
     {
+        if(s3eWwiseSoundEngineRenderAudio() == S3E_RESULT_ERROR)
+            s3eDebugOutputString("Error rendering audio");
+
         IwGxClear();
 
         IwGxPrintString(100, 100, "s3eWwise");
