@@ -11,6 +11,8 @@
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
 
+#include <stdlib.h>
+
 s3eResult s3eWwiseInit_platform()
 {
     // Add any platform-specific initialisation code here
@@ -20,6 +22,19 @@ s3eResult s3eWwiseInit_platform()
 void s3eWwiseTerminate_platform()
 {
     // Add any platform-specific termination code here
+}
+
+// Necessary memory hooks
+namespace AK
+{
+	void * AllocHook( size_t in_size )
+	{
+		return malloc( in_size );
+	}
+	void FreeHook( void * in_ptr )
+	{
+		free( in_ptr );
+	}
 }
 
 s3eBool s3eWwiseMemoryMgrIsInitialized_platform()
