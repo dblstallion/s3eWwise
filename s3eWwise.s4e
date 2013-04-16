@@ -104,7 +104,7 @@ s3eResult s3eWwiseSoundEngineRenderAudio() S3E_RESULT_ERROR
 s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID) S3E_WWISE_INVALID_PLAYING_ID
 
 // Game Objects
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName = NULL) S3E_RESULT_ERROR
+s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName) S3E_RESULT_ERROR
 s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID) S3E_RESULT_ERROR
 s3eResult s3eWwiseSoundEngineUnregisterAllGameObj() S3E_RESULT_ERROR
 

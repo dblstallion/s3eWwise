@@ -133,7 +133,7 @@ s3eResult s3eWwiseSoundEngineRenderAudio();
 
 s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName = NULL);
+s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
 
 s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID);
 

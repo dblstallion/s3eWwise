@@ -26,7 +26,7 @@ typedef       void(*s3eWwiseSoundEngineGetDefaultPlatformInitSettings_t)(s3eWwis
 typedef       void(*s3eWwiseSoundEngineTerm_t)();
 typedef  s3eResult(*s3eWwiseSoundEngineRenderAudio_t)();
 typedef s3eWwisePlayingID(*PostEvent_t)(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
-typedef  s3eResult(*s3eWwiseSoundEngineRegisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName = NULL);
+typedef  s3eResult(*s3eWwiseSoundEngineRegisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
 typedef  s3eResult(*s3eWwiseSoundEngineUnregisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID);
 typedef  s3eResult(*s3eWwiseSoundEngineUnregisterAllGameObj_t)();
 typedef  s3eResult(*s3eWwiseSoundEngineLoadBank_t)(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId);
@@ -392,7 +392,7 @@ s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in
     return ret;
 }
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName = NULL)
+s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[13] func: s3eWwiseSoundEngineRegisterGameObj"));
 
@@ -405,7 +405,7 @@ s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectI
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineRegisterGameObj(in_gameObjectID, NULL);
+    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineRegisterGameObj(in_gameObjectID, in_pszObjName);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
