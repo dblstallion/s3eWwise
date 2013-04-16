@@ -1,3 +1,4 @@
 build*
 *.mobileprovision
-Wwise
+Wwise/*
+!Wwise/README.md
