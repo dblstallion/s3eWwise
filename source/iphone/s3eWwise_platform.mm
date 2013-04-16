@@ -11,6 +11,10 @@
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
 
+#include <AK/SoundEngine/Common/AkStreamMgrModule.h>
+#include <AK/SoundEngine/Common/IAkStreamMgr.h>
+#include <AK/Tools/Common/AkPlatformFuncs.h>
+
 #include <stdlib.h>
 
 s3eResult s3eWwiseInit_platform()
@@ -55,17 +59,28 @@ s3eResult s3eWwiseMemoryMgrInit_platform(s3eWwiseMemSettings* in_pSettings)
     return AK::MemoryMgr::Init(&memSettings) == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
 }
 
-s3eResult s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings)
+s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings)
 {
-    return S3E_RESULT_ERROR;
+	AkStreamMgrSettings streamSettings;
+	streamSettings.uMemorySize = in_settings->uMemorySize;
+	
+    return (s3eWwiseStreamMgr *)AK::StreamMgr::Create(streamSettings);
 }
 
-void s3eWwiseStreamMgrDestroy_platform()
+void s3eWwiseStreamMgrDestroy_platform(s3eWwiseStreamMgr* streamMgr)
 {
+	AK::IAkStreamMgr *mgr = (AK::IAkStreamMgr *)streamMgr;
+	
+	mgr->Destroy();
 }
 
 void s3eWwiseStreamMgrGetDefaultSettings_platform(s3eWwiseStreamMgrSettings* out_settings)
 {
+	AkStreamMgrSettings streamSettings;
+	
+	AK::StreamMgr::GetDefaultSettings(streamSettings);
+	
+	out_settings->uMemorySize = streamSettings.uMemorySize;
 }
 
 s3eBool s3eWwiseSoundEngineIsInitialized_platform()

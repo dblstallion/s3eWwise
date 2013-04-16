@@ -16,8 +16,8 @@
 typedef    s3eBool(*s3eWwiseMemoryMgrIsInitialized_t)();
 typedef       void(*s3eWwiseMemoryMgrTerm_t)();
 typedef  s3eResult(*s3eWwiseMemoryMgrInit_t)(s3eWwiseMemSettings* in_pSettings);
-typedef  s3eResult(*s3eWwiseStreamMgrCreate_t)(s3eWwiseStreamMgrSettings* in_settings);
-typedef       void(*s3eWwiseStreamMgrDestroy_t)();
+typedef s3eWwiseStreamMgr*(*s3eWwiseStreamMgrCreate_t)(s3eWwiseStreamMgrSettings* in_settings);
+typedef       void(*s3eWwiseStreamMgrDestroy_t)(s3eWwiseStreamMgr* streamMgr);
 typedef       void(*s3eWwiseStreamMgrGetDefaultSettings_t)(s3eWwiseStreamMgrSettings* out_settings);
 typedef    s3eBool(*s3eWwiseSoundEngineIsInitialized_t)();
 typedef  s3eResult(*s3eWwiseSoundEngineInit_t)(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings);
@@ -172,12 +172,12 @@ s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
     return ret;
 }
 
-s3eResult s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings)
+s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[3] func: s3eWwiseStreamMgrCreate"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return NULL;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -185,7 +185,7 @@ s3eResult s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings)
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseStreamMgrCreate(in_settings);
+    s3eWwiseStreamMgr* ret = g_Ext.m_s3eWwiseStreamMgrCreate(in_settings);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -194,7 +194,7 @@ s3eResult s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings)
     return ret;
 }
 
-void s3eWwiseStreamMgrDestroy()
+void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[4] func: s3eWwiseStreamMgrDestroy"));
 
@@ -207,7 +207,7 @@ void s3eWwiseStreamMgrDestroy()
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    g_Ext.m_s3eWwiseStreamMgrDestroy();
+    g_Ext.m_s3eWwiseStreamMgrDestroy(streamMgr);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);

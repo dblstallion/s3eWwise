@@ -5,6 +5,8 @@
 #include "s3eExt.h"
 #include "s3ePointer.h"
 
+static s3eWwiseStreamMgr *streamMgr;
+
 void initWwise()
 {
     if (!s3eWwiseAvailable())
@@ -21,10 +23,17 @@ void initWwise()
 
     s3eWwiseMemoryMgrInit(&memSettings);
     s3eDebugOutputString("Wwise memory manager init");
+
+    s3eWwiseStreamMgrSettings streamSettings;
+    s3eWwiseStreamMgrGetDefaultSettings(&streamSettings);
+    streamMgr = s3eWwiseStreamMgrCreate(&streamSettings);
+    s3eDebugOutputString("Wwise stream manager init");
 }
 
 void shutdownWwise()
 {
+    s3eWwiseStreamMgrDestroy(streamMgr);
+
     s3eWwiseMemoryMgrTerm();
     s3eDebugOutputString("Wwise Shutdown");
 }

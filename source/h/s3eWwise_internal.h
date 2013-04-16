@@ -48,9 +48,9 @@ void s3eWwiseMemoryMgrTerm_platform();
 
 s3eResult s3eWwiseMemoryMgrInit_platform(s3eWwiseMemSettings* in_pSettings);
 
-s3eResult s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings);
+s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings);
 
-void s3eWwiseStreamMgrDestroy_platform();
+void s3eWwiseStreamMgrDestroy_platform(s3eWwiseStreamMgr* streamMgr);
 
 void s3eWwiseStreamMgrGetDefaultSettings_platform(s3eWwiseStreamMgrSettings* out_settings);
 

@@ -50,6 +50,8 @@ struct s3eWwiseStreamMgrSettings
 	uint32 uMemorySize;
 };
 
+struct s3eWwiseStreamMgr;
+
 /**
  * AK::SoundEngine
  */
@@ -110,9 +112,9 @@ s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings);
 /**
  * AK::StreamMgr
  */
-s3eResult s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings);
+s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings);
 
-void s3eWwiseStreamMgrDestroy();
+void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr);
 
 void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings);
 

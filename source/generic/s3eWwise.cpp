@@ -38,14 +38,14 @@ s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
 	return s3eWwiseMemoryMgrInit_platform(in_pSettings);
 }
 
-s3eResult s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings)
+s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings)
 {
 	return s3eWwiseStreamMgrCreate_platform(in_settings);
 }
 
-void s3eWwiseStreamMgrDestroy()
+void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr)
 {
-	s3eWwiseStreamMgrDestroy_platform();
+	s3eWwiseStreamMgrDestroy_platform(streamMgr);
 }
 
 void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings)
