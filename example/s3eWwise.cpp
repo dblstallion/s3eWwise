@@ -4,6 +4,7 @@
 #include "IwGx.h"
 #include "s3eExt.h"
 #include "s3ePointer.h"
+#include "s3eFile.h"
 
 static s3eWwiseStreamMgr *streamMgr;
 
@@ -33,15 +34,17 @@ void initWwise()
     s3eWwisePlatformInitSettings platformSettings;
     s3eWwiseSoundEngineGetDefaultInitSettings(&settings);
     s3eWwiseSoundEngineGetDefaultPlatformInitSettings(&platformSettings);
-    if( s3eWwiseSoundEngineInit(&settings, &platformSettings) != s3eWwise_Success )
-        s3eDebugOutputString("Failed to init Wwise");
+    s3eWwiseResult soundEngine = s3eWwiseSoundEngineInit(&settings, &platformSettings);
+    if(soundEngine  != s3eWwise_Success )
+        s3eDebugTracePrintf("Failed to init Wwise. Error code = %d", soundEngine);
     else
         s3eDebugOutputString("Init Wwise Successfully");
 
     s3eWwiseMusicSettings musicSettings;
     s3eWwiseMusicEngineGetDefaultInitSettings(&musicSettings);
-    if( s3eWwiseMusicEngineInit(&musicSettings) != s3eWwise_Success )
-        s3eDebugOutputString("Failed to init music");
+    s3eWwiseResult musicEngine = s3eWwiseMusicEngineInit(&musicSettings);
+    if( musicEngine != s3eWwise_Success )
+        s3eDebugTracePrintf("Failed to init music. Error code = %d", musicEngine);
     else
         s3eDebugOutputString("Init Music Successfully");
 
@@ -51,7 +54,7 @@ void initWwise()
     else
         s3eDebugOutputString("Loaded sound bank");
 
-    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBank("iOS/Human.bnk", S3E_WWISE_DEFAULT_POOL_ID);
+    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBank("iOS/English(US)/Human.bnk", S3E_WWISE_DEFAULT_POOL_ID);
     if( loadHuman != s3eWwise_Success )
         s3eDebugTracePrintf("Failed to load sound bank. Error code = %d", loadHuman);
     else

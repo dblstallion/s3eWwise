@@ -72,5 +72,5 @@ deployments
 	#iphone-link-lib="McDSPLimiterFX"
     iphone-link-lib="s3eWwise"
     iphone-link-libdir="lib/iphone"
-	iphone-link-libdir="Wwise/SDK/iOS/Debug-iphoneos/lib"
+	iphone-link-libdir="Wwise/SDK/iOS/Release-iphoneos/lib"
 }
