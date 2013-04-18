@@ -2,6 +2,7 @@ build*
 *.mobileprovision
 Wwise/*
 !Wwise/README.md
+lib
 
 # Wwise project stuff
 .cache
