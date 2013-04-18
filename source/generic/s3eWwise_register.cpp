@@ -34,7 +34,7 @@ void s3eWwiseRegisterExt()
     funcPtrs[9] = (void*)s3eWwiseSoundEngineGetDefaultPlatformInitSettings;
     funcPtrs[10] = (void*)s3eWwiseSoundEngineTerm;
     funcPtrs[11] = (void*)s3eWwiseSoundEngineRenderAudio;
-    funcPtrs[12] = (void*)PostEvent;
+    funcPtrs[12] = (void*)s3eWwiseSoundEnginePostEvent;
     funcPtrs[13] = (void*)s3eWwiseSoundEngineRegisterGameObj;
     funcPtrs[14] = (void*)s3eWwiseSoundEngineUnregisterGameObj;
     funcPtrs[15] = (void*)s3eWwiseSoundEngineUnregisterAllGameObj;

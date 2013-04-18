@@ -189,7 +189,7 @@ void s3eWwiseSoundEngineTerm()
 s3eWwiseResult s3eWwiseSoundEngineRenderAudio() s3eWwise_NotImplemented
 
 // Event Management
-s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID) S3E_WWISE_INVALID_PLAYING_ID
+s3eWwisePlayingID s3eWwiseSoundEnginePostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID) S3E_WWISE_INVALID_PLAYING_ID
 
 // Game Objects
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName) s3eWwise_NotImplemented

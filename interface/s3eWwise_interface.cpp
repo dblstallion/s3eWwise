@@ -25,7 +25,7 @@ typedef       void(*s3eWwiseSoundEngineGetDefaultInitSettings_t)(s3eWwiseInitSet
 typedef       void(*s3eWwiseSoundEngineGetDefaultPlatformInitSettings_t)(s3eWwisePlatformInitSettings* out_settings);
 typedef       void(*s3eWwiseSoundEngineTerm_t)();
 typedef s3eWwiseResult(*s3eWwiseSoundEngineRenderAudio_t)();
-typedef s3eWwisePlayingID(*PostEvent_t)(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
+typedef s3eWwisePlayingID(*s3eWwiseSoundEnginePostEvent_t)(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
 typedef s3eWwiseResult(*s3eWwiseSoundEngineRegisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
 typedef s3eWwiseResult(*s3eWwiseSoundEngineUnregisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID);
 typedef s3eWwiseResult(*s3eWwiseSoundEngineUnregisterAllGameObj_t)();
@@ -52,7 +52,7 @@ typedef struct s3eWwiseFuncs
     s3eWwiseSoundEngineGetDefaultPlatformInitSettings_t m_s3eWwiseSoundEngineGetDefaultPlatformInitSettings;
     s3eWwiseSoundEngineTerm_t m_s3eWwiseSoundEngineTerm;
     s3eWwiseSoundEngineRenderAudio_t m_s3eWwiseSoundEngineRenderAudio;
-    PostEvent_t m_PostEvent;
+    s3eWwiseSoundEnginePostEvent_t m_s3eWwiseSoundEnginePostEvent;
     s3eWwiseSoundEngineRegisterGameObj_t m_s3eWwiseSoundEngineRegisterGameObj;
     s3eWwiseSoundEngineUnregisterGameObj_t m_s3eWwiseSoundEngineUnregisterGameObj;
     s3eWwiseSoundEngineUnregisterAllGameObj_t m_s3eWwiseSoundEngineUnregisterAllGameObj;
@@ -370,9 +370,9 @@ s3eWwiseResult s3eWwiseSoundEngineRenderAudio()
     return ret;
 }
 
-s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)
+s3eWwisePlayingID s3eWwiseSoundEnginePostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[12] func: PostEvent"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[12] func: s3eWwiseSoundEnginePostEvent"));
 
     if (!_extLoad())
         return S3E_WWISE_INVALID_PLAYING_ID;
@@ -383,7 +383,7 @@ s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eWwisePlayingID ret = g_Ext.m_PostEvent(in_pszEventName, in_gameObjectID);
+    s3eWwisePlayingID ret = g_Ext.m_s3eWwiseSoundEnginePostEvent(in_pszEventName, in_gameObjectID);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);

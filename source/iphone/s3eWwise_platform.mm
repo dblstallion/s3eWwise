@@ -172,29 +172,24 @@ s3eWwiseResult s3eWwiseSoundEngineRenderAudio_platform()
     return (s3eWwiseResult)AK::SoundEngine::RenderAudio();
 }
 
-s3eWwisePlayingID PostEvent_platform(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)
+s3eWwisePlayingID s3eWwiseSoundEnginePostEvent_platform(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)
 {
-    return S3E_WWISE_INVALID_PLAYING_ID;
-}
-
-s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID)
-{
-    return s3eWwise_Fail;
+    return (s3eWwisePlayingID)AK::SoundEngine::PostEvent(in_pszEventName, (AkGameObjectID)in_gameObjectID);
 }
 
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
 {
-    return s3eWwise_Fail;
+    return (s3eWwiseResult)AK::SoundEngine::RegisterGameObj((AkGameObjectID)in_gameObjectID, in_pszObjName);
 }
 
 s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID)
 {
-    return s3eWwise_Fail;
+    return (s3eWwiseResult)AK::SoundEngine::UnregisterGameObj((AkGameObjectID)in_gameObjectID);
 }
 
 s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj_platform()
 {
-    return s3eWwise_Fail;
+    return (s3eWwiseResult)AK::SoundEngine::UnregisterAllGameObj();
 }
 
 s3eWwiseResult s3eWwiseSoundEngineLoadBank_platform(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId)

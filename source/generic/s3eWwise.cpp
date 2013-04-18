@@ -82,9 +82,9 @@ s3eWwiseResult s3eWwiseSoundEngineRenderAudio()
 	return s3eWwiseSoundEngineRenderAudio_platform();
 }
 
-s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)
+s3eWwisePlayingID s3eWwiseSoundEnginePostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)
 {
-	return PostEvent_platform(in_pszEventName, in_gameObjectID);
+	return s3eWwiseSoundEnginePostEvent_platform(in_pszEventName, in_gameObjectID);
 }
 
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID)

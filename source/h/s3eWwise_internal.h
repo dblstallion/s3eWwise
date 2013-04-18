@@ -64,7 +64,7 @@ void s3eWwiseSoundEngineTerm_platform();
 
 s3eWwiseResult s3eWwiseSoundEngineRenderAudio_platform();
 
-s3eWwisePlayingID PostEvent_platform(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
+s3eWwisePlayingID s3eWwiseSoundEnginePostEvent_platform(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
 
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID);
 

@@ -219,7 +219,7 @@ void s3eWwiseSoundEngineTerm();
 
 s3eWwiseResult s3eWwiseSoundEngineRenderAudio();
 
-s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
+s3eWwisePlayingID s3eWwiseSoundEnginePostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
 
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
 

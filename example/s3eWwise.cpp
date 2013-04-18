@@ -7,6 +7,7 @@
 #include "s3eFile.h"
 
 static s3eWwiseStreamMgr *streamMgr;
+const s3eWwiseGameObjectID gameObjectID = (s3eWwiseGameObjectID)100;
 
 void initWwise()
 {
@@ -59,10 +60,14 @@ void initWwise()
         s3eDebugTracePrintf("Failed to load sound bank. Error code = %d", loadHuman);
     else
         s3eDebugOutputString("Loaded sound bank");
+
+    s3eWwiseSoundEngineRegisterGameObj(gameObjectID, "Human");
 }
 
 void shutdownWwise()
 {
+    s3eWwiseSoundEngineUnregisterAllGameObj();
+
     s3eWwiseSoundEngineUnloadBank("iOS/Human.bnk");
     s3eWwiseSoundEngineUnloadBank("iOS/Init.bnk");
 
@@ -76,12 +81,21 @@ void shutdownWwise()
     s3eDebugOutputString("Wwise Shutdown");
 }
 
+void touchEvent(s3ePointerTouchEvent *event)
+{
+    if(event->m_Pressed)
+    {
+        s3eDebugOutputString("Posting Event \"Play_Hello\"");
+        s3eWwiseSoundEnginePostEvent("Play_Hello", gameObjectID);
+    }
+}
+
 // Example showing how to use the s3eWwise extension
 int main()
 {
     s3eDebugOutputString("Booting s3eWwise example");
 
-    //s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)touchEvent, NULL);
+    s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)touchEvent, NULL);
 
     IwGxInit();
 
