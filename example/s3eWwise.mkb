@@ -1,7 +1,14 @@
 #!/usr/bin/env mkb
+
 files
 {
     s3eWwise.cpp
+}
+
+assets
+{
+	(WwiseProject\GeneratedSoundBanks)
+	iOS
 }
 
 subprojects
@@ -15,5 +22,4 @@ deployments
 	["Default"]
 	android-manifest='AndroidManifest.xml'
 	app-icf='data/app.icf'
-	caption='s3eApsalar'
 }

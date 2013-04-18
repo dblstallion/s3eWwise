@@ -13,13 +13,19 @@
 
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
 #include <AK/SoundEngine/Common/IAkStreamMgr.h>
-#include <AK/Tools/Common/AkPlatformFuncs.h>
+
+#include "s3eIOHook.h"
+#include "AkFilePackageLowLevelIO.h"
 
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
 
 #include <AK/MusicEngine/Common/AkMusicEngine.h>
 
 #include <stdlib.h>
+
+// We're using the default Low-Level I/O implementation that's part
+// of the SDK's sample code, with the file package extension
+CAkFilePackageLowLevelIO<s3eIOHook> g_lowLevelIO;
 
 s3eResult s3eWwiseInit_platform()
 {
@@ -55,24 +61,32 @@ void s3eWwiseMemoryMgrTerm_platform()
 	AK::MemoryMgr::Term();
 }
 
-s3eResult s3eWwiseMemoryMgrInit_platform(s3eWwiseMemSettings* in_pSettings)
+s3eWwiseResult s3eWwiseMemoryMgrInit_platform(s3eWwiseMemSettings* in_pSettings)
 {
 	AkMemSettings memSettings;
 	memSettings.uMaxNumPools = in_pSettings->uMaxNumPools;
 	
-    return AK::MemoryMgr::Init(&memSettings) == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
+    return (s3eWwiseResult)AK::MemoryMgr::Init(&memSettings);
 }
 
 s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings)
 {
 	AkStreamMgrSettings streamSettings;
 	streamSettings.uMemorySize = in_settings->uMemorySize;
+
+	s3eWwiseStreamMgr *ret = (s3eWwiseStreamMgr *)AK::StreamMgr::Create(streamSettings);
+
+	AkDeviceSettings deviceSettings;
+	AK::StreamMgr::GetDefaultDeviceSettings(deviceSettings);
+	g_lowLevelIO.Init(deviceSettings);
 	
-    return (s3eWwiseStreamMgr *)AK::StreamMgr::Create(streamSettings);
+    return ret;
 }
 
 void s3eWwiseStreamMgrDestroy_platform(s3eWwiseStreamMgr* streamMgr)
 {
+	g_lowLevelIO.Term();
+
 	AK::IAkStreamMgr *mgr = (AK::IAkStreamMgr *)streamMgr;
 	
 	mgr->Destroy();
@@ -92,7 +106,7 @@ s3eBool s3eWwiseSoundEngineIsInitialized_platform()
     return AK::SoundEngine::IsInitialized();
 }
 
-s3eResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
+s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
 	AkInitSettings initSettings;
 	initSettings.pfnAssertHook					= in_pSettings->pfnAssertHook;
@@ -115,7 +129,7 @@ s3eResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s
 	platformInitSettings.uNumRefillsInVoice					= in_pPlatformSettings->uNumRefillsInVoice;
 	platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
 	
-    return AK::SoundEngine::Init(&initSettings, &platformInitSettings) == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
+    return (s3eWwiseResult)AK::SoundEngine::Init(&initSettings, &platformInitSettings);
 }
 
 void s3eWwiseSoundEngineGetDefaultInitSettings_platform(s3eWwiseInitSettings* out_settings)
@@ -153,9 +167,9 @@ void s3eWwiseSoundEngineTerm_platform()
 	AK::SoundEngine::Term();
 }
 
-s3eResult s3eWwiseSoundEngineRenderAudio_platform()
+s3eWwiseResult s3eWwiseSoundEngineRenderAudio_platform()
 {
-    return AK::SoundEngine::RenderAudio() == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
+    return (s3eWwiseResult)AK::SoundEngine::RenderAudio();
 }
 
 s3eWwisePlayingID PostEvent_platform(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID)
@@ -163,42 +177,43 @@ s3eWwisePlayingID PostEvent_platform(const char* in_pszEventName, s3eWwiseGameOb
     return S3E_WWISE_INVALID_PLAYING_ID;
 }
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID)
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID)
 {
-    return S3E_RESULT_ERROR;
+    return s3eWwise_Fail;
 }
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
 {
-    return S3E_RESULT_ERROR;
+    return s3eWwise_Fail;
 }
 
-s3eResult s3eWwiseSoundEngineUnregisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID)
+s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj_platform(s3eWwiseGameObjectID in_gameObjectID)
 {
-    return S3E_RESULT_ERROR;
+    return s3eWwise_Fail;
 }
 
-s3eResult s3eWwiseSoundEngineUnregisterAllGameObj_platform()
+s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj_platform()
 {
-    return S3E_RESULT_ERROR;
+    return s3eWwise_Fail;
 }
 
-s3eResult s3eWwiseSoundEngineLoadBank_platform(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId)
+s3eWwiseResult s3eWwiseSoundEngineLoadBank_platform(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId)
 {
-    return S3E_RESULT_ERROR;
+	AkBankID bankId;
+    return (s3eWwiseResult)AK::SoundEngine::LoadBank(in_pszString, (AkMemPoolId)in_memPoolId, bankId);
 }
 
-s3eResult s3eWwiseSoundEngineUnloadBank_platform(const char* in_pszString)
+s3eWwiseResult s3eWwiseSoundEngineUnloadBank_platform(const char* in_pszString)
 {
-    return S3E_RESULT_ERROR;
+    return (s3eWwiseResult)AK::SoundEngine::UnloadBank(in_pszString);
 }
 
-s3eResult s3eWwiseMusicEngineInit_platform(s3eWwiseMusicSettings* in_pSettings)
+s3eWwiseResult s3eWwiseMusicEngineInit_platform(s3eWwiseMusicSettings* in_pSettings)
 {
 	AkMusicSettings settings;
 	settings.fStreamingLookAheadRatio = in_pSettings->fStreamingLookAheadRatio;
 
-    return AK::MusicEngine::Init(&settings) == AK_Success ? S3E_RESULT_SUCCESS : S3E_RESULT_ERROR;
+	return (s3eWwiseResult)AK::MusicEngine::Init(&settings);
 }
 
 void s3eWwiseMusicEngineGetDefaultInitSettings_platform(s3eWwiseMusicSettings* out_settings)

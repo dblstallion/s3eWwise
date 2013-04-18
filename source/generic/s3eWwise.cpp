@@ -32,7 +32,7 @@ void s3eWwiseMemoryMgrTerm()
 	s3eWwiseMemoryMgrTerm_platform();
 }
 
-s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
+s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
 {
 	return s3eWwiseMemoryMgrInit_platform(in_pSettings);
 }
@@ -57,7 +57,7 @@ s3eBool s3eWwiseSoundEngineIsInitialized()
 	return s3eWwiseSoundEngineIsInitialized_platform();
 }
 
-s3eResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
+s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
 	return s3eWwiseSoundEngineInit_platform(in_pSettings, in_pPlatformSettings);
 }
@@ -77,7 +77,7 @@ void s3eWwiseSoundEngineTerm()
 	s3eWwiseSoundEngineTerm_platform();
 }
 
-s3eResult s3eWwiseSoundEngineRenderAudio()
+s3eWwiseResult s3eWwiseSoundEngineRenderAudio()
 {
 	return s3eWwiseSoundEngineRenderAudio_platform();
 }
@@ -87,37 +87,37 @@ s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in
 	return PostEvent_platform(in_pszEventName, in_gameObjectID);
 }
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
 {
 	return s3eWwiseSoundEngineRegisterGameObj_platform(in_gameObjectID);
 }
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
 {
 	return s3eWwiseSoundEngineRegisterGameObj_platform(in_gameObjectID, in_pszObjName);
 }
 
-s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
+s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
 {
 	return s3eWwiseSoundEngineUnregisterGameObj_platform(in_gameObjectID);
 }
 
-s3eResult s3eWwiseSoundEngineUnregisterAllGameObj()
+s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj()
 {
 	return s3eWwiseSoundEngineUnregisterAllGameObj_platform();
 }
 
-s3eResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId)
+s3eWwiseResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId)
 {
 	return s3eWwiseSoundEngineLoadBank_platform(in_pszString, in_memPoolId);
 }
 
-s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString)
+s3eWwiseResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString)
 {
 	return s3eWwiseSoundEngineUnloadBank_platform(in_pszString);
 }
 
-s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
+s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
 {
 	return s3eWwiseMusicEngineInit_platform(in_pSettings);
 }

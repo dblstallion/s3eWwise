@@ -34,6 +34,92 @@ static const s3eWwiseGameObjectID S3E_WWISE_INVALID_GAME_OBJECT = (s3eWwiseGameO
 typedef uint32 s3eWwisePlayingID;
 static const s3eWwisePlayingID S3E_WWISE_INVALID_PLAYING_ID = S3E_WWISE_INVALID_UNIQUE_ID;
 
+/// Standard function call result.
+enum s3eWwiseResult
+{
+    s3eWwise_NotImplemented			= 0,	///< This feature is not implemented.
+    s3eWwise_Success					= 1,	///< The operation was successful.
+    s3eWwise_Fail						= 2,	///< The operation failed.
+    s3eWwise_PartialSuccess			= 3,	///< The operation succeeded partially.
+    s3eWwise_NotCompatible			= 4,	///< Incompatible formats
+    s3eWwise_AlreadyConnected			= 5,	///< The stream is already connected to another node.
+    s3eWwise_NameNotSet				= 6,	///< Trying to open a file when its name was not set
+    s3eWwise_InvalidFile				= 7,	///< An unexpected value causes the file to be invalid.
+    s3eWwise_CorruptedFile			= 8,	///< The file is missing some exprected data.
+    s3eWwise_MaxReached				= 9,	///< The maximum was reached.
+    s3eWwise_InputsInUsed				= 10,	///< Inputs are currently used.
+    s3eWwise_OutputsInUsed			= 11,	///< Outputs are currently used.
+    s3eWwise_InvalidName				= 12,	///< The name is invalid.
+    s3eWwise_NameAlreadyInUse			= 13,	///< The name is already in use.
+    s3eWwise_InvalidID				= 14,	///< The ID is invalid.
+    s3eWwise_IDNotFound				= 15,	///< The ID was not found.
+    s3eWwise_InvalidInstanceID		= 16,	///< The InstanceID is invalid.
+    s3eWwise_NoMoreData				= 17,	///< No more data is available from the source.
+    s3eWwise_NoSourceAvailable		= 18,	///< There is no child (source) associated with the node.
+	s3eWwise_StateGroupAlreadyExists	= 19,	///< The StateGroup already exists.
+	s3eWwise_InvalidStateGroup		= 20,	///< The StateGroup is not a valid channel.
+	s3eWwise_ChildAlreadyHasAParent	= 21,	///< The child already has a parent.
+	s3eWwise_InvalidLanguage			= 22,	///< The language is invalid (applies to the Low-Level I/O).
+	s3eWwise_CannotAddItseflAsAChild	= 23,	///< It is not possible to add itself as its own child.
+	s3eWwise_TransitionNotFound		= 24,	///< The transition is not in the list.
+	s3eWwise_TransitionNotStartable	= 25,	///< Start allowed in the Running and Done states.
+	s3eWwise_TransitionNotRemovable	= 26,	///< Must not be in the Computing state.
+	s3eWwise_UsersListFull			= 27,	///< No one can be added any more, could be AK_MaxReached.
+	s3eWwise_UserAlreadyInList		= 28,	///< This user is already there.
+	s3eWwise_UserNotInList			= 29,	///< This user is not there.
+	s3eWwise_NoTransitionPoint		= 30,	///< Not in use.
+	s3eWwise_InvalidParameter			= 31,	///< Something is not within bounds.
+	s3eWwise_ParameterAdjusted		= 32,	///< Something was not within bounds and was relocated to the nearest OK value.
+	s3eWwise_IsA3DSound				= 33,	///< The sound has 3D parameters.
+	s3eWwise_NotA3DSound				= 34,	///< The sound does not have 3D parameters.
+	s3eWwise_ElementAlreadyInList		= 35,	///< The item could not be added because it was already in the list.
+	s3eWwise_PathNotFound				= 36,	///< This path is not known.
+	s3eWwise_PathNoVertices			= 37,	///< Stuff in vertices before trying to start it
+	s3eWwise_PathNotRunning			= 38,	///< Only a running path can be paused.
+	s3eWwise_PathNotPaused			= 39,	///< Only a paused path can be resumed.
+	s3eWwise_PathNodeAlreadyInList	= 40,	///< This path is already there.
+	s3eWwise_PathNodeNotInList		= 41,	///< This path is not there.
+	s3eWwise_VoiceNotFound			= 42,	///< Unknown in our voices list
+	s3eWwise_DataNeeded				= 43,	///< The consumer needs more.
+	s3eWwise_NoDataNeeded				= 44,	///< The consumer does not need more.
+	s3eWwise_DataReady				= 45,	///< The provider has available data.
+	s3eWwise_NoDataReady				= 46,	///< The provider does not have available data.
+	s3eWwise_NoMoreSlotAvailable		= 47,	///< Not enough space to load bank.
+	s3eWwise_SlotNotFound				= 48,	///< Bank error.
+	s3eWwise_ProcessingOnly			= 49,	///< No need to fetch new data.
+	s3eWwise_MemoryLeak				= 50,	///< Debug mode only.
+	s3eWwise_CorruptedBlockList		= 51,	///< The memory manager's block list has been corrupted.
+	s3eWwise_InsufficientMemory		= 52,	///< Memory error.
+	s3eWwise_Cancelled				= 53,	///< The requested action was cancelled (not an error).
+	s3eWwise_UnknownBankID			= 54,	///< Trying to load a bank using an ID which is not defined.
+    s3eWwise_IsProcessing             = 55,   ///< Asynchronous pipeline component is processing.
+	s3eWwise_BankReadError			= 56,	///< Error while reading a bank.
+	s3eWwise_InvalidSwitchType		= 57,	///< Invalid switch type (used with the switch container)
+	s3eWwise_VoiceDone				= 58,	///< Internal use only.
+	s3eWwise_UnknownEnvironment		= 59,	///< This environment is not defined.
+	s3eWwise_EnvironmentInUse			= 60,	///< This environment is used by an object.
+	s3eWwise_UnknownObject			= 61,	///< This object is not defined.
+	s3eWwise_NoConversionNeeded		= 62,	///< Audio data already in target format, no conversion to perform.
+    s3eWwise_FormatNotReady           = 63,   ///< Source format not known yet.
+	s3eWwise_WrongBankVersion			= 64,	///< The bank version is not compatible with the current bank reader.
+	s3eWwise_DataReadyNoProcess		= 65,	///< The provider has some data but does not process it (virtual voices).
+    s3eWwise_FileNotFound             = 66,   ///< File not found.
+    s3eWwise_DeviceNotReady           = 67,   ///< IO device not ready (may be because the tray is open)
+    s3eWwise_CouldNotCreateSecBuffer	= 68,   ///< The direct sound secondary buffer creation failed.
+	s3eWwise_BankAlreadyLoaded		= 69,	///< The bank load failed because the bank is already loaded.
+	s3eWwise_RenderedFX				= 71,	///< The effect on the node is rendered.
+	s3eWwise_ProcessNeeded			= 72,	///< A routine needs to be executed on some CPU.
+	s3eWwise_ProcessDone				= 73,	///< The executed routine has finished its execution.
+	s3eWwise_MemManagerNotInitialized	= 74,	///< The memory manager should have been initialized at this point.
+	s3eWwise_StreamMgrNotInitialized	= 75,	///< The stream manager should have been initialized at this point.
+	s3eWwise_SSEInstructionsNotSupported = 76,///< The machine does not support SSE instructions (required on PC).
+	s3eWwise_Busy						= 77,	///< The system is busy and could not process the request.
+	s3eWwise_UnsupportedChannelConfig = 78,	///< Channel configuration is not supported in the current execution context.
+	s3eWwise_PluginMediaNotAvailable  = 79,	///< Plugin media is not available for effect.
+	s3eWwise_MustBeVirtualized		= 80,	///< Sound was Not Allowed to play.
+	s3eWwise_CommandTooLarge			= 81	///< SDK command is too large to fit in the command queue.
+};
+
 /**
  * AK::MemoryMgr
  */
@@ -107,7 +193,7 @@ s3eBool s3eWwiseMemoryMgrIsInitialized();
 
 void s3eWwiseMemoryMgrTerm();
 
-s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings);
+s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings);
 
 /**
  * AK::StreamMgr
@@ -123,7 +209,7 @@ void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings
  */
 s3eBool s3eWwiseSoundEngineIsInitialized();
 
-s3eResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings);
+s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings);
 
 void s3eWwiseSoundEngineGetDefaultInitSettings(s3eWwiseInitSettings* out_settings);
 
@@ -131,24 +217,24 @@ void s3eWwiseSoundEngineGetDefaultPlatformInitSettings(s3eWwisePlatformInitSetti
 
 void s3eWwiseSoundEngineTerm();
 
-s3eResult s3eWwiseSoundEngineRenderAudio();
+s3eWwiseResult s3eWwiseSoundEngineRenderAudio();
 
 s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
 
-s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID);
+s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID);
 
-s3eResult s3eWwiseSoundEngineUnregisterAllGameObj();
+s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj();
 
-s3eResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId);
+s3eWwiseResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId);
 
-s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString);
+s3eWwiseResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString);
 
 /**
  * AK::MusicEngine
  */
-s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings);
+s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings);
 
 void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings);
 

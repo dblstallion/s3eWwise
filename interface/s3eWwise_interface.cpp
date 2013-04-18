@@ -15,23 +15,23 @@
  */
 typedef    s3eBool(*s3eWwiseMemoryMgrIsInitialized_t)();
 typedef       void(*s3eWwiseMemoryMgrTerm_t)();
-typedef  s3eResult(*s3eWwiseMemoryMgrInit_t)(s3eWwiseMemSettings* in_pSettings);
+typedef s3eWwiseResult(*s3eWwiseMemoryMgrInit_t)(s3eWwiseMemSettings* in_pSettings);
 typedef s3eWwiseStreamMgr*(*s3eWwiseStreamMgrCreate_t)(s3eWwiseStreamMgrSettings* in_settings);
 typedef       void(*s3eWwiseStreamMgrDestroy_t)(s3eWwiseStreamMgr* streamMgr);
 typedef       void(*s3eWwiseStreamMgrGetDefaultSettings_t)(s3eWwiseStreamMgrSettings* out_settings);
 typedef    s3eBool(*s3eWwiseSoundEngineIsInitialized_t)();
-typedef  s3eResult(*s3eWwiseSoundEngineInit_t)(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings);
+typedef s3eWwiseResult(*s3eWwiseSoundEngineInit_t)(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings);
 typedef       void(*s3eWwiseSoundEngineGetDefaultInitSettings_t)(s3eWwiseInitSettings* out_settings);
 typedef       void(*s3eWwiseSoundEngineGetDefaultPlatformInitSettings_t)(s3eWwisePlatformInitSettings* out_settings);
 typedef       void(*s3eWwiseSoundEngineTerm_t)();
-typedef  s3eResult(*s3eWwiseSoundEngineRenderAudio_t)();
+typedef s3eWwiseResult(*s3eWwiseSoundEngineRenderAudio_t)();
 typedef s3eWwisePlayingID(*PostEvent_t)(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
-typedef  s3eResult(*s3eWwiseSoundEngineRegisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
-typedef  s3eResult(*s3eWwiseSoundEngineUnregisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID);
-typedef  s3eResult(*s3eWwiseSoundEngineUnregisterAllGameObj_t)();
-typedef  s3eResult(*s3eWwiseSoundEngineLoadBank_t)(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId);
-typedef  s3eResult(*s3eWwiseSoundEngineUnloadBank_t)(const char* in_pszString);
-typedef  s3eResult(*s3eWwiseMusicEngineInit_t)(s3eWwiseMusicSettings* in_pSettings);
+typedef s3eWwiseResult(*s3eWwiseSoundEngineRegisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
+typedef s3eWwiseResult(*s3eWwiseSoundEngineUnregisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID);
+typedef s3eWwiseResult(*s3eWwiseSoundEngineUnregisterAllGameObj_t)();
+typedef s3eWwiseResult(*s3eWwiseSoundEngineLoadBank_t)(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId);
+typedef s3eWwiseResult(*s3eWwiseSoundEngineUnloadBank_t)(const char* in_pszString);
+typedef s3eWwiseResult(*s3eWwiseMusicEngineInit_t)(s3eWwiseMusicSettings* in_pSettings);
 typedef       void(*s3eWwiseMusicEngineGetDefaultInitSettings_t)(s3eWwiseMusicSettings* out_settings);
 typedef       void(*s3eWwiseMusicEngineTerm_t)();
 
@@ -150,12 +150,12 @@ void s3eWwiseMemoryMgrTerm()
     return;
 }
 
-s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
+s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[2] func: s3eWwiseMemoryMgrInit"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -163,7 +163,7 @@ s3eResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseMemoryMgrInit(in_pSettings);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseMemoryMgrInit(in_pSettings);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -260,12 +260,12 @@ s3eBool s3eWwiseSoundEngineIsInitialized()
     return ret;
 }
 
-s3eResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
+s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[7] func: s3eWwiseSoundEngineInit"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -273,7 +273,7 @@ s3eResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePl
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineInit(in_pSettings, in_pPlatformSettings);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineInit(in_pSettings, in_pPlatformSettings);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -348,12 +348,12 @@ void s3eWwiseSoundEngineTerm()
     return;
 }
 
-s3eResult s3eWwiseSoundEngineRenderAudio()
+s3eWwiseResult s3eWwiseSoundEngineRenderAudio()
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[11] func: s3eWwiseSoundEngineRenderAudio"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -361,7 +361,7 @@ s3eResult s3eWwiseSoundEngineRenderAudio()
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineRenderAudio();
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineRenderAudio();
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -392,12 +392,12 @@ s3eWwisePlayingID PostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in
     return ret;
 }
 
-s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[13] func: s3eWwiseSoundEngineRegisterGameObj"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -405,7 +405,7 @@ s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectI
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineRegisterGameObj(in_gameObjectID, in_pszObjName);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineRegisterGameObj(in_gameObjectID, in_pszObjName);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -414,12 +414,12 @@ s3eResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectI
     return ret;
 }
 
-s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
+s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[14] func: s3eWwiseSoundEngineUnregisterGameObj"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -427,7 +427,7 @@ s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjec
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineUnregisterGameObj(in_gameObjectID);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineUnregisterGameObj(in_gameObjectID);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -436,12 +436,12 @@ s3eResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjec
     return ret;
 }
 
-s3eResult s3eWwiseSoundEngineUnregisterAllGameObj()
+s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj()
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[15] func: s3eWwiseSoundEngineUnregisterAllGameObj"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -449,7 +449,7 @@ s3eResult s3eWwiseSoundEngineUnregisterAllGameObj()
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineUnregisterAllGameObj();
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineUnregisterAllGameObj();
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -458,12 +458,12 @@ s3eResult s3eWwiseSoundEngineUnregisterAllGameObj()
     return ret;
 }
 
-s3eResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId)
+s3eWwiseResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[16] func: s3eWwiseSoundEngineLoadBank"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -471,7 +471,7 @@ s3eResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolI
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineLoadBank(in_pszString, in_memPoolId);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineLoadBank(in_pszString, in_memPoolId);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -480,12 +480,12 @@ s3eResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolI
     return ret;
 }
 
-s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString)
+s3eWwiseResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[17] func: s3eWwiseSoundEngineUnloadBank"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -493,7 +493,7 @@ s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString)
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseSoundEngineUnloadBank(in_pszString);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineUnloadBank(in_pszString);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
@@ -502,12 +502,12 @@ s3eResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString)
     return ret;
 }
 
-s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
+s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[18] func: s3eWwiseMusicEngineInit"));
 
     if (!_extLoad())
-        return S3E_RESULT_ERROR;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching 
@@ -515,7 +515,7 @@ s3eResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eResult ret = g_Ext.m_s3eWwiseMusicEngineInit(in_pSettings);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseMusicEngineInit(in_pSettings);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);

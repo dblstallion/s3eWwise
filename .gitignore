@@ -2,3 +2,8 @@ build*
 *.mobileprovision
 Wwise/*
 !Wwise/README.md
+
+# Wwise project stuff
+.cache
+*.validationcache
+*.wsettings
