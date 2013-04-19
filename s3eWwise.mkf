@@ -18,6 +18,10 @@ files
     (h)
     s3eWwise.h
 
+	["Wwise fake"]
+	(h/AK/SoundEngine/Common)
+	AkTypes.h
+
     ["interface"]
     (interface)
     s3eWwise_interface.cpp

@@ -1,4 +1,5 @@
 #include "s3eOSReadString.h"
+#include "Wwise_IDs.h"
 #include "s3eWwise.h"
 #include "IwDebug.h"
 #include "IwGx.h"
