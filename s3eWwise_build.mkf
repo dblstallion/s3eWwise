@@ -3,6 +3,7 @@
 # be overwritten (unless --force is specified) and is intended to be modified.
 display_name "Extensions/s3eWwise"
 
+includepath Wwise/SDK/include
 includepath source/h
 includepath h
 
@@ -17,11 +18,11 @@ defines
 
 #This command re-generates the relevant source files from the s4e when
 #the mkb is run
-extension
-{
-    ("$MARMALADE_ROOT/extensions/builder")
-    "make_extension s3eWwise.s4e"
-}
+#extension
+#{
+#    ("$MARMALADE_ROOT/extensions/builder")
+#    "make_extension s3eWwise.s4e"
+#}
 
 #include the extension builder subproject
 subproject "$MARMALADE_ROOT/s3e/edk"

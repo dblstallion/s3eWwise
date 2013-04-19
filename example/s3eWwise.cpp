@@ -50,27 +50,37 @@ void initWwise()
     else
         s3eDebugOutputString("Init Music Successfully");
 
-    s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBank("iOS/Init.bnk", S3E_WWISE_DEFAULT_POOL_ID);
+    s3eWwiseBankID bankId;
+
+    //s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::INIT, S3E_WWISE_DEFAULT_POOL_ID);
+    s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankNamed("iOS/Init.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if(loadInit  != s3eWwise_Success )
-        s3eDebugTracePrintf("Failed to load sound bank. Error code = %d", loadInit);
+    {
+        s3eDebugOutputString("Failed to load sound bank");
+        s3eDebugTracePrintf("Error code = %d", loadInit);
+    }
     else
         s3eDebugOutputString("Loaded sound bank");
 
-    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBank("iOS/English(US)/Human.bnk", S3E_WWISE_DEFAULT_POOL_ID);
+    //s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::HUMAN, S3E_WWISE_DEFAULT_POOL_ID);
+    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankNamed("iOS/English(US)/Human.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if( loadHuman != s3eWwise_Success )
-        s3eDebugTracePrintf("Failed to load sound bank. Error code = %d", loadHuman);
+    {
+        s3eDebugOutputString("Failed to load sound bank");
+        s3eDebugTracePrintf("Error code = %d", loadHuman);
+    }
     else
         s3eDebugOutputString("Loaded sound bank");
 
-    s3eWwiseSoundEngineRegisterGameObj(gameObjectID, "Human");
+    s3eWwiseSoundEngineRegisterGameObjWithName(gameObjectID, "Human");
 }
 
 void shutdownWwise()
 {
     s3eWwiseSoundEngineUnregisterAllGameObj();
 
-    s3eWwiseSoundEngineUnloadBank("iOS/Human.bnk");
-    s3eWwiseSoundEngineUnloadBank("iOS/Init.bnk");
+    s3eWwiseSoundEngineUnloadBankNamed("iOS/Init.bnk");
+    s3eWwiseSoundEngineUnloadBankNamed("iOS/English(US)/Human.bnk");
 
     s3eWwiseMusicEngineTerm();
 
@@ -87,7 +97,7 @@ void touchEvent(s3ePointerTouchEvent *event)
     if(event->m_Pressed)
     {
         s3eDebugOutputString("Posting Event \"Play_Hello\"");
-        s3eWwiseSoundEnginePostEvent("Play_Hello", gameObjectID);
+        s3eWwiseSoundEnginePostEventWithID(AK::EVENTS::PLAY_HELLO, gameObjectID);
     }
 }
 

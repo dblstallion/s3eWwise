@@ -24,6 +24,18 @@
 typedef uint32 s3eWwiseUniqueID;
 static const s3eWwiseUniqueID S3E_WWISE_INVALID_UNIQUE_ID = 0;
 
+typedef uint32 s3eWwiseStateID;
+typedef uint32 s3eWwiseStateGroupID;
+
+typedef uint32 s3eWwiseSwitchGroupID;
+typedef uint32 s3eWwiseSwitchStateID;
+
+typedef uint32 s3eWwiseRtpcID;
+typedef float s3eWwiseRtpcValue;
+static const s3eWwiseRtpcID S3E_WWISE_INVALID_RTPC_ID = S3E_WWISE_INVALID_UNIQUE_ID;
+
+typedef uint32 s3eWwiseTriggerID;
+
 typedef int32 s3eWwiseMemPoolId;
 static const s3eWwiseMemPoolId S3E_WWISE_INVALID_POOL_ID = -1;
 static const s3eWwiseMemPoolId S3E_WWISE_DEFAULT_POOL_ID = -1;
@@ -34,116 +46,159 @@ static const s3eWwiseGameObjectID S3E_WWISE_INVALID_GAME_OBJECT = (s3eWwiseGameO
 typedef uint32 s3eWwisePlayingID;
 static const s3eWwisePlayingID S3E_WWISE_INVALID_PLAYING_ID = S3E_WWISE_INVALID_UNIQUE_ID;
 
-/// Standard function call result.
-enum s3eWwiseResult
+typedef int32 s3eWwiseTimeMs;
+
+typedef uint32 s3eWwiseBankID;
+static const s3eWwiseBankID S3E_WWISE_INVALID_BANK_ID = S3E_WWISE_INVALID_UNIQUE_ID;
+
+static const uint32 S3E_WWISE_INVALID_LISTENER_INDEX = (uint32)-1;
+
+typedef struct s3eWwiseVector
 {
-    s3eWwise_NotImplemented			= 0,	///< This feature is not implemented.
+	float X;
+	float Y;
+	float Z;
+} s3eWwiseVector;
+
+typedef struct s3eWwiseSoundPosition
+{
+	s3eWwiseVector Position;
+	s3eWwiseVector Orientation;
+} s3eWwiseSoundPosition;
+
+typedef struct s3eWwiseListenerPosition
+{
+	s3eWwiseVector OrientationFront;
+	s3eWwiseVector OrientationTop;
+	s3eWwiseVector Position;
+} s3eWwiseListenerPosition;
+
+/// Curve interpolation types
+typedef enum s3eWwiseCurveInterpolation
+{
+    s3eWwiseCurveInterpolation_Log3			= 0, ///< Log3
+    s3eWwiseCurveInterpolation_Sine			= 1, ///< Sine
+    s3eWwiseCurveInterpolation_Log1			= 2, ///< Log1
+    s3eWwiseCurveInterpolation_InvSCurve		= 3, ///< Inversed S Curve
+    s3eWwiseCurveInterpolation_Linear			= 4, ///< Linear (Default)
+    s3eWwiseCurveInterpolation_SCurve			= 5, ///< S Curve
+    s3eWwiseCurveInterpolation_Exp1			= 6, ///< Exp1
+    s3eWwiseCurveInterpolation_SineRecip		= 7, ///< Reciprocal of sine curve
+    s3eWwiseCurveInterpolation_Exp3			= 8, ///< Exp3
+	s3eWwiseCurveInterpolation_LastFadeCurve  = 8, ///< Update this value to reflect last curve available for fades
+	s3eWwiseCurveInterpolation_Constant		= 9  ///< Constant ( not valid for fading values )
+} s3eWwiseCurveInterpolation;
+
+/// Standard function call result.
+typedef enum s3eWwiseResult
+{
+    s3eWwise_NotImplemented				= 0,	///< This feature is not implemented.
     s3eWwise_Success					= 1,	///< The operation was successful.
     s3eWwise_Fail						= 2,	///< The operation failed.
-    s3eWwise_PartialSuccess			= 3,	///< The operation succeeded partially.
-    s3eWwise_NotCompatible			= 4,	///< Incompatible formats
+    s3eWwise_PartialSuccess				= 3,	///< The operation succeeded partially.
+    s3eWwise_NotCompatible				= 4,	///< Incompatible formats
     s3eWwise_AlreadyConnected			= 5,	///< The stream is already connected to another node.
-    s3eWwise_NameNotSet				= 6,	///< Trying to open a file when its name was not set
+    s3eWwise_NameNotSet					= 6,	///< Trying to open a file when its name was not set
     s3eWwise_InvalidFile				= 7,	///< An unexpected value causes the file to be invalid.
-    s3eWwise_CorruptedFile			= 8,	///< The file is missing some exprected data.
-    s3eWwise_MaxReached				= 9,	///< The maximum was reached.
+    s3eWwise_CorruptedFile				= 8,	///< The file is missing some exprected data.
+    s3eWwise_MaxReached					= 9,	///< The maximum was reached.
     s3eWwise_InputsInUsed				= 10,	///< Inputs are currently used.
-    s3eWwise_OutputsInUsed			= 11,	///< Outputs are currently used.
+    s3eWwise_OutputsInUsed				= 11,	///< Outputs are currently used.
     s3eWwise_InvalidName				= 12,	///< The name is invalid.
     s3eWwise_NameAlreadyInUse			= 13,	///< The name is already in use.
-    s3eWwise_InvalidID				= 14,	///< The ID is invalid.
-    s3eWwise_IDNotFound				= 15,	///< The ID was not found.
-    s3eWwise_InvalidInstanceID		= 16,	///< The InstanceID is invalid.
-    s3eWwise_NoMoreData				= 17,	///< No more data is available from the source.
-    s3eWwise_NoSourceAvailable		= 18,	///< There is no child (source) associated with the node.
+    s3eWwise_InvalidID					= 14,	///< The ID is invalid.
+    s3eWwise_IDNotFound					= 15,	///< The ID was not found.
+    s3eWwise_InvalidInstanceID			= 16,	///< The InstanceID is invalid.
+    s3eWwise_NoMoreData					= 17,	///< No more data is available from the source.
+    s3eWwise_NoSourceAvailable			= 18,	///< There is no child (source) associated with the node.
 	s3eWwise_StateGroupAlreadyExists	= 19,	///< The StateGroup already exists.
-	s3eWwise_InvalidStateGroup		= 20,	///< The StateGroup is not a valid channel.
-	s3eWwise_ChildAlreadyHasAParent	= 21,	///< The child already has a parent.
+	s3eWwise_InvalidStateGroup			= 20,	///< The StateGroup is not a valid channel.
+	s3eWwise_ChildAlreadyHasAParent		= 21,	///< The child already has a parent.
 	s3eWwise_InvalidLanguage			= 22,	///< The language is invalid (applies to the Low-Level I/O).
 	s3eWwise_CannotAddItseflAsAChild	= 23,	///< It is not possible to add itself as its own child.
-	s3eWwise_TransitionNotFound		= 24,	///< The transition is not in the list.
-	s3eWwise_TransitionNotStartable	= 25,	///< Start allowed in the Running and Done states.
-	s3eWwise_TransitionNotRemovable	= 26,	///< Must not be in the Computing state.
-	s3eWwise_UsersListFull			= 27,	///< No one can be added any more, could be AK_MaxReached.
-	s3eWwise_UserAlreadyInList		= 28,	///< This user is already there.
-	s3eWwise_UserNotInList			= 29,	///< This user is not there.
-	s3eWwise_NoTransitionPoint		= 30,	///< Not in use.
+	s3eWwise_TransitionNotFound			= 24,	///< The transition is not in the list.
+	s3eWwise_TransitionNotStartable		= 25,	///< Start allowed in the Running and Done states.
+	s3eWwise_TransitionNotRemovable		= 26,	///< Must not be in the Computing state.
+	s3eWwise_UsersListFull				= 27,	///< No one can be added any more, could be AK_MaxReached.
+	s3eWwise_UserAlreadyInList			= 28,	///< This user is already there.
+	s3eWwise_UserNotInList				= 29,	///< This user is not there.
+	s3eWwise_NoTransitionPoint			= 30,	///< Not in use.
 	s3eWwise_InvalidParameter			= 31,	///< Something is not within bounds.
-	s3eWwise_ParameterAdjusted		= 32,	///< Something was not within bounds and was relocated to the nearest OK value.
-	s3eWwise_IsA3DSound				= 33,	///< The sound has 3D parameters.
+	s3eWwise_ParameterAdjusted			= 32,	///< Something was not within bounds and was relocated to the nearest OK value.
+	s3eWwise_IsA3DSound					= 33,	///< The sound has 3D parameters.
 	s3eWwise_NotA3DSound				= 34,	///< The sound does not have 3D parameters.
 	s3eWwise_ElementAlreadyInList		= 35,	///< The item could not be added because it was already in the list.
 	s3eWwise_PathNotFound				= 36,	///< This path is not known.
-	s3eWwise_PathNoVertices			= 37,	///< Stuff in vertices before trying to start it
-	s3eWwise_PathNotRunning			= 38,	///< Only a running path can be paused.
-	s3eWwise_PathNotPaused			= 39,	///< Only a paused path can be resumed.
-	s3eWwise_PathNodeAlreadyInList	= 40,	///< This path is already there.
-	s3eWwise_PathNodeNotInList		= 41,	///< This path is not there.
-	s3eWwise_VoiceNotFound			= 42,	///< Unknown in our voices list
-	s3eWwise_DataNeeded				= 43,	///< The consumer needs more.
+	s3eWwise_PathNoVertices				= 37,	///< Stuff in vertices before trying to start it
+	s3eWwise_PathNotRunning				= 38,	///< Only a running path can be paused.
+	s3eWwise_PathNotPaused				= 39,	///< Only a paused path can be resumed.
+	s3eWwise_PathNodeAlreadyInList		= 40,	///< This path is already there.
+	s3eWwise_PathNodeNotInList			= 41,	///< This path is not there.
+	s3eWwise_VoiceNotFound				= 42,	///< Unknown in our voices list
+	s3eWwise_DataNeeded					= 43,	///< The consumer needs more.
 	s3eWwise_NoDataNeeded				= 44,	///< The consumer does not need more.
-	s3eWwise_DataReady				= 45,	///< The provider has available data.
+	s3eWwise_DataReady					= 45,	///< The provider has available data.
 	s3eWwise_NoDataReady				= 46,	///< The provider does not have available data.
 	s3eWwise_NoMoreSlotAvailable		= 47,	///< Not enough space to load bank.
 	s3eWwise_SlotNotFound				= 48,	///< Bank error.
-	s3eWwise_ProcessingOnly			= 49,	///< No need to fetch new data.
-	s3eWwise_MemoryLeak				= 50,	///< Debug mode only.
-	s3eWwise_CorruptedBlockList		= 51,	///< The memory manager's block list has been corrupted.
-	s3eWwise_InsufficientMemory		= 52,	///< Memory error.
-	s3eWwise_Cancelled				= 53,	///< The requested action was cancelled (not an error).
-	s3eWwise_UnknownBankID			= 54,	///< Trying to load a bank using an ID which is not defined.
-    s3eWwise_IsProcessing             = 55,   ///< Asynchronous pipeline component is processing.
-	s3eWwise_BankReadError			= 56,	///< Error while reading a bank.
-	s3eWwise_InvalidSwitchType		= 57,	///< Invalid switch type (used with the switch container)
-	s3eWwise_VoiceDone				= 58,	///< Internal use only.
-	s3eWwise_UnknownEnvironment		= 59,	///< This environment is not defined.
+	s3eWwise_ProcessingOnly				= 49,	///< No need to fetch new data.
+	s3eWwise_MemoryLeak					= 50,	///< Debug mode only.
+	s3eWwise_CorruptedBlockList			= 51,	///< The memory manager's block list has been corrupted.
+	s3eWwise_InsufficientMemory			= 52,	///< Memory error.
+	s3eWwise_Cancelled					= 53,	///< The requested action was cancelled (not an error).
+	s3eWwise_UnknownBankID				= 54,	///< Trying to load a bank using an ID which is not defined.
+    s3eWwise_IsProcessing				= 55,   ///< Asynchronous pipeline component is processing.
+	s3eWwise_BankReadError				= 56,	///< Error while reading a bank.
+	s3eWwise_InvalidSwitchType			= 57,	///< Invalid switch type (used with the switch container)
+	s3eWwise_VoiceDone					= 58,	///< Internal use only.
+	s3eWwise_UnknownEnvironment			= 59,	///< This environment is not defined.
 	s3eWwise_EnvironmentInUse			= 60,	///< This environment is used by an object.
-	s3eWwise_UnknownObject			= 61,	///< This object is not defined.
-	s3eWwise_NoConversionNeeded		= 62,	///< Audio data already in target format, no conversion to perform.
-    s3eWwise_FormatNotReady           = 63,   ///< Source format not known yet.
+	s3eWwise_UnknownObject				= 61,	///< This object is not defined.
+	s3eWwise_NoConversionNeeded			= 62,	///< Audio data already in target format, no conversion to perform.
+    s3eWwise_FormatNotReady          	= 63,   ///< Source format not known yet.
 	s3eWwise_WrongBankVersion			= 64,	///< The bank version is not compatible with the current bank reader.
-	s3eWwise_DataReadyNoProcess		= 65,	///< The provider has some data but does not process it (virtual voices).
-    s3eWwise_FileNotFound             = 66,   ///< File not found.
-    s3eWwise_DeviceNotReady           = 67,   ///< IO device not ready (may be because the tray is open)
+	s3eWwise_DataReadyNoProcess			= 65,	///< The provider has some data but does not process it (virtual voices).
+    s3eWwise_FileNotFound             	= 66,   ///< File not found.
+    s3eWwise_DeviceNotReady           	= 67,   ///< IO device not ready (may be because the tray is open)
     s3eWwise_CouldNotCreateSecBuffer	= 68,   ///< The direct sound secondary buffer creation failed.
-	s3eWwise_BankAlreadyLoaded		= 69,	///< The bank load failed because the bank is already loaded.
-	s3eWwise_RenderedFX				= 71,	///< The effect on the node is rendered.
-	s3eWwise_ProcessNeeded			= 72,	///< A routine needs to be executed on some CPU.
+	s3eWwise_BankAlreadyLoaded			= 69,	///< The bank load failed because the bank is already loaded.
+	s3eWwise_RenderedFX					= 71,	///< The effect on the node is rendered.
+	s3eWwise_ProcessNeeded				= 72,	///< A routine needs to be executed on some CPU.
 	s3eWwise_ProcessDone				= 73,	///< The executed routine has finished its execution.
 	s3eWwise_MemManagerNotInitialized	= 74,	///< The memory manager should have been initialized at this point.
 	s3eWwise_StreamMgrNotInitialized	= 75,	///< The stream manager should have been initialized at this point.
-	s3eWwise_SSEInstructionsNotSupported = 76,///< The machine does not support SSE instructions (required on PC).
+	s3eWwise_SSEInstructionsNotSupported= 76,	///< The machine does not support SSE instructions (required on PC).
 	s3eWwise_Busy						= 77,	///< The system is busy and could not process the request.
-	s3eWwise_UnsupportedChannelConfig = 78,	///< Channel configuration is not supported in the current execution context.
-	s3eWwise_PluginMediaNotAvailable  = 79,	///< Plugin media is not available for effect.
-	s3eWwise_MustBeVirtualized		= 80,	///< Sound was Not Allowed to play.
+	s3eWwise_UnsupportedChannelConfig 	= 78,	///< Channel configuration is not supported in the current execution context.
+	s3eWwise_PluginMediaNotAvailable  	= 79,	///< Plugin media is not available for effect.
+	s3eWwise_MustBeVirtualized			= 80,	///< Sound was Not Allowed to play.
 	s3eWwise_CommandTooLarge			= 81	///< SDK command is too large to fit in the command queue.
-};
+} s3eWwiseResult;
 
 /**
  * AK::MemoryMgr
  */
-struct s3eWwiseMemSettings
+typedef struct s3eWwiseMemSettings
 {
 	uint32 uMaxNumPools;
-};
+} s3eWwiseMemSettings;
 
 /**
  * AK::StreamMgr
  */
-struct s3eWwiseStreamMgrSettings
+typedef struct s3eWwiseStreamMgrSettings
 {
 	uint32 uMemorySize;
-};
+} s3eWwiseStreamMgrSettings;
 
-struct s3eWwiseStreamMgr;
+typedef struct s3eWwiseStreamMgr s3eWwiseStreamMgr;
 
 /**
  * AK::SoundEngine
  */
 typedef void (*s3eWwiseAssertHook)(const char *in_pszExpression, const char *in_pszFileName, int in_lineNumber);
- 
-struct s3eWwiseInitSettings
+
+typedef struct s3eWwiseInitSettings
 {
 	s3eWwiseAssertHook pfnAssertHook;
 	uint32 uMaxNumPaths;
@@ -156,9 +211,9 @@ struct s3eWwiseInitSettings
 	uint32 uContinuousPlaybackLookAhead;
 	uint32 uMonitorPoolSize;
 	uint32 uMonitorQueuePoolSize;
-};
+} s3eWwiseInitSettings;
 
-struct s3eWwisePlatformInitSettings
+typedef struct s3eWwisePlatformInitSettings
 {
 	// Missing: s3eWwiseThreadProperties threadLEngine;
 	// Missing: s3eWwiseThreadProperties threadBankManager;
@@ -168,15 +223,15 @@ struct s3eWwisePlatformInitSettings
 	uint32 uSampleRate;
 	uint16 uNumRefillsInVoice;
 	s3eBool bMuteOtherApps;
-};
+} s3eWwisePlatformInitSettings;
 
 /**
  * AK::MusicEngine
  */
-struct s3eWwiseMusicSettings
+typedef struct s3eWwiseMusicSettings
 {
 	float fStreamingLookAheadRatio;
-};
+} s3eWwiseMusicSettings;
 // \cond HIDDEN_DEFINES
 S3E_BEGIN_C_DECL
 // \endcond
@@ -185,11 +240,6 @@ S3E_BEGIN_C_DECL
  * Returns S3E_TRUE if the Wwise extension is available.
  */
 s3eBool s3eWwiseAvailable();
-
-/**
- * AK::MemoryMgr
- */
-s3eBool s3eWwiseMemoryMgrIsInitialized();
 
 void s3eWwiseMemoryMgrTerm();
 
@@ -219,17 +269,57 @@ void s3eWwiseSoundEngineTerm();
 
 s3eWwiseResult s3eWwiseSoundEngineRenderAudio();
 
-s3eWwisePlayingID s3eWwiseSoundEnginePostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID);
+s3eWwisePlayingID s3eWwiseSoundEnginePostEventNamed(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID, uint32 flags = 0);
 
-s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
+s3eWwisePlayingID s3eWwiseSoundEnginePostEventWithID(s3eWwiseUniqueID in_eventID, s3eWwiseGameObjectID in_gameObjectID, uint32 flags = 0);
+
+void s3eWwiseSoundEngineStopAll(s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT);
+
+void s3eWwiseSoundEngineStopPlayingID(s3eWwisePlayingID in_playingID, s3eWwiseTimeMs in_uTransitionDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear);
+
+s3eWwiseResult s3eWwiseSoundEngineSetActiveListeners(s3eWwiseGameObjectID in_GameObjectID, uint32 in_uListenerMask);
+
+s3eWwiseResult s3eWwiseSoundEngineSetListenerPosition(const s3eWwiseListenerPosition* in_Position, uint32 in_uIndex = 0);
+
+s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID, s3eWwiseRtpcValue in_value, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear);
+
+s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueNamed(const char* in_pszRtpcName, s3eWwiseRtpcValue in_value, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear);
+
+s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear);
+
+s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueNamed(const char* in_pszRtpcName, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear);
+
+s3eWwiseResult s3eWwiseSoundEngineSetSwitchWithID(s3eWwiseSwitchGroupID in_switchGroup, s3eWwiseSwitchStateID in_switchState, s3eWwiseGameObjectID in_gameObjectID);
+
+s3eWwiseResult s3eWwiseSoundEngineSetSwitchNamed(const char* in_pszSwitchGroup, const char* in_pszSwitchState, s3eWwiseGameObjectID in_gameObjectID);
+
+s3eWwiseResult s3eWwiseSoundEnginePostTriggerWithID(s3eWwiseTriggerID in_triggerID, s3eWwiseGameObjectID in_gameObjectID);
+
+s3eWwiseResult s3eWwiseSoundEnginePostTriggerNamed(const char* in_pszTrigger, s3eWwiseGameObjectID in_gameObjectID);
+
+s3eWwiseResult s3eWwiseSoundEngineSetStateWithID(s3eWwiseStateGroupID in_stateGroup, s3eWwiseStateID in_state);
+
+s3eWwiseResult s3eWwiseSoundEngineSetStateNamed(const char* in_pszStateGroup, const char* in_pszState);
+
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID);
+
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObjWithName(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
 
 s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID);
 
 s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj();
 
-s3eWwiseResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId);
+s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex = S3E_WWISE_INVALID_LISTENER_INDEX);
 
-s3eWwiseResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString);
+s3eWwiseResult s3eWwiseSoundEngineClearBanks();
+
+s3eWwiseResult s3eWwiseSoundEngineLoadBankNamed(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId, s3eWwiseBankID* out_bankID);
+
+s3eWwiseResult s3eWwiseSoundEngineLoadBankWithID(s3eWwiseBankID in_bankID, s3eWwiseMemPoolId in_memPoolId);
+
+s3eWwiseResult s3eWwiseSoundEngineUnloadBankNamed(const char* in_pszString, s3eWwiseMemPoolId* out_memPoolId = NULL);
+
+s3eWwiseResult s3eWwiseSoundEngineUnloadBankWithID(s3eWwiseBankID in_bankID, s3eWwiseMemPoolId* out_memPoolId = NULL);
 
 /**
  * AK::MusicEngine
@@ -239,6 +329,11 @@ s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings);
 void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings);
 
 void s3eWwiseMusicEngineTerm();
+
+/**
+ * AK::MemoryMgr
+ */
+s3eBool s3eWwiseMemoryMgrIsInitialized();
 
 S3E_END_C_DECL
 

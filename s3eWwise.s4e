@@ -7,6 +7,18 @@ include:
 typedef uint32 s3eWwiseUniqueID;
 static const s3eWwiseUniqueID S3E_WWISE_INVALID_UNIQUE_ID = 0;
 
+typedef uint32 s3eWwiseStateID;
+typedef uint32 s3eWwiseStateGroupID;
+
+typedef uint32 s3eWwiseSwitchGroupID;
+typedef uint32 s3eWwiseSwitchStateID;
+
+typedef uint32 s3eWwiseRtpcID;
+typedef float s3eWwiseRtpcValue;
+static const s3eWwiseRtpcID S3E_WWISE_INVALID_RTPC_ID = S3E_WWISE_INVALID_UNIQUE_ID;
+
+typedef uint32 s3eWwiseTriggerID;
+
 typedef int32 s3eWwiseMemPoolId;
 static const s3eWwiseMemPoolId S3E_WWISE_INVALID_POOL_ID = -1;
 static const s3eWwiseMemPoolId S3E_WWISE_DEFAULT_POOL_ID = -1;
@@ -17,8 +29,51 @@ static const s3eWwiseGameObjectID S3E_WWISE_INVALID_GAME_OBJECT = (s3eWwiseGameO
 typedef uint32 s3eWwisePlayingID;
 static const s3eWwisePlayingID S3E_WWISE_INVALID_PLAYING_ID = S3E_WWISE_INVALID_UNIQUE_ID;
 
+typedef int32 s3eWwiseTimeMs;
+
+typedef uint32 s3eWwiseBankID;
+static const s3eWwiseBankID S3E_WWISE_INVALID_BANK_ID = S3E_WWISE_INVALID_UNIQUE_ID;
+
+static const uint32 S3E_WWISE_INVALID_LISTENER_INDEX = (uint32)-1;
+
+typedef struct s3eWwiseVector
+{
+	float X;
+	float Y;
+	float Z;
+} s3eWwiseVector;
+
+typedef struct s3eWwiseSoundPosition
+{
+	s3eWwiseVector Position;
+	s3eWwiseVector Orientation;
+} s3eWwiseSoundPosition;
+
+typedef struct s3eWwiseListenerPosition
+{
+	s3eWwiseVector OrientationFront;
+	s3eWwiseVector OrientationTop;
+	s3eWwiseVector Position;
+} s3eWwiseListenerPosition;
+
+/// Curve interpolation types
+typedef enum s3eWwiseCurveInterpolation
+{
+    s3eWwiseCurveInterpolation_Log3			= 0, ///< Log3
+    s3eWwiseCurveInterpolation_Sine			= 1, ///< Sine
+    s3eWwiseCurveInterpolation_Log1			= 2, ///< Log1
+    s3eWwiseCurveInterpolation_InvSCurve		= 3, ///< Inversed S Curve
+    s3eWwiseCurveInterpolation_Linear			= 4, ///< Linear (Default)
+    s3eWwiseCurveInterpolation_SCurve			= 5, ///< S Curve
+    s3eWwiseCurveInterpolation_Exp1			= 6, ///< Exp1
+    s3eWwiseCurveInterpolation_SineRecip		= 7, ///< Reciprocal of sine curve
+    s3eWwiseCurveInterpolation_Exp3			= 8, ///< Exp3
+	s3eWwiseCurveInterpolation_LastFadeCurve  = 8, ///< Update this value to reflect last curve available for fades
+	s3eWwiseCurveInterpolation_Constant		= 9  ///< Constant ( not valid for fading values )
+} s3eWwiseCurveInterpolation;
+
 /// Standard function call result.
-enum s3eWwiseResult
+typedef enum s3eWwiseResult
 {
     s3eWwise_NotImplemented				= 0,	///< This feature is not implemented.
     s3eWwise_Success					= 1,	///< The operation was successful.
@@ -101,32 +156,32 @@ enum s3eWwiseResult
 	s3eWwise_PluginMediaNotAvailable  	= 79,	///< Plugin media is not available for effect.
 	s3eWwise_MustBeVirtualized			= 80,	///< Sound was Not Allowed to play.
 	s3eWwise_CommandTooLarge			= 81	///< SDK command is too large to fit in the command queue.
-};
+} s3eWwiseResult;
 
 /**
  * AK::MemoryMgr
  */
-struct s3eWwiseMemSettings
+typedef struct s3eWwiseMemSettings
 {
 	uint32 uMaxNumPools;
-};
+} s3eWwiseMemSettings;
 
 /**
  * AK::StreamMgr
  */
-struct s3eWwiseStreamMgrSettings
+typedef struct s3eWwiseStreamMgrSettings
 {
 	uint32 uMemorySize;
-};
+} s3eWwiseStreamMgrSettings;
 
-struct s3eWwiseStreamMgr;
+typedef struct s3eWwiseStreamMgr s3eWwiseStreamMgr;
 
 /**
  * AK::SoundEngine
  */
 typedef void (*s3eWwiseAssertHook)(const char *in_pszExpression, const char *in_pszFileName, int in_lineNumber);
  
-struct s3eWwiseInitSettings
+typedef struct s3eWwiseInitSettings
 {
 	s3eWwiseAssertHook pfnAssertHook;
 	uint32 uMaxNumPaths;
@@ -139,9 +194,9 @@ struct s3eWwiseInitSettings
 	uint32 uContinuousPlaybackLookAhead;
 	uint32 uMonitorPoolSize;
 	uint32 uMonitorQueuePoolSize;
-};
+} s3eWwiseInitSettings;
 
-struct s3eWwisePlatformInitSettings
+typedef struct s3eWwisePlatformInitSettings
 {
 	// Missing: s3eWwiseThreadProperties threadLEngine;
 	// Missing: s3eWwiseThreadProperties threadBankManager;
@@ -151,15 +206,15 @@ struct s3eWwisePlatformInitSettings
 	uint32 uSampleRate;
 	uint16 uNumRefillsInVoice;
 	s3eBool bMuteOtherApps;
-};
+} s3eWwisePlatformInitSettings;
 
 /**
  * AK::MusicEngine
  */
-struct s3eWwiseMusicSettings
+typedef struct s3eWwiseMusicSettings
 {
 	float fStreamingLookAheadRatio;
-};
+} s3eWwiseMusicSettings;
  
 functions:
 /**
@@ -189,16 +244,40 @@ void s3eWwiseSoundEngineTerm()
 s3eWwiseResult s3eWwiseSoundEngineRenderAudio() s3eWwise_NotImplemented
 
 // Event Management
-s3eWwisePlayingID s3eWwiseSoundEnginePostEvent(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID) S3E_WWISE_INVALID_PLAYING_ID
+s3eWwisePlayingID s3eWwiseSoundEnginePostEventNamed(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID, uint32 flags = 0) S3E_WWISE_INVALID_PLAYING_ID
+s3eWwisePlayingID s3eWwiseSoundEnginePostEventWithID(s3eWwiseUniqueID in_eventID, s3eWwiseGameObjectID in_gameObjectID, uint32 flags = 0) S3E_WWISE_INVALID_PLAYING_ID
+void s3eWwiseSoundEngineStopAll(s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT);
+void s3eWwiseSoundEngineStopPlayingID(s3eWwisePlayingID in_playingID, s3eWwiseTimeMs in_uTransitionDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear)
+
+// Listeners
+s3eWwiseResult s3eWwiseSoundEngineSetActiveListeners(s3eWwiseGameObjectID in_GameObjectID, uint32 in_uListenerMask) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetListenerPosition(const s3eWwiseListenerPosition* in_Position, uint32 in_uIndex = 0) s3eWwise_NotImplemented
+
+// Game Syncs
+s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID, s3eWwiseRtpcValue in_value, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueNamed(const char* in_pszRtpcName, s3eWwiseRtpcValue in_value, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueNamed(const char* in_pszRtpcName, s3eWwiseGameObjectID in_gameObjectID = S3E_WWISE_INVALID_GAME_OBJECT, s3eWwiseTimeMs in_uValueChangeDuration = 0, s3eWwiseCurveInterpolation in_eFadeCurve = s3eWwiseCurveInterpolation_Linear) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetSwitchWithID(s3eWwiseSwitchGroupID in_switchGroup, s3eWwiseSwitchStateID in_switchState, s3eWwiseGameObjectID in_gameObjectID) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetSwitchNamed(const char* in_pszSwitchGroup, const char* in_pszSwitchState, s3eWwiseGameObjectID in_gameObjectID) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEnginePostTriggerWithID(s3eWwiseTriggerID in_triggerID, s3eWwiseGameObjectID in_gameObjectID) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEnginePostTriggerNamed(const char* in_pszTrigger, s3eWwiseGameObjectID in_gameObjectID) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetStateWithID(s3eWwiseStateGroupID in_stateGroup, s3eWwiseStateID in_state) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetStateNamed(const char* in_pszStateGroup, const char* in_pszState) s3eWwise_NotImplemented
 
 // Game Objects
-s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineRegisterGameObjWithName(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName) s3eWwise_NotImplemented
 s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID) s3eWwise_NotImplemented
 s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj() s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex = S3E_WWISE_INVALID_LISTENER_INDEX) s3eWwise_NotImplemented
 
 // Bank Management
-s3eWwiseResult s3eWwiseSoundEngineLoadBank(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId) s3eWwise_NotImplemented
-s3eWwiseResult s3eWwiseSoundEngineUnloadBank(const char* in_pszString) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineClearBanks() s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineLoadBankNamed(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId, s3eWwiseBankID* out_bankID) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineLoadBankWithID(s3eWwiseBankID in_bankID, s3eWwiseMemPoolId in_memPoolId) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineUnloadBankNamed(const char* in_pszString, s3eWwiseMemPoolId* out_memPoolId = NULL) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineUnloadBankWithID(s3eWwiseBankID in_bankID, s3eWwiseMemPoolId* out_memPoolId = NULL) s3eWwise_NotImplemented
 
 /**
  * AK::MusicEngine

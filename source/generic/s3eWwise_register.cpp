@@ -21,33 +21,53 @@ extern void s3eWwiseTerminate();
 void s3eWwiseRegisterExt()
 {
     /* fill in the function pointer struct for this extension */
-    void* funcPtrs[21];
-    funcPtrs[0] = (void*)s3eWwiseMemoryMgrIsInitialized;
-    funcPtrs[1] = (void*)s3eWwiseMemoryMgrTerm;
-    funcPtrs[2] = (void*)s3eWwiseMemoryMgrInit;
-    funcPtrs[3] = (void*)s3eWwiseStreamMgrCreate;
-    funcPtrs[4] = (void*)s3eWwiseStreamMgrDestroy;
-    funcPtrs[5] = (void*)s3eWwiseStreamMgrGetDefaultSettings;
-    funcPtrs[6] = (void*)s3eWwiseSoundEngineIsInitialized;
-    funcPtrs[7] = (void*)s3eWwiseSoundEngineInit;
-    funcPtrs[8] = (void*)s3eWwiseSoundEngineGetDefaultInitSettings;
-    funcPtrs[9] = (void*)s3eWwiseSoundEngineGetDefaultPlatformInitSettings;
-    funcPtrs[10] = (void*)s3eWwiseSoundEngineTerm;
-    funcPtrs[11] = (void*)s3eWwiseSoundEngineRenderAudio;
-    funcPtrs[12] = (void*)s3eWwiseSoundEnginePostEvent;
-    funcPtrs[13] = (void*)s3eWwiseSoundEngineRegisterGameObj;
-    funcPtrs[14] = (void*)s3eWwiseSoundEngineUnregisterGameObj;
-    funcPtrs[15] = (void*)s3eWwiseSoundEngineUnregisterAllGameObj;
-    funcPtrs[16] = (void*)s3eWwiseSoundEngineLoadBank;
-    funcPtrs[17] = (void*)s3eWwiseSoundEngineUnloadBank;
-    funcPtrs[18] = (void*)s3eWwiseMusicEngineInit;
-    funcPtrs[19] = (void*)s3eWwiseMusicEngineGetDefaultInitSettings;
-    funcPtrs[20] = (void*)s3eWwiseMusicEngineTerm;
+    void* funcPtrs[41];
+    funcPtrs[0] = (void*)s3eWwiseMemoryMgrTerm;
+    funcPtrs[1] = (void*)s3eWwiseMemoryMgrInit;
+    funcPtrs[2] = (void*)s3eWwiseStreamMgrCreate;
+    funcPtrs[3] = (void*)s3eWwiseStreamMgrDestroy;
+    funcPtrs[4] = (void*)s3eWwiseStreamMgrGetDefaultSettings;
+    funcPtrs[5] = (void*)s3eWwiseSoundEngineIsInitialized;
+    funcPtrs[6] = (void*)s3eWwiseSoundEngineInit;
+    funcPtrs[7] = (void*)s3eWwiseSoundEngineGetDefaultInitSettings;
+    funcPtrs[8] = (void*)s3eWwiseSoundEngineGetDefaultPlatformInitSettings;
+    funcPtrs[9] = (void*)s3eWwiseSoundEngineTerm;
+    funcPtrs[10] = (void*)s3eWwiseSoundEngineRenderAudio;
+    funcPtrs[11] = (void*)s3eWwiseSoundEnginePostEventNamed;
+    funcPtrs[12] = (void*)s3eWwiseSoundEnginePostEventWithID;
+    funcPtrs[13] = (void*)s3eWwiseSoundEngineStopAll;
+    funcPtrs[14] = (void*)s3eWwiseSoundEngineStopPlayingID;
+    funcPtrs[15] = (void*)s3eWwiseSoundEngineSetActiveListeners;
+    funcPtrs[16] = (void*)s3eWwiseSoundEngineSetListenerPosition;
+    funcPtrs[17] = (void*)s3eWwiseSoundEngineSetRTPCValueWithID;
+    funcPtrs[18] = (void*)s3eWwiseSoundEngineSetRTPCValueNamed;
+    funcPtrs[19] = (void*)s3eWwiseSoundEngineResetRTPCValueWithID;
+    funcPtrs[20] = (void*)s3eWwiseSoundEngineResetRTPCValueNamed;
+    funcPtrs[21] = (void*)s3eWwiseSoundEngineSetSwitchWithID;
+    funcPtrs[22] = (void*)s3eWwiseSoundEngineSetSwitchNamed;
+    funcPtrs[23] = (void*)s3eWwiseSoundEnginePostTriggerWithID;
+    funcPtrs[24] = (void*)s3eWwiseSoundEnginePostTriggerNamed;
+    funcPtrs[25] = (void*)s3eWwiseSoundEngineSetStateWithID;
+    funcPtrs[26] = (void*)s3eWwiseSoundEngineSetStateNamed;
+    funcPtrs[27] = (void*)s3eWwiseSoundEngineRegisterGameObj;
+    funcPtrs[28] = (void*)s3eWwiseSoundEngineRegisterGameObjWithName;
+    funcPtrs[29] = (void*)s3eWwiseSoundEngineUnregisterGameObj;
+    funcPtrs[30] = (void*)s3eWwiseSoundEngineUnregisterAllGameObj;
+    funcPtrs[31] = (void*)s3eWwiseSoundEngineSetPosition;
+    funcPtrs[32] = (void*)s3eWwiseSoundEngineClearBanks;
+    funcPtrs[33] = (void*)s3eWwiseSoundEngineLoadBankNamed;
+    funcPtrs[34] = (void*)s3eWwiseSoundEngineLoadBankWithID;
+    funcPtrs[35] = (void*)s3eWwiseSoundEngineUnloadBankNamed;
+    funcPtrs[36] = (void*)s3eWwiseSoundEngineUnloadBankWithID;
+    funcPtrs[37] = (void*)s3eWwiseMusicEngineInit;
+    funcPtrs[38] = (void*)s3eWwiseMusicEngineGetDefaultInitSettings;
+    funcPtrs[39] = (void*)s3eWwiseMusicEngineTerm;
+    funcPtrs[40] = (void*)s3eWwiseMemoryMgrIsInitialized;
 
     /*
      * Flags that specify the extension's use of locking and stackswitching
      */
-    int flags[21] = { 0 };
+    int flags[41] = { 0 };
 
     /*
      * Register the extension
