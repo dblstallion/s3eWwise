@@ -6,9 +6,13 @@
 #include "s3eExt.h"
 #include "s3ePointer.h"
 #include "s3eFile.h"
+#include "s3eSurface.h"
+#include <string>
+#include <sstream>
 
 static s3eWwiseStreamMgr *streamMgr;
 const s3eWwiseGameObjectID gameObjectID = (s3eWwiseGameObjectID)100;
+const s3eWwiseGameObjectID carID = (s3eWwiseGameObjectID)200;
 
 void initWwise()
 {
@@ -72,7 +76,17 @@ void initWwise()
     else
         s3eDebugOutputString("Loaded sound bank");
 
+    s3eWwiseResult loadCar = s3eWwiseSoundEngineLoadBankNamed("iOS/Car.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
+    if( loadCar != s3eWwise_Success )
+    {
+        s3eDebugOutputString("Failed to load sound bank");
+        s3eDebugTracePrintf("Error code = %d", loadCar);
+    }
+    else
+        s3eDebugOutputString("Loaded sound bank");
+
     s3eWwiseSoundEngineRegisterGameObjWithName(gameObjectID, "Human");
+    s3eWwiseSoundEngineRegisterGameObj(carID);
 }
 
 void shutdownWwise()
@@ -92,13 +106,32 @@ void shutdownWwise()
     s3eDebugOutputString("Wwise Shutdown");
 }
 
-void touchEvent(s3ePointerTouchEvent *event)
+void buttonEvent(s3ePointerTouchEvent *event)
 {
     if(event->m_Pressed)
     {
         s3eDebugOutputString("Posting Event \"Play_Hello\"");
         s3eWwiseSoundEnginePostEventWithID(AK::EVENTS::PLAY_HELLO, gameObjectID);
+
+        s3eWwiseSoundEnginePostEventWithID(AK::EVENTS::PLAY_ENGINE, carID);
     }
+    else
+    {
+        s3eWwiseSoundEnginePostEventWithID(AK::EVENTS::STOP_ENGINE, carID);
+    }
+}
+
+float rpm = 0.0f;
+float touchHeight = 0.0f;
+float height = 0.0f;
+
+void motionEvent(s3ePointerMotionEvent *event)
+{
+    height = s3eSurfaceGetInt(S3E_SURFACE_HEIGHT);
+
+    touchHeight = (float)event->m_y;
+    rpm = (float)event->m_y / (float)height * (10000.0f - 1000.0f) + 1000.0f;
+    s3eWwiseSoundEngineSetRTPCValueWithID(AK::GAME_PARAMETERS::RPM, rpm, carID);
 }
 
 // Example showing how to use the s3eWwise extension
@@ -106,13 +139,16 @@ int main()
 {
     s3eDebugOutputString("Booting s3eWwise example");
 
-    s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)touchEvent, NULL);
+    s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)buttonEvent, NULL);
+    s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)motionEvent, NULL);
 
     IwGxInit();
 
     IwGxSetColClear(0, 0, 0, 0xff);
 
     initWwise();
+
+    std::stringstream str;
 
     while(!s3eDeviceCheckQuitRequest())
     {
@@ -124,6 +160,18 @@ int main()
         IwGxPrintString(100, 100, "s3eWwise");
 
         IwGxPrintString(100, 300, "Touch to fire event");
+
+        str << "RPM = " << rpm;
+        IwGxPrintString(100, 400, str.str().c_str());
+        str.str(std::string());
+
+        str << "TH = " << touchHeight;
+        IwGxPrintString(100, 500, str.str().c_str());
+        str.str(std::string());
+
+        str << "Height = " << height;
+        IwGxPrintString(100, 600, str.str().c_str());
+        str.str(std::string());
 
         IwGxFlush();
         IwGxSwapBuffers();
