@@ -232,6 +232,25 @@ typedef struct s3eWwiseMusicSettings
 {
 	float fStreamingLookAheadRatio;
 } s3eWwiseMusicSettings;
+
+/**
+ * AK::Comm
+ */
+typedef struct s3eWwisePorts
+{
+	uint16 uDiscoveryBroadcast;
+	uint16 uCommand;
+	uint16 uNotification;
+	uint16 uControl;
+} s3eWwisePorts;
+
+typedef struct s3eWwiseCommSettings
+{
+	uint32 uPoolSize;
+	// Missing: s3eWwiseThreadProperties threadProperties;
+	s3eWwisePorts ports;
+	s3eBool bInitSystemLib;
+} s3eWwiseCommSettings;
 // \cond HIDDEN_DEFINES
 S3E_BEGIN_C_DECL
 // \endcond
@@ -240,6 +259,11 @@ S3E_BEGIN_C_DECL
  * Returns S3E_TRUE if the Wwise extension is available.
  */
 s3eBool s3eWwiseAvailable();
+
+/**
+ * AK::MemoryMgr
+ */
+s3eBool s3eWwiseMemoryMgrIsInitialized();
 
 void s3eWwiseMemoryMgrTerm();
 
@@ -331,9 +355,13 @@ void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settin
 void s3eWwiseMusicEngineTerm();
 
 /**
- * AK::MemoryMgr
+ * AK::Comm
  */
-s3eBool s3eWwiseMemoryMgrIsInitialized();
+s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings *in_settings);
+
+void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings *out_settings);
+
+void s3eWwiseCommTerm();
 
 S3E_END_C_DECL
 

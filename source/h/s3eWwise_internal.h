@@ -42,6 +42,8 @@ void s3eWwiseTerminate();
 void s3eWwiseTerminate_platform();
 void s3eWwiseMemoryMgrTerm_platform();
 
+s3eBool s3eWwiseMemoryMgrIsInitialized_platform();
+
 s3eWwiseResult s3eWwiseMemoryMgrInit_platform(s3eWwiseMemSettings* in_pSettings);
 
 s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings);
@@ -120,6 +122,10 @@ void s3eWwiseMusicEngineGetDefaultInitSettings_platform(s3eWwiseMusicSettings* o
 
 void s3eWwiseMusicEngineTerm_platform();
 
-s3eBool s3eWwiseMemoryMgrIsInitialized_platform();
+s3eWwiseResult s3eWwiseCommInit_platform(s3eWwiseCommSettings* in_pSettings);
+
+void s3eWwiseCommGetDefaultInitSettings_platform(s3eWwiseCommSettings* out_settings);
+
+void s3eWwiseCommTerm_platform();
 
 #endif /* !S3EWWISE_INTERNAL_H */

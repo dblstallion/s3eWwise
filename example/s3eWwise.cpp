@@ -54,6 +54,18 @@ void initWwise()
     else
         s3eDebugOutputString("Init Music Successfully");
 
+    s3eWwiseCommSettings commSettings;
+    s3eWwiseCommGetDefaultInitSettings(&commSettings);
+    s3eWwiseResult commEngine = s3eWwiseCommInit(&commSettings);
+    if( commEngine != s3eWwise_Success )
+    {
+        std::stringstream ss;
+        ss << "Failed to Init Comm: error code = " << commEngine;
+        s3eDebugOutputString(ss.str().c_str());
+    }
+    else
+        s3eDebugOutputString("Init Comm Successfully");
+
     s3eWwiseBankID bankId;
 
     //s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::INIT, S3E_WWISE_DEFAULT_POOL_ID);
@@ -95,6 +107,8 @@ void shutdownWwise()
 
     s3eWwiseSoundEngineUnloadBankNamed("iOS/Init.bnk");
     s3eWwiseSoundEngineUnloadBankNamed("iOS/English(US)/Human.bnk");
+
+    s3eWwiseCommTerm();
 
     s3eWwiseMusicEngineTerm();
 

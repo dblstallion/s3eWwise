@@ -21,6 +21,8 @@
 
 #include <AK/MusicEngine/Common/AkMusicEngine.h>
 
+#include <AK/Comm/AkCommunication.h>
+
 #include <stdlib.h>
 
 // We're using the default Low-Level I/O implementation that's part
@@ -324,4 +326,36 @@ void s3eWwiseMusicEngineGetDefaultInitSettings_platform(s3eWwiseMusicSettings* o
 void s3eWwiseMusicEngineTerm_platform()
 {
 	AK::MusicEngine::Term();
+}
+
+s3eWwiseResult s3eWwiseCommInit_platform(s3eWwiseCommSettings* in_pSettings)
+{
+	AkCommSettings settings;
+	AK::Comm::GetDefaultInitSettings(settings);
+	settings.uPoolSize					= in_pSettings->uPoolSize;
+	settings.ports.uDiscoveryBroadcast	= in_pSettings->ports.uDiscoveryBroadcast;
+	settings.ports.uCommand				= in_pSettings->ports.uCommand;
+	settings.ports.uNotification		= in_pSettings->ports.uNotification;
+	settings.ports.uControl				= in_pSettings->ports.uControl;
+	settings.bInitSystemLib				= in_pSettings->bInitSystemLib;
+
+	return (s3eWwiseResult)AK::Comm::Init(settings);
+}
+
+void s3eWwiseCommGetDefaultInitSettings_platform(s3eWwiseCommSettings* out_settings)
+{
+	AkCommSettings settings;
+	AK::Comm::GetDefaultInitSettings(settings);
+
+	out_settings->uPoolSize					= settings.uPoolSize;
+	out_settings->ports.uDiscoveryBroadcast = settings.ports.uDiscoveryBroadcast;
+	out_settings->ports.uCommand			= settings.ports.uCommand;
+	out_settings->ports.uNotification		= settings.ports.uNotification;
+	out_settings->ports.uControl			= settings.ports.uControl;
+	out_settings->bInitSystemLib			= settings.bInitSystemLib;
+}
+
+void s3eWwiseCommTerm_platform()
+{
+	AK::Comm::Term();
 }

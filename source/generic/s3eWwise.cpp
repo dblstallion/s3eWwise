@@ -22,6 +22,11 @@ void s3eWwiseTerminate()
     s3eWwiseTerminate_platform();
 }
 
+s3eBool s3eWwiseMemoryMgrIsInitialized()
+{
+	return s3eWwiseMemoryMgrIsInitialized_platform();
+}
+
 void s3eWwiseMemoryMgrTerm()
 {
 	s3eWwiseMemoryMgrTerm_platform();
@@ -222,7 +227,17 @@ void s3eWwiseMusicEngineTerm()
 	s3eWwiseMusicEngineTerm_platform();
 }
 
-s3eBool s3eWwiseMemoryMgrIsInitialized()
+s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_pSettings)
 {
-	return s3eWwiseMemoryMgrIsInitialized_platform();
+	return s3eWwiseCommInit_platform(in_pSettings);
+}
+
+void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
+{
+	s3eWwiseCommGetDefaultInitSettings_platform(out_settings);
+}
+
+void s3eWwiseCommTerm()
+{
+	s3eWwiseCommTerm_platform();
 }

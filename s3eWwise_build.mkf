@@ -16,6 +16,13 @@ defines
     S3E_EXT_WWISE
 }
 
+commands
+{
+	"for f in $(find Wwise/SDK/iOS/Debug-iphoneos/lib -type f); do cp $f ${f/.a/_d.a}; done"
+	"mv Wwise/SDK/iOS/Debug-iphoneos/lib/*_d.a Wwise/SDK/iOS"
+	"cp Wwise/SDK/iOS/Release-iphoneos/lib/*.a Wwise/SDK/iOS"
+}
+
 #This command re-generates the relevant source files from the s4e when
 #the mkb is run
 #extension

@@ -215,12 +215,31 @@ typedef struct s3eWwiseMusicSettings
 {
 	float fStreamingLookAheadRatio;
 } s3eWwiseMusicSettings;
- 
+
+/**
+ * AK::Comm
+ */
+typedef struct s3eWwisePorts
+{
+	uint16 uDiscoveryBroadcast;
+	uint16 uCommand;
+	uint16 uNotification;
+	uint16 uControl;
+} s3eWwisePorts;
+
+typedef struct s3eWwiseCommSettings
+{
+	uint32 uPoolSize;
+	// Missing: s3eWwiseThreadProperties threadProperties;
+	s3eWwisePorts ports;
+	s3eBool bInitSystemLib;
+} s3eWwiseCommSettings;
+
 functions:
 /**
  * AK::MemoryMgr
  */
-s3eBool s3eWwiseMemoryMgrIsInitialized() S3E_FALSE order
+s3eBool s3eWwiseMemoryMgrIsInitialized() S3E_FALSE
 void s3eWwiseMemoryMgrTerm()
 s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings) s3eWwise_NotImplemented
 
@@ -285,3 +304,10 @@ s3eWwiseResult s3eWwiseSoundEngineUnloadBankWithID(s3eWwiseBankID in_bankID, s3e
 s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings) s3eWwise_NotImplemented
 void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
 void s3eWwiseMusicEngineTerm()
+
+/**
+ * AK::Comm
+ */
+s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_settings) s3eWwise_NotImplemented
+void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
+void s3eWwiseCommTerm()

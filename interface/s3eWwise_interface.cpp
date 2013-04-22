@@ -12,6 +12,7 @@
 /**
  * Definitions for functions types passed to/from s3eExt interface
  */
+typedef    s3eBool(*s3eWwiseMemoryMgrIsInitialized_t)();
 typedef       void(*s3eWwiseMemoryMgrTerm_t)();
 typedef s3eWwiseResult(*s3eWwiseMemoryMgrInit_t)(s3eWwiseMemSettings* in_pSettings);
 typedef s3eWwiseStreamMgr*(*s3eWwiseStreamMgrCreate_t)(s3eWwiseStreamMgrSettings* in_settings);
@@ -52,13 +53,16 @@ typedef s3eWwiseResult(*s3eWwiseSoundEngineUnloadBankWithID_t)(s3eWwiseBankID in
 typedef s3eWwiseResult(*s3eWwiseMusicEngineInit_t)(s3eWwiseMusicSettings* in_pSettings);
 typedef       void(*s3eWwiseMusicEngineGetDefaultInitSettings_t)(s3eWwiseMusicSettings* out_settings);
 typedef       void(*s3eWwiseMusicEngineTerm_t)();
-typedef    s3eBool(*s3eWwiseMemoryMgrIsInitialized_t)();
+typedef s3eWwiseResult(*s3eWwiseCommInit_t)(s3eWwiseCommSettings *in_settings);
+typedef       void(*s3eWwiseCommGetDefaultInitSettings_t)(s3eWwiseCommSettings *out_settings);
+typedef       void(*s3eWwiseCommTerm_t)();
 
 /**
  * struct that gets filled in by s3eWwiseRegister
  */
 typedef struct s3eWwiseFuncs
 {
+    s3eWwiseMemoryMgrIsInitialized_t m_s3eWwiseMemoryMgrIsInitialized;
     s3eWwiseMemoryMgrTerm_t m_s3eWwiseMemoryMgrTerm;
     s3eWwiseMemoryMgrInit_t m_s3eWwiseMemoryMgrInit;
     s3eWwiseStreamMgrCreate_t m_s3eWwiseStreamMgrCreate;
@@ -99,7 +103,9 @@ typedef struct s3eWwiseFuncs
     s3eWwiseMusicEngineInit_t m_s3eWwiseMusicEngineInit;
     s3eWwiseMusicEngineGetDefaultInitSettings_t m_s3eWwiseMusicEngineGetDefaultInitSettings;
     s3eWwiseMusicEngineTerm_t m_s3eWwiseMusicEngineTerm;
-    s3eWwiseMemoryMgrIsInitialized_t m_s3eWwiseMemoryMgrIsInitialized;
+    s3eWwiseCommInit_t m_s3eWwiseCommInit;
+    s3eWwiseCommGetDefaultInitSettings_t m_s3eWwiseCommGetDefaultInitSettings;
+    s3eWwiseCommTerm_t m_s3eWwiseCommTerm;
 } s3eWwiseFuncs;
 
 static s3eWwiseFuncs g_Ext;
@@ -145,9 +151,31 @@ s3eBool s3eWwiseAvailable()
     return g_GotExt ? S3E_TRUE : S3E_FALSE;
 }
 
+s3eBool s3eWwiseMemoryMgrIsInitialized()
+{
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[0] func: s3eWwiseMemoryMgrIsInitialized"));
+
+    if (!_extLoad())
+        return S3E_FALSE;
+
+#ifdef __mips
+    // For MIPs platform we do not have asm code for stack switching
+    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+    s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
+#endif
+
+    s3eBool ret = g_Ext.m_s3eWwiseMemoryMgrIsInitialized();
+
+#ifdef __mips
+    s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
+#endif
+
+    return ret;
+}
+
 void s3eWwiseMemoryMgrTerm()
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[0] func: s3eWwiseMemoryMgrTerm"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[1] func: s3eWwiseMemoryMgrTerm"));
 
     if (!_extLoad())
         return;
@@ -169,7 +197,7 @@ void s3eWwiseMemoryMgrTerm()
 
 s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[1] func: s3eWwiseMemoryMgrInit"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[2] func: s3eWwiseMemoryMgrInit"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -191,7 +219,7 @@ s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
 
 s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[2] func: s3eWwiseStreamMgrCreate"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[3] func: s3eWwiseStreamMgrCreate"));
 
     if (!_extLoad())
         return NULL;
@@ -213,7 +241,7 @@ s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_setting
 
 void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[3] func: s3eWwiseStreamMgrDestroy"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[4] func: s3eWwiseStreamMgrDestroy"));
 
     if (!_extLoad())
         return;
@@ -235,7 +263,7 @@ void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr)
 
 void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[4] func: s3eWwiseStreamMgrGetDefaultSettings"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[5] func: s3eWwiseStreamMgrGetDefaultSettings"));
 
     if (!_extLoad())
         return;
@@ -257,7 +285,7 @@ void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings
 
 s3eBool s3eWwiseSoundEngineIsInitialized()
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[5] func: s3eWwiseSoundEngineIsInitialized"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[6] func: s3eWwiseSoundEngineIsInitialized"));
 
     if (!_extLoad())
         return S3E_FALSE;
@@ -279,7 +307,7 @@ s3eBool s3eWwiseSoundEngineIsInitialized()
 
 s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[6] func: s3eWwiseSoundEngineInit"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[7] func: s3eWwiseSoundEngineInit"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -301,7 +329,7 @@ s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWw
 
 void s3eWwiseSoundEngineGetDefaultInitSettings(s3eWwiseInitSettings* out_settings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[7] func: s3eWwiseSoundEngineGetDefaultInitSettings"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[8] func: s3eWwiseSoundEngineGetDefaultInitSettings"));
 
     if (!_extLoad())
         return;
@@ -323,7 +351,7 @@ void s3eWwiseSoundEngineGetDefaultInitSettings(s3eWwiseInitSettings* out_setting
 
 void s3eWwiseSoundEngineGetDefaultPlatformInitSettings(s3eWwisePlatformInitSettings* out_settings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[8] func: s3eWwiseSoundEngineGetDefaultPlatformInitSettings"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[9] func: s3eWwiseSoundEngineGetDefaultPlatformInitSettings"));
 
     if (!_extLoad())
         return;
@@ -345,7 +373,7 @@ void s3eWwiseSoundEngineGetDefaultPlatformInitSettings(s3eWwisePlatformInitSetti
 
 void s3eWwiseSoundEngineTerm()
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[9] func: s3eWwiseSoundEngineTerm"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[10] func: s3eWwiseSoundEngineTerm"));
 
     if (!_extLoad())
         return;
@@ -367,7 +395,7 @@ void s3eWwiseSoundEngineTerm()
 
 s3eWwiseResult s3eWwiseSoundEngineRenderAudio()
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[10] func: s3eWwiseSoundEngineRenderAudio"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[11] func: s3eWwiseSoundEngineRenderAudio"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -389,7 +417,7 @@ s3eWwiseResult s3eWwiseSoundEngineRenderAudio()
 
 s3eWwisePlayingID s3eWwiseSoundEnginePostEventNamed(const char* in_pszEventName, s3eWwiseGameObjectID in_gameObjectID, uint32 flags)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[11] func: s3eWwiseSoundEnginePostEventNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[12] func: s3eWwiseSoundEnginePostEventNamed"));
 
     if (!_extLoad())
         return S3E_WWISE_INVALID_PLAYING_ID;
@@ -411,7 +439,7 @@ s3eWwisePlayingID s3eWwiseSoundEnginePostEventNamed(const char* in_pszEventName,
 
 s3eWwisePlayingID s3eWwiseSoundEnginePostEventWithID(s3eWwiseUniqueID in_eventID, s3eWwiseGameObjectID in_gameObjectID, uint32 flags)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[12] func: s3eWwiseSoundEnginePostEventWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[13] func: s3eWwiseSoundEnginePostEventWithID"));
 
     if (!_extLoad())
         return S3E_WWISE_INVALID_PLAYING_ID;
@@ -433,7 +461,7 @@ s3eWwisePlayingID s3eWwiseSoundEnginePostEventWithID(s3eWwiseUniqueID in_eventID
 
 void s3eWwiseSoundEngineStopAll(s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[13] func: s3eWwiseSoundEngineStopAll"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[14] func: s3eWwiseSoundEngineStopAll"));
 
     if (!_extLoad())
         return;
@@ -455,7 +483,7 @@ void s3eWwiseSoundEngineStopAll(s3eWwiseGameObjectID in_gameObjectID)
 
 void s3eWwiseSoundEngineStopPlayingID(s3eWwisePlayingID in_playingID, s3eWwiseTimeMs in_uTransitionDuration, s3eWwiseCurveInterpolation in_eFadeCurve)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[14] func: s3eWwiseSoundEngineStopPlayingID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[15] func: s3eWwiseSoundEngineStopPlayingID"));
 
     if (!_extLoad())
         return;
@@ -477,7 +505,7 @@ void s3eWwiseSoundEngineStopPlayingID(s3eWwisePlayingID in_playingID, s3eWwiseTi
 
 s3eWwiseResult s3eWwiseSoundEngineSetActiveListeners(s3eWwiseGameObjectID in_GameObjectID, uint32 in_uListenerMask)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[15] func: s3eWwiseSoundEngineSetActiveListeners"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[16] func: s3eWwiseSoundEngineSetActiveListeners"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -499,7 +527,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetActiveListeners(s3eWwiseGameObjectID in_Gam
 
 s3eWwiseResult s3eWwiseSoundEngineSetListenerPosition(const s3eWwiseListenerPosition* in_Position, uint32 in_uIndex)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[16] func: s3eWwiseSoundEngineSetListenerPosition"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[17] func: s3eWwiseSoundEngineSetListenerPosition"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -521,7 +549,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetListenerPosition(const s3eWwiseListenerPosi
 
 s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID, s3eWwiseRtpcValue in_value, s3eWwiseGameObjectID in_gameObjectID, s3eWwiseTimeMs in_uValueChangeDuration, s3eWwiseCurveInterpolation in_eFadeCurve)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[17] func: s3eWwiseSoundEngineSetRTPCValueWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[18] func: s3eWwiseSoundEngineSetRTPCValueWithID"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -543,7 +571,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID, s
 
 s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueNamed(const char* in_pszRtpcName, s3eWwiseRtpcValue in_value, s3eWwiseGameObjectID in_gameObjectID, s3eWwiseTimeMs in_uValueChangeDuration, s3eWwiseCurveInterpolation in_eFadeCurve)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[18] func: s3eWwiseSoundEngineSetRTPCValueNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[19] func: s3eWwiseSoundEngineSetRTPCValueNamed"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -565,7 +593,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetRTPCValueNamed(const char* in_pszRtpcName, 
 
 s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID, s3eWwiseGameObjectID in_gameObjectID, s3eWwiseTimeMs in_uValueChangeDuration, s3eWwiseCurveInterpolation in_eFadeCurve)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[19] func: s3eWwiseSoundEngineResetRTPCValueWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[20] func: s3eWwiseSoundEngineResetRTPCValueWithID"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -587,7 +615,7 @@ s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueWithID(s3eWwiseRtpcID in_rtpcID,
 
 s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueNamed(const char* in_pszRtpcName, s3eWwiseGameObjectID in_gameObjectID, s3eWwiseTimeMs in_uValueChangeDuration, s3eWwiseCurveInterpolation in_eFadeCurve)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[20] func: s3eWwiseSoundEngineResetRTPCValueNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[21] func: s3eWwiseSoundEngineResetRTPCValueNamed"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -609,7 +637,7 @@ s3eWwiseResult s3eWwiseSoundEngineResetRTPCValueNamed(const char* in_pszRtpcName
 
 s3eWwiseResult s3eWwiseSoundEngineSetSwitchWithID(s3eWwiseSwitchGroupID in_switchGroup, s3eWwiseSwitchStateID in_switchState, s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[21] func: s3eWwiseSoundEngineSetSwitchWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[22] func: s3eWwiseSoundEngineSetSwitchWithID"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -631,7 +659,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetSwitchWithID(s3eWwiseSwitchGroupID in_switc
 
 s3eWwiseResult s3eWwiseSoundEngineSetSwitchNamed(const char* in_pszSwitchGroup, const char* in_pszSwitchState, s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[22] func: s3eWwiseSoundEngineSetSwitchNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[23] func: s3eWwiseSoundEngineSetSwitchNamed"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -653,7 +681,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetSwitchNamed(const char* in_pszSwitchGroup, 
 
 s3eWwiseResult s3eWwiseSoundEnginePostTriggerWithID(s3eWwiseTriggerID in_triggerID, s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[23] func: s3eWwiseSoundEnginePostTriggerWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[24] func: s3eWwiseSoundEnginePostTriggerWithID"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -675,7 +703,7 @@ s3eWwiseResult s3eWwiseSoundEnginePostTriggerWithID(s3eWwiseTriggerID in_trigger
 
 s3eWwiseResult s3eWwiseSoundEnginePostTriggerNamed(const char* in_pszTrigger, s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[24] func: s3eWwiseSoundEnginePostTriggerNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[25] func: s3eWwiseSoundEnginePostTriggerNamed"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -697,7 +725,7 @@ s3eWwiseResult s3eWwiseSoundEnginePostTriggerNamed(const char* in_pszTrigger, s3
 
 s3eWwiseResult s3eWwiseSoundEngineSetStateWithID(s3eWwiseStateGroupID in_stateGroup, s3eWwiseStateID in_state)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[25] func: s3eWwiseSoundEngineSetStateWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[26] func: s3eWwiseSoundEngineSetStateWithID"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -719,7 +747,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetStateWithID(s3eWwiseStateGroupID in_stateGr
 
 s3eWwiseResult s3eWwiseSoundEngineSetStateNamed(const char* in_pszStateGroup, const char* in_pszState)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[26] func: s3eWwiseSoundEngineSetStateNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[27] func: s3eWwiseSoundEngineSetStateNamed"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -741,7 +769,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetStateNamed(const char* in_pszStateGroup, co
 
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[27] func: s3eWwiseSoundEngineRegisterGameObj"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[28] func: s3eWwiseSoundEngineRegisterGameObj"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -763,7 +791,7 @@ s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameOb
 
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObjWithName(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[28] func: s3eWwiseSoundEngineRegisterGameObjWithName"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[29] func: s3eWwiseSoundEngineRegisterGameObjWithName"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -785,7 +813,7 @@ s3eWwiseResult s3eWwiseSoundEngineRegisterGameObjWithName(s3eWwiseGameObjectID i
 
 s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[29] func: s3eWwiseSoundEngineUnregisterGameObj"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[30] func: s3eWwiseSoundEngineUnregisterGameObj"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -807,7 +835,7 @@ s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_game
 
 s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj()
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[30] func: s3eWwiseSoundEngineUnregisterAllGameObj"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[31] func: s3eWwiseSoundEngineUnregisterAllGameObj"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -829,7 +857,7 @@ s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj()
 
 s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[31] func: s3eWwiseSoundEngineSetPosition"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[32] func: s3eWwiseSoundEngineSetPosition"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -851,7 +879,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObject
 
 s3eWwiseResult s3eWwiseSoundEngineClearBanks()
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[32] func: s3eWwiseSoundEngineClearBanks"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[33] func: s3eWwiseSoundEngineClearBanks"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -873,7 +901,7 @@ s3eWwiseResult s3eWwiseSoundEngineClearBanks()
 
 s3eWwiseResult s3eWwiseSoundEngineLoadBankNamed(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId, s3eWwiseBankID* out_bankID)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[33] func: s3eWwiseSoundEngineLoadBankNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[34] func: s3eWwiseSoundEngineLoadBankNamed"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -895,7 +923,7 @@ s3eWwiseResult s3eWwiseSoundEngineLoadBankNamed(const char* in_pszString, s3eWwi
 
 s3eWwiseResult s3eWwiseSoundEngineLoadBankWithID(s3eWwiseBankID in_bankID, s3eWwiseMemPoolId in_memPoolId)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[34] func: s3eWwiseSoundEngineLoadBankWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[35] func: s3eWwiseSoundEngineLoadBankWithID"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -917,7 +945,7 @@ s3eWwiseResult s3eWwiseSoundEngineLoadBankWithID(s3eWwiseBankID in_bankID, s3eWw
 
 s3eWwiseResult s3eWwiseSoundEngineUnloadBankNamed(const char* in_pszString, s3eWwiseMemPoolId* out_memPoolId)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[35] func: s3eWwiseSoundEngineUnloadBankNamed"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[36] func: s3eWwiseSoundEngineUnloadBankNamed"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -939,7 +967,7 @@ s3eWwiseResult s3eWwiseSoundEngineUnloadBankNamed(const char* in_pszString, s3eW
 
 s3eWwiseResult s3eWwiseSoundEngineUnloadBankWithID(s3eWwiseBankID in_bankID, s3eWwiseMemPoolId* out_memPoolId)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[36] func: s3eWwiseSoundEngineUnloadBankWithID"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[37] func: s3eWwiseSoundEngineUnloadBankWithID"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -961,7 +989,7 @@ s3eWwiseResult s3eWwiseSoundEngineUnloadBankWithID(s3eWwiseBankID in_bankID, s3e
 
 s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[37] func: s3eWwiseMusicEngineInit"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[38] func: s3eWwiseMusicEngineInit"));
 
     if (!_extLoad())
         return s3eWwise_NotImplemented;
@@ -983,7 +1011,7 @@ s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
 
 void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[38] func: s3eWwiseMusicEngineGetDefaultInitSettings"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[39] func: s3eWwiseMusicEngineGetDefaultInitSettings"));
 
     if (!_extLoad())
         return;
@@ -1005,7 +1033,7 @@ void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settin
 
 void s3eWwiseMusicEngineTerm()
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[39] func: s3eWwiseMusicEngineTerm"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[40] func: s3eWwiseMusicEngineTerm"));
 
     if (!_extLoad())
         return;
@@ -1025,12 +1053,12 @@ void s3eWwiseMusicEngineTerm()
     return;
 }
 
-s3eBool s3eWwiseMemoryMgrIsInitialized()
+s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_settings)
 {
-    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[40] func: s3eWwiseMemoryMgrIsInitialized"));
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[41] func: s3eWwiseCommInit"));
 
     if (!_extLoad())
-        return S3E_FALSE;
+        return s3eWwise_NotImplemented;
 
 #ifdef __mips
     // For MIPs platform we do not have asm code for stack switching
@@ -1038,11 +1066,55 @@ s3eBool s3eWwiseMemoryMgrIsInitialized()
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eBool ret = g_Ext.m_s3eWwiseMemoryMgrIsInitialized();
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseCommInit(in_settings);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
     return ret;
+}
+
+void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
+{
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[42] func: s3eWwiseCommGetDefaultInitSettings"));
+
+    if (!_extLoad())
+        return;
+
+#ifdef __mips
+    // For MIPs platform we do not have asm code for stack switching
+    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+    s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
+#endif
+
+    g_Ext.m_s3eWwiseCommGetDefaultInitSettings(out_settings);
+
+#ifdef __mips
+    s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
+#endif
+
+    return;
+}
+
+void s3eWwiseCommTerm()
+{
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[43] func: s3eWwiseCommTerm"));
+
+    if (!_extLoad())
+        return;
+
+#ifdef __mips
+    // For MIPs platform we do not have asm code for stack switching
+    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+    s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
+#endif
+
+    g_Ext.m_s3eWwiseCommTerm();
+
+#ifdef __mips
+    s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
+#endif
+
+    return;
 }
