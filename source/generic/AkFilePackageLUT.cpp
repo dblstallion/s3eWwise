@@ -194,19 +194,16 @@ AkFileID CAkFilePackageLUT::GetSoundBankID(
 }
 
 AkUInt64 CAkFilePackageLUT::GetExternalID(
-	const AkOSChar*			in_pszExternalName		// External Source name.
+	char*			in_pszExternalName		// External Source name.
 	)
 {
-	char* szString;
-    CONVERT_OSCHAR_TO_CHAR(in_pszExternalName, szString);
-
-	size_t stringSize = strlen( szString );
+	size_t stringSize = strlen( in_pszExternalName );
 
 	// 1- Make lower case.
-	_MakeLowerA( szString, stringSize );
+	_MakeLowerA( in_pszExternalName, stringSize );
 
 	AK::FNVHash64 MainHash;
-	return MainHash.Compute( (const unsigned char *) szString, (unsigned int)stringSize );
+	return MainHash.Compute( (const unsigned char *) in_pszExternalName, (unsigned int)stringSize );
 }
 
 void CAkFilePackageLUT::_MakeLowerA( char* in_pString, size_t in_strlen )

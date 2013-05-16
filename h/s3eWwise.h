@@ -197,7 +197,7 @@ typedef struct s3eWwiseStreamMgr s3eWwiseStreamMgr;
  * AK::SoundEngine
  */
 typedef void (*s3eWwiseAssertHook)(const char *in_pszExpression, const char *in_pszFileName, int in_lineNumber);
-
+ 
 typedef struct s3eWwiseInitSettings
 {
 	s3eWwiseAssertHook pfnAssertHook;
@@ -357,9 +357,9 @@ void s3eWwiseMusicEngineTerm();
 /**
  * AK::Comm
  */
-s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings *in_settings);
+s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_settings);
 
-void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings *out_settings);
+void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings);
 
 void s3eWwiseCommTerm();
 

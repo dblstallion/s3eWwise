@@ -94,7 +94,7 @@ public:
 
     // Return the id of an external file (by hashing its name in 64 bits)
 	AkUInt64 GetExternalID( 
-		const AkOSChar*			in_pszExternalName		// External Source name.
+		char*			        in_pszExternalName		// External Source name.
 		);	
 
 protected:
@@ -201,7 +201,7 @@ const CAkFilePackageLUT::AkFileEntry<T_FILEID> * CAkFilePackageLUT::LookupFile(
 	}
 	while ( uTop <= uBottom );
 
-	return NULL;
+	return 0;
 }
 
 #endif //_AK_FILE_PACKAGE_LUT_H_

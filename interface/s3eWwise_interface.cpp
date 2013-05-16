@@ -53,8 +53,8 @@ typedef s3eWwiseResult(*s3eWwiseSoundEngineUnloadBankWithID_t)(s3eWwiseBankID in
 typedef s3eWwiseResult(*s3eWwiseMusicEngineInit_t)(s3eWwiseMusicSettings* in_pSettings);
 typedef       void(*s3eWwiseMusicEngineGetDefaultInitSettings_t)(s3eWwiseMusicSettings* out_settings);
 typedef       void(*s3eWwiseMusicEngineTerm_t)();
-typedef s3eWwiseResult(*s3eWwiseCommInit_t)(s3eWwiseCommSettings *in_settings);
-typedef       void(*s3eWwiseCommGetDefaultInitSettings_t)(s3eWwiseCommSettings *out_settings);
+typedef s3eWwiseResult(*s3eWwiseCommInit_t)(s3eWwiseCommSettings* in_settings);
+typedef       void(*s3eWwiseCommGetDefaultInitSettings_t)(s3eWwiseCommSettings* out_settings);
 typedef       void(*s3eWwiseCommTerm_t)();
 
 /**

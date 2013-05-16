@@ -38,6 +38,7 @@
 
 #include "AkFilePackageLowLevelIO.h"
 #include <AK/Tools/Common/AkPlatformFuncs.h>
+#include <stdio.h>
 
 template <class T_LLIOHOOK_FILELOC, class T_PACKAGE>
 CAkFilePackageLowLevelIO<T_LLIOHOOK_FILELOC,T_PACKAGE>::CAkFilePackageLowLevelIO()
@@ -100,7 +101,9 @@ AKRESULT CAkFilePackageLowLevelIO<T_LLIOHOOK_FILELOC,T_PACKAGE>::Open(
 			ListFilePackages::Iterator it = m_packages.Begin();
 			while ( it != m_packages.End() )
 			{
-				AkUInt64 fileID = (*it)->lut.GetExternalID( in_pszFileName );
+                char *filename;
+                CONVERT_OSCHAR_TO_CHAR(in_pszFileName, filename);
+				AkUInt64 fileID = (*it)->lut.GetExternalID( filename );
 
 				if ( FindPackagedFile( (T_PACKAGE*)(*it), fileID, in_pFlags, out_fileDesc ) == AK_Success )
 				{
@@ -158,8 +161,8 @@ AKRESULT CAkFilePackageLowLevelIO<T_LLIOHOOK_FILELOC,T_PACKAGE>::Open(
 		ListFilePackages::Iterator it = m_packages.Begin();
 		while ( it != m_packages.End() )
 		{
-			AkOSChar szFileName[20];
-			AK_OSPRINTF(szFileName, 20, AKTEXT("%u.wem"), (unsigned int)in_fileID);
+			char szFileName[20];
+            sprintf(szFileName, "%u.wem", (unsigned int)in_fileID);
 			AkUInt64 fileID = (*it)->lut.GetExternalID(szFileName);
 
 			if ( FindPackagedFile( (T_PACKAGE*)(*it), fileID, in_pFlags, out_fileDesc ) == AK_Success )

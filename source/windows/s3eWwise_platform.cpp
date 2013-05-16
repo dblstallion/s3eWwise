@@ -1,5 +1,5 @@
 /*
- * iphone-specific implementation of the s3eWwise extension.
+ * windows-specific implementation of the s3eWwise extension.
  * Add any platform-specific functionality here.
  */
 /*
@@ -51,6 +51,28 @@ namespace AK
 	{
 		free( in_ptr );
 	}
+
+    // Note: VirtualAllocHook() may be used by I/O pools of the default implementation
+    // of the Stream Manager, to allow "true" unbuffered I/O (using FILE_FLAG_NO_BUFFERING
+    // - refer to the Windows SDK documentation for more details). This is NOT mandatory;
+    // you may implement it with a simple malloc().
+    void * VirtualAllocHook(
+        void * in_pMemAddress,
+        size_t in_size,
+        DWORD in_dwAllocationType,
+        DWORD in_dwProtect
+        )
+    {
+        return VirtualAlloc( in_pMemAddress, in_size, in_dwAllocationType, in_dwProtect );
+    }
+    void VirtualFreeHook(
+        void * in_pMemAddress,
+        size_t in_size,
+        DWORD in_dwFreeType
+        )
+    {
+        VirtualFree( in_pMemAddress, in_size, in_dwFreeType );
+    }
 }
 
 s3eBool s3eWwiseMemoryMgrIsInitialized_platform()
@@ -60,20 +82,20 @@ s3eBool s3eWwiseMemoryMgrIsInitialized_platform()
 
 void s3eWwiseMemoryMgrTerm_platform()
 {
-	AK::MemoryMgr::Term();
+    AK::MemoryMgr::Term();
 }
 
 s3eWwiseResult s3eWwiseMemoryMgrInit_platform(s3eWwiseMemSettings* in_pSettings)
 {
-	AkMemSettings memSettings;
+    AkMemSettings memSettings;
 	memSettings.uMaxNumPools = in_pSettings->uMaxNumPools;
-	
+
     return (s3eWwiseResult)AK::MemoryMgr::Init(&memSettings);
 }
 
 s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* in_settings)
 {
-	AkStreamMgrSettings streamSettings;
+    AkStreamMgrSettings streamSettings;
 	streamSettings.uMemorySize = in_settings->uMemorySize;
 
 	s3eWwiseStreamMgr *ret = (s3eWwiseStreamMgr *)AK::StreamMgr::Create(streamSettings);
@@ -81,25 +103,25 @@ s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate_platform(s3eWwiseStreamMgrSettings* i
 	AkDeviceSettings deviceSettings;
 	AK::StreamMgr::GetDefaultDeviceSettings(deviceSettings);
 	g_lowLevelIO.Init(deviceSettings);
-	
+
     return ret;
 }
 
 void s3eWwiseStreamMgrDestroy_platform(s3eWwiseStreamMgr* streamMgr)
 {
-	g_lowLevelIO.Term();
+    g_lowLevelIO.Term();
 
 	AK::IAkStreamMgr *mgr = (AK::IAkStreamMgr *)streamMgr;
-	
+
 	mgr->Destroy();
 }
 
 void s3eWwiseStreamMgrGetDefaultSettings_platform(s3eWwiseStreamMgrSettings* out_settings)
 {
-	AkStreamMgrSettings streamSettings;
-	
+    AkStreamMgrSettings streamSettings;
+
 	AK::StreamMgr::GetDefaultSettings(streamSettings);
-	
+
 	out_settings->uMemorySize = streamSettings.uMemorySize;
 }
 
@@ -110,7 +132,7 @@ s3eBool s3eWwiseSoundEngineIsInitialized_platform()
 
 s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
-	AkInitSettings initSettings;
+    AkInitSettings initSettings;
 	initSettings.pfnAssertHook					= in_pSettings->pfnAssertHook;
 	initSettings.uMaxNumPaths					= in_pSettings->uMaxNumPaths;
 	initSettings.uMaxNumTransitions				= in_pSettings->uMaxNumTransitions;
@@ -122,23 +144,23 @@ s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettin
 	initSettings.uContinuousPlaybackLookAhead	= in_pSettings->uContinuousPlaybackLookAhead;
 	initSettings.uMonitorPoolSize				= in_pSettings->uMonitorPoolSize;
 	initSettings.uMonitorQueuePoolSize			= in_pSettings->uMonitorQueuePoolSize;
-	
+
 	AkPlatformInitSettings platformInitSettings;
 	AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
 	platformInitSettings.fLEngineDefaultPoolRatioThreshold	= in_pPlatformSettings->fLEngineDefaultPoolRatioThreshold;
 	platformInitSettings.uLEngineDefaultPoolSize			= in_pPlatformSettings->uLEngineDefaultPoolSize;
-	platformInitSettings.uSampleRate						= in_pPlatformSettings->uSampleRate;
+	//platformInitSettings.uSampleRate						= in_pPlatformSettings->uSampleRate;
 	platformInitSettings.uNumRefillsInVoice					= in_pPlatformSettings->uNumRefillsInVoice;
-	platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
-	
+	//platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
+
     return (s3eWwiseResult)AK::SoundEngine::Init(&initSettings, &platformInitSettings);
 }
 
 void s3eWwiseSoundEngineGetDefaultInitSettings_platform(s3eWwiseInitSettings* out_settings)
 {
-	AkInitSettings initSettings;
+    AkInitSettings initSettings;
 	AK::SoundEngine::GetDefaultInitSettings(initSettings);
-	
+
 	out_settings->pfnAssertHook					= initSettings.pfnAssertHook;
 	out_settings->uMaxNumPaths					= initSettings.uMaxNumPaths;
 	out_settings->uMaxNumTransitions			= initSettings.uMaxNumTransitions;
@@ -154,14 +176,14 @@ void s3eWwiseSoundEngineGetDefaultInitSettings_platform(s3eWwiseInitSettings* ou
 
 void s3eWwiseSoundEngineGetDefaultPlatformInitSettings_platform(s3eWwisePlatformInitSettings* out_settings)
 {
-	AkPlatformInitSettings platformInitSettings;
+    AkPlatformInitSettings platformInitSettings;
 	AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
 
 	out_settings->fLEngineDefaultPoolRatioThreshold	= platformInitSettings.fLEngineDefaultPoolRatioThreshold;
 	out_settings->uLEngineDefaultPoolSize			= platformInitSettings.uLEngineDefaultPoolSize;
-	out_settings->uSampleRate						= platformInitSettings.uSampleRate;
+	//out_settings->uSampleRate						= platformInitSettings.uSampleRate;
 	out_settings->uNumRefillsInVoice				= platformInitSettings.uNumRefillsInVoice;
-	out_settings->bMuteOtherApps					= platformInitSettings.bMuteOtherApps;
+	//out_settings->bMuteOtherApps					= platformInitSettings.bMuteOtherApps;
 }
 
 void s3eWwiseSoundEngineTerm_platform()
@@ -259,7 +281,6 @@ s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj_platform(s3eWwiseGameObjectID 
 {
     return (s3eWwiseResult)AK::SoundEngine::RegisterGameObj((AkGameObjectID)in_gameObjectID);
 }
-
 
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObjWithName_platform(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName)
 {

@@ -1,6 +1,7 @@
 #include "s3eIOHook.h"
 #include "s3eTypes.h"
 #include "s3eFile.h"
+#include "string.h"
 
 #define DEVICE_NAME AKTEXT("S3E Device")
 
@@ -66,7 +67,9 @@ AKRESULT s3eIOHook::Open(const AkOSChar* in_pszFileName, AkOpenMode in_eOpenMode
 			break;
 	}
 
-    s3eFile *file = s3eFileOpen(in_pszFileName, mode);
+    char *filename;
+    CONVERT_OSCHAR_TO_CHAR(in_pszFileName, filename);
+    s3eFile *file = s3eFileOpen(filename, mode);
 
 	if ( file != NULL )
 	{
