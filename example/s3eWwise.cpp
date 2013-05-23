@@ -79,7 +79,7 @@ void initWwise()
         s3eDebugOutputString("Loaded sound bank");
 
     //s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::HUMAN, S3E_WWISE_DEFAULT_POOL_ID);
-    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankNamed("iOS/English(US)/Human.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
+    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankNamed("iOS/Human.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if( loadHuman != s3eWwise_Success )
     {
         s3eDebugOutputString("Failed to load sound bank");
@@ -153,6 +153,8 @@ void motionEvent(s3ePointerMotionEvent *event)
 int main()
 {
     s3eDebugOutputString("Booting s3eWwise example");
+
+    s3eDeviceYield(10000);
 
     s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)buttonEvent, NULL);
     s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)motionEvent, NULL);

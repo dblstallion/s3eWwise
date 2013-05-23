@@ -40,7 +40,7 @@ if {{defined I3D_OS_IPHONE}}
 if {{defined I3D_OS_WINDOWS}}
 {
 	librarypath Wwise/SDK/Win32_vc100
-	librarypath "C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86"
+	librarypath source/lib/win32
 	
 	librarys
 	{
@@ -100,17 +100,25 @@ if {{defined I3D_OS_LINUX and not defined S3E_ANDROID}}
 
 files
 {
+	# Add any platform-independent files here
+    # Note that if the file exists in the platform-specific directory
+    # it will be taken from there instead of 'generic'
+	AkFileLocationBase.cpp
 	AkFilePackage.cpp
 	AkFilePackageLUT.cpp
 	s3eIOHook.cpp
-    # Add any platform-independent files here
-    # Note that if the file exists in the platform-specific directory
-    # it will be taken from there instead of 'generic'
+    
     s3eWwise_register.cpp
     s3eWwise.cpp
 
     ["h"]
     (source/h)
+	AkFileLocationBase.h
+	AkFilePackage.h
+	AkFilePackageLowLevelIO.h
+	AkFilePackageLowLevelIO.inl
+	AkFilePackageLUT.h
+	s3eIOHook.h
     s3eWwise_internal.h
     s3eWwise_autodefs.h
 

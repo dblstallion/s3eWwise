@@ -42,7 +42,31 @@ void s3eIOHook::Term()
 	AK::StreamMgr::DestroyDevice( m_deviceID );
 }
 
+// Returns a file descriptor for a given file name.
 AKRESULT s3eIOHook::Open(const AkOSChar* in_pszFileName, AkOpenMode in_eOpenMode, AkFileSystemFlags *in_pFlags, bool &io_bSyncOpen, AkFileDesc &out_fileDesc)
+{
+    AkOSChar szFullFilePath[AK_MAX_PATH];
+    if ( GetFullFilePath( in_pszFileName, in_pFlags, in_eOpenMode, szFullFilePath ) == AK_Success )
+    {
+        return OpenInternal(szFullFilePath, in_eOpenMode, in_pFlags, io_bSyncOpen, out_fileDesc);
+    }
+
+    return AK_Fail;
+}
+
+// Returns a file descriptor for a given file ID.
+AKRESULT s3eIOHook::Open(AkFileID in_fileID, AkOpenMode in_eOpenMode, AkFileSystemFlags *in_pFlags, bool &io_bSyncOpen, AkFileDesc &out_fileDesc)
+{
+    AkOSChar szFullFilePath[AK_MAX_PATH];
+    if ( GetFullFilePath( in_fileID, in_pFlags, in_eOpenMode, szFullFilePath ) == AK_Success )
+    {
+        return OpenInternal(szFullFilePath, in_eOpenMode, in_pFlags, io_bSyncOpen, out_fileDesc);
+    }
+
+    return AK_Fail;
+}
+
+AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_eOpenMode, AkFileSystemFlags *in_pFlags, bool &io_bSyncOpen, AkFileDesc &out_fileDesc)
 {
 	io_bSyncOpen = true;
 
@@ -50,16 +74,16 @@ AKRESULT s3eIOHook::Open(const AkOSChar* in_pszFileName, AkOpenMode in_eOpenMode
     switch ( in_eOpenMode )
 	{
 		case AK_OpenModeRead:
-			mode = "r";
+			mode = "rb";
 			break;
 		case AK_OpenModeWrite:
-			mode = "w";
+			mode = "wb";
 			break;
 		case AK_OpenModeWriteOvrwr:
-			mode = "w+";
+			mode = "w+b";
 			break;
 		case AK_OpenModeReadWrite:
-			mode = "a";
+			mode = "ab";
 			break;
 		default:
 			AKASSERT( !"Invalid open mode" );
@@ -84,12 +108,6 @@ AKRESULT s3eIOHook::Open(const AkOSChar* in_pszFileName, AkOpenMode in_eOpenMode
 	}
 
 	return AK_Fail;
-}
-
-// Returns a file descriptor for a given file ID.
-AKRESULT s3eIOHook::Open(AkFileID in_fileID, AkOpenMode in_eOpenMode, AkFileSystemFlags *in_pFlags, bool &io_bSyncOpen, AkFileDesc &out_fileDesc)
-{
-    return AK_NotImplemented;
 }
 
 AKRESULT s3eIOHook::Read(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void *out_pBuffer, AkIOTransferInfo &io_transferInfo)

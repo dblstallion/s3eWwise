@@ -2,8 +2,9 @@
 #define S3E_IO_HOOK_H
 
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
+#include "AkFileLocationBase.h"
 
-class s3eIOHook : public AK::StreamMgr::IAkFileLocationResolver, public AK::StreamMgr::IAkIOHookBlocking
+class s3eIOHook : public CAkFileLocationBase, public AK::StreamMgr::IAkFileLocationResolver, public AK::StreamMgr::IAkIOHookBlocking
 {
 public:
 
@@ -29,6 +30,8 @@ public:
 	virtual AkUInt32 GetDeviceData();
 
 protected:
+    AKRESULT OpenInternal(const AkOSChar *in_pszFileName, AkOpenMode in_eOpenMode, AkFileSystemFlags *in_pFlags, bool &io_bSyncOpen, AkFileDesc &out_fileDesc);
+
 	AkDeviceID	m_deviceID;
 };
 
