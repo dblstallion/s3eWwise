@@ -1,5 +1,5 @@
 #include "s3eOSReadString.h"
-#include "Wwise_IDs.h"
+#include "data/Wwise_IDs.h"
 #include "s3eWwise.h"
 #include "IwDebug.h"
 #include "IwGx.h"
@@ -105,8 +105,9 @@ void shutdownWwise()
 {
     s3eWwiseSoundEngineUnregisterAllGameObj();
 
-    s3eWwiseSoundEngineUnloadBankNamed("iOS/Init.bnk");
+    s3eWwiseSoundEngineUnloadBankNamed("iOS/Car.bnk");
     s3eWwiseSoundEngineUnloadBankNamed("iOS/English(US)/Human.bnk");
+    s3eWwiseSoundEngineUnloadBankNamed("iOS/Init.bnk");
 
     s3eWwiseCommTerm();
 

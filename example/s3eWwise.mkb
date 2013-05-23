@@ -1,16 +1,18 @@
 #!/usr/bin/env mkb
 
-
-includepath WwiseProject/GeneratedSoundBanks
-
 files
 {
     s3eWwise.cpp
+
+	[data]
+	(data)
+	Wwise_IDs.h
+
 }
 
 assets
 {
-	(WwiseProject/GeneratedSoundBanks)
+	(.)
 	iOS
 }
 
@@ -19,6 +21,7 @@ subprojects
     s3eWwise
 	iwgx
 }
+
 #### AUTO GENERATED deployment settings from DeployTool.exe. Do not edit below this line ####
 deployments
 {
