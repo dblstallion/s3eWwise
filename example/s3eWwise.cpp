@@ -68,7 +68,7 @@ void initWwise()
 
     s3eWwiseBankID bankId;
 
-    //s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::INIT, S3E_WWISE_DEFAULT_POOL_ID);
+    ///s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::INIT, S3E_WWISE_DEFAULT_POOL_ID);
     s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankNamed("iOS/Init.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if(loadInit  != s3eWwise_Success )
     {
@@ -153,8 +153,6 @@ void motionEvent(s3ePointerMotionEvent *event)
 int main()
 {
     s3eDebugOutputString("Booting s3eWwise example");
-
-    s3eDeviceYield(10000);
 
     s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)buttonEvent, NULL);
     s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)motionEvent, NULL);
