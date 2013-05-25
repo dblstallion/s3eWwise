@@ -21,19 +21,6 @@ void s3eWwiseTerminate_platform()
     // Add any platform-specific termination code here
 }
 
-// Necessary memory hooks
-namespace AK
-{
-	void * AllocHook( size_t in_size )
-	{
-		return malloc( in_size );
-	}
-	void FreeHook( void * in_ptr )
-	{
-		free( in_ptr );
-	}
-}
-
 s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
 	AkInitSettings initSettings;

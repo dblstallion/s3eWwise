@@ -29,11 +29,11 @@ namespace AK
 {
 	void * AllocHook( size_t in_size )
 	{
-		return s3eMalloc( in_size );
+        return malloc(in_size);
 	}
 	void FreeHook( void * in_ptr )
 	{
-		s3eFree( in_ptr );
+		free(in_ptr);
 	}
 }
 

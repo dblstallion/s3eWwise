@@ -16,6 +16,8 @@ const s3eWwiseGameObjectID carID = (s3eWwiseGameObjectID)200;
 
 void initWwise()
 {
+    IW_CALLSTACK("initWwise");
+
     if (!s3eWwiseAvailable())
     {
         s3eDebugOutputString("Can't load Wwise");
@@ -103,11 +105,11 @@ void initWwise()
 
 void shutdownWwise()
 {
+    IW_CALLSTACK("shutdownWwise");
+
     s3eWwiseSoundEngineUnregisterAllGameObj();
 
-    s3eWwiseSoundEngineUnloadBankNamed("iOS/Car.bnk");
-    s3eWwiseSoundEngineUnloadBankNamed("iOS/English(US)/Human.bnk");
-    s3eWwiseSoundEngineUnloadBankNamed("iOS/Init.bnk");
+    s3eWwiseSoundEngineClearBanks();
 
     s3eWwiseCommTerm();
 
@@ -123,6 +125,8 @@ void shutdownWwise()
 
 void buttonEvent(s3ePointerTouchEvent *event)
 {
+    IW_CALLSTACK("buttonEvent");
+
     if(event->m_Pressed)
     {
         s3eDebugOutputString("Posting Event \"Play_Hello\"");
@@ -142,6 +146,8 @@ float height = 0.0f;
 
 void motionEvent(s3ePointerMotionEvent *event)
 {
+    IW_CALLSTACK("motionEvent");
+
     height = s3eSurfaceGetInt(S3E_SURFACE_HEIGHT);
 
     touchHeight = (float)event->m_y;
@@ -152,7 +158,11 @@ void motionEvent(s3ePointerMotionEvent *event)
 // Example showing how to use the s3eWwise extension
 int main()
 {
+    IW_CALLSTACK("main");
+
     s3eDebugOutputString("Booting s3eWwise example");
+
+    initWwise();
 
     s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)buttonEvent, NULL);
     s3ePointerRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)motionEvent, NULL);
@@ -161,14 +171,11 @@ int main()
 
     IwGxSetColClear(0, 0, 0, 0xff);
 
-    initWwise();
-
-    std::stringstream str;
-
     while(!s3eDeviceCheckQuitRequest())
     {
-        if(s3eWwiseSoundEngineRenderAudio() != s3eWwise_Success)
-            s3eDebugOutputString("Error rendering audio");
+        std::stringstream str;
+
+        s3eWwiseSoundEngineRenderAudio();
 
         IwGxClear();
 
@@ -193,9 +200,12 @@ int main()
         s3eDeviceYield(0);
     }
 
-    shutdownWwise();
-
     IwGxTerminate();
+
+    s3ePointerUnRegister(S3E_POINTER_BUTTON_EVENT, (s3eCallback)buttonEvent);
+    s3ePointerUnRegister(S3E_POINTER_MOTION_EVENT, (s3eCallback)motionEvent);
+
+    shutdownWwise();
 
     return 0;
 }
