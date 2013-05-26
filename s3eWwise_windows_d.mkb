@@ -10,6 +10,5 @@ options
     output-name-debug="lib/win32/s3eWwise_d.dll"
 }
 define S3E_BUILD_EXT
-define AK_OPTIMIZED
 
 subproject s3eWwise_build

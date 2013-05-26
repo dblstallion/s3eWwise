@@ -301,6 +301,7 @@ void s3eWwiseMusicEngineTerm()
 
 s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_pSettings)
 {
+#ifndef AK_OPTIMIZED
 	AkCommSettings settings;
 	AK::Comm::GetDefaultInitSettings(settings);
 	settings.uPoolSize					= in_pSettings->uPoolSize;
@@ -311,10 +312,14 @@ s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_pSettings)
 	settings.bInitSystemLib				= in_pSettings->bInitSystemLib;
 
 	return (s3eWwiseResult)AK::Comm::Init(settings);
+#else
+    return s3eWwise_NotImplemented;
+#endif
 }
 
 void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
 {
+#ifndef AK_OPTIMIZED
 	AkCommSettings settings;
 	AK::Comm::GetDefaultInitSettings(settings);
 
@@ -324,9 +329,12 @@ void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
 	out_settings->ports.uNotification		= settings.ports.uNotification;
 	out_settings->ports.uControl			= settings.ports.uControl;
 	out_settings->bInitSystemLib			= settings.bInitSystemLib;
+#endif
 }
 
 void s3eWwiseCommTerm()
 {
+#ifndef AK_OPTIMIZED
 	AK::Comm::Term();
+#endif
 }

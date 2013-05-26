@@ -39,9 +39,18 @@ if {{defined I3D_OS_IPHONE}}
 
 if {{defined I3D_OS_WINDOWS}}
 {
-	librarypath Wwise/SDK/Win32_vc100
 	librarypath source/lib/win32
-	
+
+	if {{not defined AK_OPTIMIZED}}
+	{
+		librarypath "Wwise/SDK/Win32_vc100/Debug(StaticCRT)/lib"
+		library CommunicationCentral.lib
+	}
+	else
+	{
+		librarypath "Wwise/SDK/Win32_vc100/Release(StaticCRT)/lib"
+	}
+
 	librarys
 	{
 		User32.lib
@@ -53,8 +62,8 @@ if {{defined I3D_OS_WINDOWS}}
 		AkMusicEngine.lib
 		AkSoundEngine.lib
 		AkStreamMgr.lib
-		CommunicationCentral.lib
 	}
+
 	
     files
     {

@@ -6,3 +6,4 @@ IW_TRACE_CHANNEL_WWISE s3eWwise Extension trace channel
 IW_TRACE_CHANNEL_WWISE_VERBOSE s3eWwise Extension verbose trace channel
 IW_ASSERTION_CHANNEL_WWISE s3eWwise Extension assertion channel
 S3E_EXT_WWISE  Defined when s3eWwise extension is being built or used
+AK_OPTIMIZED Defined in release mode when the Wwise engine should be optimized
