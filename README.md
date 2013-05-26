@@ -16,6 +16,8 @@ Binaries are not included because the final library will contain AudioKinetic co
 
 To begin, copy the Wwise SDK directory into the Wwise folder.
 
+Run setup_libs.sh to create the debug and release variants of the different libraries for Marmalade.
+
 Build the extension by running `mkb --arm --iphone s3eWwise_iphone.mkb` in the console on OSX.
 A Mac is needed to build the extension.
 

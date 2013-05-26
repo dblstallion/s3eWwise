@@ -2,13 +2,6 @@
 # Builder mkb file for the s3eWwise extension on iphone
 platform IPHONE
 
-commands
-{
-	"for f in $(find Wwise/SDK/iOS/Debug-iphoneos/lib -type f); do cp $f ${f/.a/_d.a}; done"
-	"mv Wwise/SDK/iOS/Debug-iphoneos/lib/*_d.a Wwise/SDK/iOS"
-	"cp Wwise/SDK/iOS/Release-iphoneos/lib/*.a Wwise/SDK/iOS"
-}
-
 options
 {
     lib
