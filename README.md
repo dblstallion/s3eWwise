@@ -34,8 +34,6 @@ To get the Wwise SDK:
 * Once both are installed, copy the folders from /Users/$USER/Wwise/<WWISE_VERSION>/SDK into the Wwise/SDK directory.
 * Copy the contents of the Android and Windows SDKs from C:\Program Files (x86)\Audiokinetic\Wwise <build #>\SDK into the Wwise/SDK directory.
 
-**Run setup_libs.sh to create the debug and release variants of the different libraries for Marmalade.**
-
 As you build the library for each platform, make sure to follow the [EDK Guide](http://docs.madewithmarmalade.com/native/extensions/edkguides.html).
 The EDK Guide provides helpful instructions, i.e. mounting a the Windows directory
 on your Mac so the iOS and Mac versions can be built through SSH. It also contains other helpful tips for troubleshooting

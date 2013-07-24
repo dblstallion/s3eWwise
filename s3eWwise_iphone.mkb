@@ -2,6 +2,11 @@
 # Builder mkb file for the s3eWwise extension on iphone
 platform IPHONE
 
+commands
+{
+	"setup_libs.py"
+}
+
 options
 {
     lib
