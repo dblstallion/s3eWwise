@@ -25,10 +25,10 @@ To get the Wwise SDK:
 * It is recommended you use the Windows web installer (first download listed).
 * iOS and Mac SDKs must be downloaded separately.
 * When running the Windows web installer, make sure to install:
-** Authoring Binaries 32-bit / 64-bit (required for the example to work)
-** Android SDK
-** Windows SDK
-** Common SDK
+    * Authoring Binaries 32-bit / 64-bit (required for the example to work)
+    * Android SDK
+    * Windows SDK
+    * Common SDK
 * Begin with the Mac installation, since copying from the Mac to Windows tends to remove some of the Windows files
 * iOS and Mac SDKs come as zipped packages. These need to be installed on a Mac.
 * Once both are installed, copy the folders from /Users/$USER/Wwise/<WWISE_VERSION>/SDK into the Wwise/SDK directory.
@@ -87,4 +87,3 @@ and is configured exactly the way your project should be when using s3eWwise.
 To run the example, begin by double-clicking the example/s3eWwise.mkb file. The example will copy the appropriate Wwise
 sound banks from the Wwise/SDK/samples directory and open your IDE. Once this is complete you can run the example in the
 simulator to hear audio playing.
-
