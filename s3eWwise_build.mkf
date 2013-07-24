@@ -37,7 +37,7 @@ if {{defined I3D_OS_IPHONE}}
     {
         ["source"]
         (use_first_found, source/iphone, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
-        s3eWwise_platform.mm
+        s3eWwise_platform.cpp
 		
 		AkDefaultIOHookBlocking.cpp
         AkDefaultIOHookDeferred.cpp
