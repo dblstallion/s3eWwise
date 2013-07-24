@@ -6,6 +6,7 @@ display_name "Extensions/s3eWwise"
 includepath Wwise/SDK/include
 includepath source/h
 includepath h
+includepath Wwise/SDK/samples/SoundEngine/Common
 
 defines
 {
@@ -16,6 +17,7 @@ defines
     S3E_EXT_WWISE
 }
 
+#NOTE: Don't run this because it will overwrite custom files
 #This command re-generates the relevant source files from the s4e when
 #the mkb is run
 #extension
@@ -29,27 +31,35 @@ subproject "$MARMALADE_ROOT/s3e/edk"
 
 if {{defined I3D_OS_IPHONE}}
 {
+	includepath Wwise/SDK/samples/SoundEngine/POSIX
+	
     files
     {
         ["source"]
-        (use_first_found, source/iphone, source/generic)
+        (use_first_found, source/iphone, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
         s3eWwise_platform.mm
+		
+		AkDefaultIOHookBlocking.cpp
+        AkDefaultIOHookDeferred.cpp
     }
 }
 
 if {{defined I3D_OS_WINDOWS}}
 {
+	includepath Wwise/SDK/samples/SoundEngine/Win32
+	
+    files
+    {
+        ["source"]
+        (use_first_found, source/windows, source/generic, Wwise/SDK/samples/SoundEngine/Win32)
+        s3eWwise_platform.cpp
+        #Add any windows-specific files here
+		
+		AkDefaultIOHookBlocking.cpp
+        AkDefaultIOHookDeferred.cpp
+    }
+	
 	librarypath source/lib/win32
-
-	if {{not defined AK_OPTIMIZED}}
-	{
-		librarypath "Wwise/SDK/Win32_vc100/Debug(StaticCRT)/lib"
-		library CommunicationCentral.lib
-	}
-	else
-	{
-		librarypath "Wwise/SDK/Win32_vc100/Release(StaticCRT)/lib"
-	}
 
 	librarys
 	{
@@ -63,36 +73,37 @@ if {{defined I3D_OS_WINDOWS}}
 		AkSoundEngine.lib
 		AkStreamMgr.lib
 	}
-
-	
-    files
-    {
-        ["source"]
-        (use_first_found, source/windows, source/generic)
-        s3eWwise_platform.cpp
-        #Add any windows-specific files here
-    }
 }
 
 if {{defined S3E_ANDROID}}
 {
+	includepath Wwise/SDK/samples/SoundEngine/POSIX
+
     files
     {
         ["source"]
-        (use_first_found, source/android, source/generic)
+        (use_first_found, source/android, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
         s3eWwise_platform.cpp
         #Add any android-specific files here
+		
+		AkDefaultIOHookBlocking.cpp
+        AkDefaultIOHookDeferred.cpp
     }
 }
 
 if {{defined I3D_OS_OSX}}
 {
+	includepath Wwise/SDK/samples/SoundEngine/POSIX
+	
     files
     {
         ["source"]
-        (use_first_found, source/osx, source/generic)
+        (use_first_found, source/osx, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
         s3eWwise_platform.mm
         #Add any osx-specific files here
+		
+		AkDefaultIOHookBlocking.cpp
+        AkDefaultIOHookDeferred.cpp
     }
 }
 
@@ -109,28 +120,31 @@ if {{defined I3D_OS_LINUX and not defined S3E_ANDROID}}
 
 files
 {
-	# Add any platform-independent files here
+    # Add any platform-independent files here
     # Note that if the file exists in the platform-specific directory
     # it will be taken from there instead of 'generic'
-	AkFileLocationBase.cpp
-	AkFilePackage.cpp
-	AkFilePackageLUT.cpp
-	s3eIOHook.cpp
-    
     s3eWwise_register.cpp
     s3eWwise.cpp
+	s3eIOHook.cpp
+	
+    (Wwise/SDK/samples/SoundEngine/Common)
+    AkDefaultLowLevelIODispatcher.cpp
+    AkFileLocationBase.cpp
+	AkFilePackage.cpp
+	AkFilePackageLUT.cpp
 
     ["h"]
     (source/h)
-	AkFileLocationBase.h
-	AkFilePackage.h
-	AkFilePackageLowLevelIO.h
-	AkFilePackageLowLevelIO.inl
-	AkFilePackageLUT.h
-	s3eIOHook.h
     s3eWwise_internal.h
     s3eWwise_autodefs.h
-
+    s3eIOHook.h
+    
+	(WWise/SDK/samples/SoundEngine/Common)
+    AkDefaultLowLevelIODispatcher.h
+    AkFileLocationBase.h
+    AkFilePackage.h
+    AkFilePackageLUT.h
+	
     ["docs"]
     (interface)
     s3eWwise.defines.txt

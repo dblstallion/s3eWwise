@@ -241,7 +241,6 @@ typedef struct s3eWwisePorts
 	uint16 uDiscoveryBroadcast;
 	uint16 uCommand;
 	uint16 uNotification;
-	uint16 uControl;
 } s3eWwisePorts;
 
 typedef struct s3eWwiseCommSettings
@@ -333,7 +332,7 @@ s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_game
 
 s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj();
 
-s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex = S3E_WWISE_INVALID_LISTENER_INDEX);
+s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position);
 
 s3eWwiseResult s3eWwiseSoundEngineClearBanks();
 

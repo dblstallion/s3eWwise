@@ -44,7 +44,7 @@ typedef s3eWwiseResult(*s3eWwiseSoundEngineRegisterGameObj_t)(s3eWwiseGameObject
 typedef s3eWwiseResult(*s3eWwiseSoundEngineRegisterGameObjWithName_t)(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName);
 typedef s3eWwiseResult(*s3eWwiseSoundEngineUnregisterGameObj_t)(s3eWwiseGameObjectID in_gameObjectID);
 typedef s3eWwiseResult(*s3eWwiseSoundEngineUnregisterAllGameObj_t)();
-typedef s3eWwiseResult(*s3eWwiseSoundEngineSetPosition_t)(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex);
+typedef s3eWwiseResult(*s3eWwiseSoundEngineSetPosition_t)(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position);
 typedef s3eWwiseResult(*s3eWwiseSoundEngineClearBanks_t)();
 typedef s3eWwiseResult(*s3eWwiseSoundEngineLoadBankNamed_t)(const char* in_pszString, s3eWwiseMemPoolId in_memPoolId, s3eWwiseBankID* out_bankID);
 typedef s3eWwiseResult(*s3eWwiseSoundEngineLoadBankWithID_t)(s3eWwiseBankID in_bankID, s3eWwiseMemPoolId in_memPoolId);
@@ -855,7 +855,7 @@ s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj()
     return ret;
 }
 
-s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex)
+s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position)
 {
     IwTrace(WWISE_VERBOSE, ("calling s3eWwise[32] func: s3eWwiseSoundEngineSetPosition"));
 
@@ -868,7 +868,7 @@ s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObject
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineSetPosition(in_gameObjectID, in_Position, in_uListenerIndex);
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseSoundEngineSetPosition(in_gameObjectID, in_Position);
 
 #ifdef __mips
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);

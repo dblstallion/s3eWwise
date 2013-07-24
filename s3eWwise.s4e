@@ -224,7 +224,6 @@ typedef struct s3eWwisePorts
 	uint16 uDiscoveryBroadcast;
 	uint16 uCommand;
 	uint16 uNotification;
-	uint16 uControl;
 } s3eWwisePorts;
 
 typedef struct s3eWwiseCommSettings
@@ -289,7 +288,7 @@ s3eWwiseResult s3eWwiseSoundEngineRegisterGameObj(s3eWwiseGameObjectID in_gameOb
 s3eWwiseResult s3eWwiseSoundEngineRegisterGameObjWithName(s3eWwiseGameObjectID in_gameObjectID, const char* in_pszObjName) s3eWwise_NotImplemented
 s3eWwiseResult s3eWwiseSoundEngineUnregisterGameObj(s3eWwiseGameObjectID in_gameObjectID) s3eWwise_NotImplemented
 s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj() s3eWwise_NotImplemented
-s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex = S3E_WWISE_INVALID_LISTENER_INDEX) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position) s3eWwise_NotImplemented
 
 // Bank Management
 s3eWwiseResult s3eWwiseSoundEngineClearBanks() s3eWwise_NotImplemented

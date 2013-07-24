@@ -13,6 +13,8 @@ This file should perform any platform-indepedentent functionality
 
 #include "s3eMemory.h"
 
+#include <stdio.h>
+
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
@@ -80,7 +82,10 @@ s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_setting
 
 	AkDeviceSettings deviceSettings;
 	AK::StreamMgr::GetDefaultDeviceSettings(deviceSettings);
-	g_lowLevelIO.Init(deviceSettings);
+	if ( g_lowLevelIO.Init( deviceSettings ) != AK_Success )
+	{
+		return NULL;
+	}
 
     return ret;
 }
@@ -247,10 +252,10 @@ s3eWwiseResult s3eWwiseSoundEngineUnregisterAllGameObj()
 	return (s3eWwiseResult)AK::SoundEngine::UnregisterAllGameObj();
 }
 
-s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position, uint32 in_uListenerIndex)
+s3eWwiseResult s3eWwiseSoundEngineSetPosition(s3eWwiseGameObjectID in_gameObjectID, const s3eWwiseSoundPosition* in_Position)
 {
 	// Memory layouts of both structures must be the same
-	return (s3eWwiseResult)AK::SoundEngine::SetPosition((AkGameObjectID)in_gameObjectID, (const AkSoundPosition &)*in_Position, in_uListenerIndex);
+	return (s3eWwiseResult)AK::SoundEngine::SetPosition((AkGameObjectID)in_gameObjectID, (const AkSoundPosition &)*in_Position);
 }
 
 s3eWwiseResult s3eWwiseSoundEngineClearBanks()
@@ -308,7 +313,6 @@ s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_pSettings)
 	settings.ports.uDiscoveryBroadcast	= in_pSettings->ports.uDiscoveryBroadcast;
 	settings.ports.uCommand				= in_pSettings->ports.uCommand;
 	settings.ports.uNotification		= in_pSettings->ports.uNotification;
-	settings.ports.uControl				= in_pSettings->ports.uControl;
 	settings.bInitSystemLib				= in_pSettings->bInitSystemLib;
 
 	return (s3eWwiseResult)AK::Comm::Init(settings);
@@ -327,7 +331,6 @@ void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
 	out_settings->ports.uDiscoveryBroadcast = settings.ports.uDiscoveryBroadcast;
 	out_settings->ports.uCommand			= settings.ports.uCommand;
 	out_settings->ports.uNotification		= settings.ports.uNotification;
-	out_settings->ports.uControl			= settings.ports.uControl;
 	out_settings->bInitSystemLib			= settings.bInitSystemLib;
 #endif
 }

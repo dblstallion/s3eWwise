@@ -1,0 +1,2 @@
+"%WWISEROOT%\Authoring\Win32\Release\bin\WwiseCLI.exe" ..\Wwise\SDK\samples\IntegrationDemo\WwiseProject\IntegrationDemo.wproj -GenerateSoundBanks
+xcopy ..\Wwise\SDK\samples\IntegrationDemo\WwiseProject\GeneratedSoundBanks\* data\\Audio /s /i /y

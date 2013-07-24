@@ -1,3 +1,0 @@
-Plug-in Media	ID	Name	Source file	Type	Wwise Object Path	Notes	Data Size
-	8071170	Dark_Cathedral	D:\Branches\wwise_v2012.2\Wwise\SDK\samples\IntegrationDemo\WwiseProject\.cache\iOS\plugins\wwise convolution reverb\ak_factory_ir\churches\ak st-katharinen_57e63247.wem	Wwise Convolution Reverb (Shared)	\Effects\Default Work Unit\Dark_Cathedral	Impulse response created by Pinguin ing.büro © 2010 Pinguin ing.büro.  All rights reserved. IR Pre-delay: 20ms  	1138912
-
