@@ -107,11 +107,21 @@ if {{defined I3D_OS_OSX}}
     {
         ["source"]
         (use_first_found, source/osx, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
-        s3eWwise_platform.mm
+        s3eWwise_platform.cpp
         #Add any osx-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
     }
+	
+	librarypath "/System/Library/Frameworks"
+	
+	library
+	{
+	   AKSoundEngine
+	   AkMemoryMgr
+	   AkMusicEngine
+	   AkStreamMgr
+	}
 }
 
 if {{defined I3D_OS_LINUX and not defined S3E_ANDROID}}
