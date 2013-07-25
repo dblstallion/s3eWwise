@@ -310,3 +310,10 @@ void s3eWwiseMusicEngineTerm()
 s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_settings) s3eWwise_NotImplemented
 void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
 void s3eWwiseCommTerm()
+
+/**
+ * Low-Level IO
+ */
+s3eWwiseResult s3eWwiseLowLevelIOSetBasePath(const char* in_pszBasePath) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseLowLevelIOSetBankPath(const char* in_pszBankPath) s3eWwise_NotImplemented
+s3eWwiseResult s3eWwiseLowLevelIOSetAudioSrcPath(const char* in_pszAudioSrcPath) s3eWwise_NotImplemented

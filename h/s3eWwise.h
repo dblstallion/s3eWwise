@@ -362,6 +362,15 @@ void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings);
 
 void s3eWwiseCommTerm();
 
+/**
+ * Low-Level IO
+ */
+s3eWwiseResult s3eWwiseLowLevelIOSetBasePath(const char* in_pszBasePath);
+
+s3eWwiseResult s3eWwiseLowLevelIOSetBankPath(const char* in_pszBankPath);
+
+s3eWwiseResult s3eWwiseLowLevelIOSetAudioSrcPath(const char* in_pszAudioSrcPath);
+
 S3E_END_C_DECL
 
 #endif /* !S3E_EXT_WWISE_H */

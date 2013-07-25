@@ -7,6 +7,7 @@
 #include "IwDebug.h"
 #include "s3eDevice.h"
 
+
 #include "s3eWwise.h"
 
 /**
@@ -56,6 +57,9 @@ typedef       void(*s3eWwiseMusicEngineTerm_t)();
 typedef s3eWwiseResult(*s3eWwiseCommInit_t)(s3eWwiseCommSettings* in_settings);
 typedef       void(*s3eWwiseCommGetDefaultInitSettings_t)(s3eWwiseCommSettings* out_settings);
 typedef       void(*s3eWwiseCommTerm_t)();
+typedef s3eWwiseResult(*s3eWwiseLowLevelIOSetBasePath_t)(const char* in_pszBasePath);
+typedef s3eWwiseResult(*s3eWwiseLowLevelIOSetBankPath_t)(const char* in_pszBankPath);
+typedef s3eWwiseResult(*s3eWwiseLowLevelIOSetAudioSrcPath_t)(const char* in_pszAudioSrcPath);
 
 /**
  * struct that gets filled in by s3eWwiseRegister
@@ -106,6 +110,9 @@ typedef struct s3eWwiseFuncs
     s3eWwiseCommInit_t m_s3eWwiseCommInit;
     s3eWwiseCommGetDefaultInitSettings_t m_s3eWwiseCommGetDefaultInitSettings;
     s3eWwiseCommTerm_t m_s3eWwiseCommTerm;
+    s3eWwiseLowLevelIOSetBasePath_t m_s3eWwiseLowLevelIOSetBasePath;
+    s3eWwiseLowLevelIOSetBankPath_t m_s3eWwiseLowLevelIOSetBankPath;
+    s3eWwiseLowLevelIOSetAudioSrcPath_t m_s3eWwiseLowLevelIOSetAudioSrcPath;
 } s3eWwiseFuncs;
 
 static s3eWwiseFuncs g_Ext;
@@ -122,7 +129,7 @@ static bool _extLoad()
             g_GotExt = true;
         else
             s3eDebugAssertShow(S3E_MESSAGE_CONTINUE_STOP_IGNORE,                 "error loading extension: s3eWwise");
-
+            
         g_TriedExt = true;
         g_TriedNoMsgExt = true;
     }
@@ -159,7 +166,7 @@ s3eBool s3eWwiseMemoryMgrIsInitialized()
         return S3E_FALSE;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -181,7 +188,7 @@ void s3eWwiseMemoryMgrTerm()
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -203,7 +210,7 @@ s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings)
         return s3eWwise_NotImplemented;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -225,7 +232,7 @@ s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_setting
         return NULL;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -247,7 +254,7 @@ void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr)
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -269,7 +276,7 @@ void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -291,7 +298,7 @@ s3eBool s3eWwiseSoundEngineIsInitialized()
         return S3E_FALSE;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -313,7 +320,7 @@ s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWw
         return s3eWwise_NotImplemented;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -335,7 +342,7 @@ void s3eWwiseSoundEngineGetDefaultInitSettings(s3eWwiseInitSettings* out_setting
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -357,7 +364,7 @@ void s3eWwiseSoundEngineGetDefaultPlatformInitSettings(s3eWwisePlatformInitSetti
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -379,7 +386,7 @@ void s3eWwiseSoundEngineTerm()
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -401,7 +408,7 @@ s3eWwiseResult s3eWwiseSoundEngineRenderAudio()
         return s3eWwise_NotImplemented;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -995,7 +1002,7 @@ s3eWwiseResult s3eWwiseMusicEngineInit(s3eWwiseMusicSettings* in_pSettings)
         return s3eWwise_NotImplemented;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -1017,7 +1024,7 @@ void s3eWwiseMusicEngineGetDefaultInitSettings(s3eWwiseMusicSettings* out_settin
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -1039,7 +1046,7 @@ void s3eWwiseMusicEngineTerm()
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -1061,7 +1068,7 @@ s3eWwiseResult s3eWwiseCommInit(s3eWwiseCommSettings* in_settings)
         return s3eWwise_NotImplemented;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -1083,7 +1090,7 @@ void s3eWwiseCommGetDefaultInitSettings(s3eWwiseCommSettings* out_settings)
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -1105,7 +1112,7 @@ void s3eWwiseCommTerm()
         return;
 
 #ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching
+    // For MIPs platform we do not have asm code for stack switching 
     // implemented. So we make LoaderCallStart call manually to set GlobalLock
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
@@ -1117,4 +1124,70 @@ void s3eWwiseCommTerm()
 #endif
 
     return;
+}
+
+s3eWwiseResult s3eWwiseLowLevelIOSetBasePath(const char* in_pszBasePath)
+{
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[44] func: s3eWwiseLowLevelIOSetBasePath"));
+
+    if (!_extLoad())
+        return s3eWwise_NotImplemented;
+
+#ifdef __mips
+    // For MIPs platform we do not have asm code for stack switching 
+    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+    s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
+#endif
+
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseLowLevelIOSetBasePath(in_pszBasePath);
+
+#ifdef __mips
+    s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
+#endif
+
+    return ret;
+}
+
+s3eWwiseResult s3eWwiseLowLevelIOSetBankPath(const char* in_pszBankPath)
+{
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[45] func: s3eWwiseLowLevelIOSetBankPath"));
+
+    if (!_extLoad())
+        return s3eWwise_NotImplemented;
+
+#ifdef __mips
+    // For MIPs platform we do not have asm code for stack switching 
+    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+    s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
+#endif
+
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseLowLevelIOSetBankPath(in_pszBankPath);
+
+#ifdef __mips
+    s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
+#endif
+
+    return ret;
+}
+
+s3eWwiseResult s3eWwiseLowLevelIOSetAudioSrcPath(const char* in_pszAudioSrcPath)
+{
+    IwTrace(WWISE_VERBOSE, ("calling s3eWwise[46] func: s3eWwiseLowLevelIOSetAudioSrcPath"));
+
+    if (!_extLoad())
+        return s3eWwise_NotImplemented;
+
+#ifdef __mips
+    // For MIPs platform we do not have asm code for stack switching 
+    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+    s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
+#endif
+
+    s3eWwiseResult ret = g_Ext.m_s3eWwiseLowLevelIOSetAudioSrcPath(in_pszAudioSrcPath);
+
+#ifdef __mips
+    s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
+#endif
+
+    return ret;
 }

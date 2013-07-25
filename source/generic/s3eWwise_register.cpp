@@ -21,7 +21,7 @@ extern void s3eWwiseTerminate();
 void s3eWwiseRegisterExt()
 {
     /* fill in the function pointer struct for this extension */
-    void* funcPtrs[44];
+    void* funcPtrs[47];
     funcPtrs[0] = (void*)s3eWwiseMemoryMgrIsInitialized;
     funcPtrs[1] = (void*)s3eWwiseMemoryMgrTerm;
     funcPtrs[2] = (void*)s3eWwiseMemoryMgrInit;
@@ -66,11 +66,14 @@ void s3eWwiseRegisterExt()
     funcPtrs[41] = (void*)s3eWwiseCommInit;
     funcPtrs[42] = (void*)s3eWwiseCommGetDefaultInitSettings;
     funcPtrs[43] = (void*)s3eWwiseCommTerm;
+    funcPtrs[44] = (void*)s3eWwiseLowLevelIOSetBasePath;
+    funcPtrs[45] = (void*)s3eWwiseLowLevelIOSetBankPath;
+    funcPtrs[46] = (void*)s3eWwiseLowLevelIOSetAudioSrcPath;
 
     /*
      * Flags that specify the extension's use of locking and stackswitching
      */
-    int flags[44] = { 0 };
+    int flags[47] = { 0 };
 
     /*
      * Register the extension

@@ -70,8 +70,10 @@ void initWwise()
 
     s3eWwiseBankID bankId;
 
+    s3eWwiseLowLevelIOSetBasePath("Audio/iOS/");
+
     ///s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::INIT, S3E_WWISE_DEFAULT_POOL_ID);
-    s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankNamed("Audio/iOS/Init.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
+    s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankNamed("Init.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if(loadInit  != s3eWwise_Success )
     {
         s3eDebugOutputString("Failed to load sound bank");
@@ -81,7 +83,7 @@ void initWwise()
         s3eDebugOutputString("Loaded sound bank");
 
     //s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::HUMAN, S3E_WWISE_DEFAULT_POOL_ID);
-    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankNamed("Audio/iOS/Human.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
+    s3eWwiseResult loadHuman = s3eWwiseSoundEngineLoadBankNamed("Human.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if( loadHuman != s3eWwise_Success )
     {
         s3eDebugOutputString("Failed to load sound bank");
@@ -90,7 +92,7 @@ void initWwise()
     else
         s3eDebugOutputString("Loaded sound bank");
 
-    s3eWwiseResult loadCar = s3eWwiseSoundEngineLoadBankNamed("Audio/iOS/Car.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
+    s3eWwiseResult loadCar = s3eWwiseSoundEngineLoadBankNamed("Car.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if( loadCar != s3eWwise_Success )
     {
         s3eDebugOutputString("Failed to load sound bank");
