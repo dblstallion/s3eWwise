@@ -277,6 +277,8 @@ void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr);
 
 void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings);
 
+s3eWwiseResult s3eWwiseStreamMgrSetCurrentLanguage(const char *in_pszLanguageName);
+
 /**
  * AK::SoundEngine
  */

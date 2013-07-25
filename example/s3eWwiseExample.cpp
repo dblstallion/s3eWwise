@@ -70,6 +70,8 @@ void initWwise()
 
     s3eWwiseBankID bankId;
 
+    // Setup paths
+    s3eWwiseStreamMgrSetCurrentLanguage("French(Canada)");
     s3eWwiseLowLevelIOSetBasePath("Audio/iOS/");
 
     ///s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::INIT, S3E_WWISE_DEFAULT_POOL_ID);

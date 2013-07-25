@@ -114,6 +114,13 @@ void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings
 	out_settings->uMemorySize = streamSettings.uMemorySize;
 }
 
+s3eWwiseResult s3eWwiseStreamMgrSetCurrentLanguage(const char *in_pszLanguageName)
+{
+    AkOSChar *languageName;
+    CONVERT_CHAR_TO_OSCHAR(in_pszLanguageName, languageName);
+    return (s3eWwiseResult)AK::StreamMgr::SetCurrentLanguage(languageName);
+}
+
 s3eBool s3eWwiseSoundEngineIsInitialized()
 {
 	return AK::SoundEngine::IsInitialized();
@@ -350,48 +357,21 @@ void s3eWwiseCommTerm()
 
 s3eWwiseResult s3eWwiseLowLevelIOSetBasePath(const char* in_pszBasePath)
 {
-    if (sizeof(AkOSChar) == sizeof(char))
-	{
-		const AkOSChar* basePath = (const AkOSChar*)in_pszBasePath;
-		return (s3eWwiseResult)g_lowLevelIO.SetBasePath(basePath);
-	}
-	else
-	{
-		wchar_t buffer[1024];
-		int len = mbstowcs( buffer, in_pszBasePath, sizeof(buffer));
-		const AkOSChar* wbasePath = (const AkOSChar*)buffer;
-		return (s3eWwiseResult)g_lowLevelIO.SetBasePath(wbasePath);
-	}
+    AkOSChar *basePath;
+    CONVERT_CHAR_TO_OSCHAR(in_pszBasePath, basePath);
+	return (s3eWwiseResult)g_lowLevelIO.SetBasePath(basePath);
 }
 
 s3eWwiseResult s3eWwiseLowLevelIOSetBankPath(const char* in_pszBankPath)
 {
-    if (sizeof(AkOSChar) == sizeof(char))
-	{
-		const AkOSChar* basePath = (const AkOSChar*)in_pszBankPath;
-		return (s3eWwiseResult)g_lowLevelIO.SetBankPath(basePath);
-	}
-	else
-	{
-		wchar_t buffer[1024];
-		int len = mbstowcs( buffer, in_pszBankPath, sizeof(buffer));
-		const AkOSChar* wbasePath = (const AkOSChar*)buffer;
-		return (s3eWwiseResult)g_lowLevelIO.SetBankPath(wbasePath);
-	}
+    AkOSChar *bankPath;
+    CONVERT_CHAR_TO_OSCHAR(in_pszBankPath, bankPath);
+	return (s3eWwiseResult)g_lowLevelIO.SetBankPath(bankPath);
 }
 
 s3eWwiseResult s3eWwiseLowLevelIOSetAudioSrcPath(const char* in_pszAudioSrcPath)
 {
-    if (sizeof(AkOSChar) == sizeof(char))
-	{
-		const AkOSChar* basePath = (const AkOSChar*)in_pszAudioSrcPath;
-        return (s3eWwiseResult)g_lowLevelIO.SetAudioSrcPath(basePath);
-	}
-	else
-	{
-		wchar_t buffer[1024];
-		int len = mbstowcs( buffer, in_pszAudioSrcPath, sizeof(buffer));
-		const AkOSChar* wbasePath = (const AkOSChar*)buffer;
-		return (s3eWwiseResult)g_lowLevelIO.SetAudioSrcPath(wbasePath);
-	}
+    AkOSChar *audioSrcPath;
+    CONVERT_CHAR_TO_OSCHAR(in_pszAudioSrcPath, audioSrcPath);
+	return (s3eWwiseResult)g_lowLevelIO.SetAudioSrcPath(audioSrcPath);
 }

@@ -248,6 +248,7 @@ s3eWwiseResult s3eWwiseMemoryMgrInit(s3eWwiseMemSettings* in_pSettings) s3eWwise
 s3eWwiseStreamMgr* s3eWwiseStreamMgrCreate(s3eWwiseStreamMgrSettings* in_settings) NULL
 void s3eWwiseStreamMgrDestroy(s3eWwiseStreamMgr* streamMgr)
 void s3eWwiseStreamMgrGetDefaultSettings(s3eWwiseStreamMgrSettings* out_settings)
+s3eWwiseResult s3eWwiseStreamMgrSetCurrentLanguage(const char* in_pszLanguageName) s3eWwise_NotImplemented
 
 /**
  * AK::SoundEngine

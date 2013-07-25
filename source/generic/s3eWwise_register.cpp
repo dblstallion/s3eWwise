@@ -21,59 +21,60 @@ extern void s3eWwiseTerminate();
 void s3eWwiseRegisterExt()
 {
     /* fill in the function pointer struct for this extension */
-    void* funcPtrs[47];
+    void* funcPtrs[48];
     funcPtrs[0] = (void*)s3eWwiseMemoryMgrIsInitialized;
     funcPtrs[1] = (void*)s3eWwiseMemoryMgrTerm;
     funcPtrs[2] = (void*)s3eWwiseMemoryMgrInit;
     funcPtrs[3] = (void*)s3eWwiseStreamMgrCreate;
     funcPtrs[4] = (void*)s3eWwiseStreamMgrDestroy;
     funcPtrs[5] = (void*)s3eWwiseStreamMgrGetDefaultSettings;
-    funcPtrs[6] = (void*)s3eWwiseSoundEngineIsInitialized;
-    funcPtrs[7] = (void*)s3eWwiseSoundEngineInit;
-    funcPtrs[8] = (void*)s3eWwiseSoundEngineGetDefaultInitSettings;
-    funcPtrs[9] = (void*)s3eWwiseSoundEngineGetDefaultPlatformInitSettings;
-    funcPtrs[10] = (void*)s3eWwiseSoundEngineTerm;
-    funcPtrs[11] = (void*)s3eWwiseSoundEngineRenderAudio;
-    funcPtrs[12] = (void*)s3eWwiseSoundEnginePostEventNamed;
-    funcPtrs[13] = (void*)s3eWwiseSoundEnginePostEventWithID;
-    funcPtrs[14] = (void*)s3eWwiseSoundEngineStopAll;
-    funcPtrs[15] = (void*)s3eWwiseSoundEngineStopPlayingID;
-    funcPtrs[16] = (void*)s3eWwiseSoundEngineSetActiveListeners;
-    funcPtrs[17] = (void*)s3eWwiseSoundEngineSetListenerPosition;
-    funcPtrs[18] = (void*)s3eWwiseSoundEngineSetRTPCValueWithID;
-    funcPtrs[19] = (void*)s3eWwiseSoundEngineSetRTPCValueNamed;
-    funcPtrs[20] = (void*)s3eWwiseSoundEngineResetRTPCValueWithID;
-    funcPtrs[21] = (void*)s3eWwiseSoundEngineResetRTPCValueNamed;
-    funcPtrs[22] = (void*)s3eWwiseSoundEngineSetSwitchWithID;
-    funcPtrs[23] = (void*)s3eWwiseSoundEngineSetSwitchNamed;
-    funcPtrs[24] = (void*)s3eWwiseSoundEnginePostTriggerWithID;
-    funcPtrs[25] = (void*)s3eWwiseSoundEnginePostTriggerNamed;
-    funcPtrs[26] = (void*)s3eWwiseSoundEngineSetStateWithID;
-    funcPtrs[27] = (void*)s3eWwiseSoundEngineSetStateNamed;
-    funcPtrs[28] = (void*)s3eWwiseSoundEngineRegisterGameObj;
-    funcPtrs[29] = (void*)s3eWwiseSoundEngineRegisterGameObjWithName;
-    funcPtrs[30] = (void*)s3eWwiseSoundEngineUnregisterGameObj;
-    funcPtrs[31] = (void*)s3eWwiseSoundEngineUnregisterAllGameObj;
-    funcPtrs[32] = (void*)s3eWwiseSoundEngineSetPosition;
-    funcPtrs[33] = (void*)s3eWwiseSoundEngineClearBanks;
-    funcPtrs[34] = (void*)s3eWwiseSoundEngineLoadBankNamed;
-    funcPtrs[35] = (void*)s3eWwiseSoundEngineLoadBankWithID;
-    funcPtrs[36] = (void*)s3eWwiseSoundEngineUnloadBankNamed;
-    funcPtrs[37] = (void*)s3eWwiseSoundEngineUnloadBankWithID;
-    funcPtrs[38] = (void*)s3eWwiseMusicEngineInit;
-    funcPtrs[39] = (void*)s3eWwiseMusicEngineGetDefaultInitSettings;
-    funcPtrs[40] = (void*)s3eWwiseMusicEngineTerm;
-    funcPtrs[41] = (void*)s3eWwiseCommInit;
-    funcPtrs[42] = (void*)s3eWwiseCommGetDefaultInitSettings;
-    funcPtrs[43] = (void*)s3eWwiseCommTerm;
-    funcPtrs[44] = (void*)s3eWwiseLowLevelIOSetBasePath;
-    funcPtrs[45] = (void*)s3eWwiseLowLevelIOSetBankPath;
-    funcPtrs[46] = (void*)s3eWwiseLowLevelIOSetAudioSrcPath;
+    funcPtrs[6] = (void*)s3eWwiseStreamMgrSetCurrentLanguage;
+    funcPtrs[7] = (void*)s3eWwiseSoundEngineIsInitialized;
+    funcPtrs[8] = (void*)s3eWwiseSoundEngineInit;
+    funcPtrs[9] = (void*)s3eWwiseSoundEngineGetDefaultInitSettings;
+    funcPtrs[10] = (void*)s3eWwiseSoundEngineGetDefaultPlatformInitSettings;
+    funcPtrs[11] = (void*)s3eWwiseSoundEngineTerm;
+    funcPtrs[12] = (void*)s3eWwiseSoundEngineRenderAudio;
+    funcPtrs[13] = (void*)s3eWwiseSoundEnginePostEventNamed;
+    funcPtrs[14] = (void*)s3eWwiseSoundEnginePostEventWithID;
+    funcPtrs[15] = (void*)s3eWwiseSoundEngineStopAll;
+    funcPtrs[16] = (void*)s3eWwiseSoundEngineStopPlayingID;
+    funcPtrs[17] = (void*)s3eWwiseSoundEngineSetActiveListeners;
+    funcPtrs[18] = (void*)s3eWwiseSoundEngineSetListenerPosition;
+    funcPtrs[19] = (void*)s3eWwiseSoundEngineSetRTPCValueWithID;
+    funcPtrs[20] = (void*)s3eWwiseSoundEngineSetRTPCValueNamed;
+    funcPtrs[21] = (void*)s3eWwiseSoundEngineResetRTPCValueWithID;
+    funcPtrs[22] = (void*)s3eWwiseSoundEngineResetRTPCValueNamed;
+    funcPtrs[23] = (void*)s3eWwiseSoundEngineSetSwitchWithID;
+    funcPtrs[24] = (void*)s3eWwiseSoundEngineSetSwitchNamed;
+    funcPtrs[25] = (void*)s3eWwiseSoundEnginePostTriggerWithID;
+    funcPtrs[26] = (void*)s3eWwiseSoundEnginePostTriggerNamed;
+    funcPtrs[27] = (void*)s3eWwiseSoundEngineSetStateWithID;
+    funcPtrs[28] = (void*)s3eWwiseSoundEngineSetStateNamed;
+    funcPtrs[29] = (void*)s3eWwiseSoundEngineRegisterGameObj;
+    funcPtrs[30] = (void*)s3eWwiseSoundEngineRegisterGameObjWithName;
+    funcPtrs[31] = (void*)s3eWwiseSoundEngineUnregisterGameObj;
+    funcPtrs[32] = (void*)s3eWwiseSoundEngineUnregisterAllGameObj;
+    funcPtrs[33] = (void*)s3eWwiseSoundEngineSetPosition;
+    funcPtrs[34] = (void*)s3eWwiseSoundEngineClearBanks;
+    funcPtrs[35] = (void*)s3eWwiseSoundEngineLoadBankNamed;
+    funcPtrs[36] = (void*)s3eWwiseSoundEngineLoadBankWithID;
+    funcPtrs[37] = (void*)s3eWwiseSoundEngineUnloadBankNamed;
+    funcPtrs[38] = (void*)s3eWwiseSoundEngineUnloadBankWithID;
+    funcPtrs[39] = (void*)s3eWwiseMusicEngineInit;
+    funcPtrs[40] = (void*)s3eWwiseMusicEngineGetDefaultInitSettings;
+    funcPtrs[41] = (void*)s3eWwiseMusicEngineTerm;
+    funcPtrs[42] = (void*)s3eWwiseCommInit;
+    funcPtrs[43] = (void*)s3eWwiseCommGetDefaultInitSettings;
+    funcPtrs[44] = (void*)s3eWwiseCommTerm;
+    funcPtrs[45] = (void*)s3eWwiseLowLevelIOSetBasePath;
+    funcPtrs[46] = (void*)s3eWwiseLowLevelIOSetBankPath;
+    funcPtrs[47] = (void*)s3eWwiseLowLevelIOSetAudioSrcPath;
 
     /*
      * Flags that specify the extension's use of locking and stackswitching
      */
-    int flags[47] = { 0 };
+    int flags[48] = { 0 };
 
     /*
      * Register the extension
