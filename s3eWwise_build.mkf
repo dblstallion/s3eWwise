@@ -40,7 +40,6 @@ if {{defined I3D_OS_IPHONE}}
         s3eWwise_platform.cpp
 		
 		AkDefaultIOHookBlocking.cpp
-        AkDefaultIOHookDeferred.cpp
     }
 }
 
@@ -56,7 +55,6 @@ if {{defined I3D_OS_WINDOWS}}
         #Add any windows-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
-        AkDefaultIOHookDeferred.cpp
     }
 	
 	librarypath source/lib/win32
@@ -77,18 +75,28 @@ if {{defined I3D_OS_WINDOWS}}
 
 if {{defined S3E_ANDROID}}
 {
-	includepath Wwise/SDK/samples/SoundEngine/POSIX
+	includepath Wwise/SDK/samples/SoundEngine/Android
 
     files
     {
         ["source"]
-        (use_first_found, source/android, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
+        (use_first_found, source/android, source/generic, Wwise/SDK/samples/SoundEngine/Android)
         s3eWwise_platform.cpp
         #Add any android-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
-        AkDefaultIOHookDeferred.cpp
     }
+	
+	librarypath "$NDK_ROOT/platforms/android-9/arch-arm/usr/lib"
+
+	library
+	{
+		libAkSoundEngine.a
+		libAkMemoryMgr.a
+		libAkMusicEngine.a
+		libAkStreamMgr.a
+		OpenSLES
+	}
 }
 
 if {{defined I3D_OS_OSX}}
@@ -103,7 +111,6 @@ if {{defined I3D_OS_OSX}}
         #Add any osx-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
-        AkDefaultIOHookDeferred.cpp
     }
 }
 

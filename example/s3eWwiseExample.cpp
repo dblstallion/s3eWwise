@@ -74,6 +74,8 @@ void initWwise()
     s3eWwiseStreamMgrSetCurrentLanguage("French(Canada)");
     s3eWwiseLowLevelIOSetBasePath("Audio/iOS/");
 
+    s3eDebugOutputString("Path setup done");
+
     ///s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankWithID(AK::BANKS::INIT, S3E_WWISE_DEFAULT_POOL_ID);
     s3eWwiseResult loadInit = s3eWwiseSoundEngineLoadBankNamed("Init.bnk", S3E_WWISE_DEFAULT_POOL_ID, &bankId);
     if(loadInit  != s3eWwise_Success )

@@ -67,6 +67,11 @@ To build Release:
 Android
 -------
 
+On Android, make sure you have the Android SDK and NDK installed. These can be extracted anywhere on the drive.
+Make sure you have an environment variable called NDK_ROOT which points to the NDK installation folder.
+
+Double-click the s3eWwise_android.mkb file to launch the build.
+
 iOS
 ---
 

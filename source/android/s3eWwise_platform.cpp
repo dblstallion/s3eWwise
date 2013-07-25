@@ -42,7 +42,7 @@ s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettin
 	platformInitSettings.uLEngineDefaultPoolSize			= in_pPlatformSettings->uLEngineDefaultPoolSize;
 	platformInitSettings.uSampleRate						= in_pPlatformSettings->uSampleRate;
 	platformInitSettings.uNumRefillsInVoice					= in_pPlatformSettings->uNumRefillsInVoice;
-	platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
+	//platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
 	
     return (s3eWwiseResult)AK::SoundEngine::Init(&initSettings, &platformInitSettings);
 }
@@ -56,5 +56,5 @@ void s3eWwiseSoundEngineGetDefaultPlatformInitSettings_platform(s3eWwisePlatform
 	out_settings->uLEngineDefaultPoolSize			= platformInitSettings.uLEngineDefaultPoolSize;
 	out_settings->uSampleRate						= platformInitSettings.uSampleRate;
 	out_settings->uNumRefillsInVoice				= platformInitSettings.uNumRefillsInVoice;
-	out_settings->bMuteOtherApps					= platformInitSettings.bMuteOtherApps;
+	//out_settings->bMuteOtherApps					= platformInitSettings.bMuteOtherApps;
 }

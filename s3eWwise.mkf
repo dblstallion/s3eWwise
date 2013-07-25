@@ -92,6 +92,5 @@ deployments
 #Include the extension's jar file during deployment
 deployments
 {
-    #android-external-jars="lib/android/s3eWwise.jar"
-    #android-so="lib/android/libs3eWwise.so"
+    android-so="lib/android/libs3eWwise.so"
 }
