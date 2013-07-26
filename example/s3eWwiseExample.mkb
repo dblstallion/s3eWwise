@@ -4,7 +4,7 @@
 # Place the output in the Wwise/SDK/examples/data/Audio folder
 commands
 {
-	"GenerateExampleBanks.bat"
+	"generate_example_banks.py"
 }
 
 files
