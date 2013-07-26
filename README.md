@@ -17,7 +17,7 @@ Getting Started
 
 In order to use this extension, you must build it yourself. Unfortunately we cannot redistribute
 AudioKinetic's binaries in this repository. Begin by downloading the different Wwise SDKs you will need
-and placing them in the empty Wwise/SDK directory.
+and placing them in the empty `s3eWwise/Wwise/SDK` directory.
 
 To get the Wwise SDK:
 
@@ -31,20 +31,20 @@ To get the Wwise SDK:
     * Common SDK
 * Begin with the Mac installation, since copying from the Mac to Windows tends to remove some of the Windows files
 * iOS and Mac SDKs come as zipped packages. These need to be installed on a Mac.
-* Once both are installed, copy the folders from /Users/$USER/Wwise/<WWISE_VERSION>/SDK into the Wwise/SDK directory.
-* Copy the contents of the Android and Windows SDKs from C:\Program Files (x86)\Audiokinetic\Wwise <build #>\SDK into the Wwise/SDK directory.
-
-As you build the library for each platform, make sure to follow the [EDK Guide](http://docs.madewithmarmalade.com/native/extensions/edkguides.html).
-The EDK Guide provides helpful instructions, i.e. mounting a the Windows directory
-on your Mac so the iOS and Mac versions can be built through SSH. It also contains other helpful tips for troubleshooting
-
-**Note**: Do not rebuild the extension using the s4e file. This will re-generate some of the extension source code
-and cause compile errors.
+* Once both are installed, copy the folders from `/Users/$USER/Wwise/<WWISE_VERSION>/SDK` into the `s3eWwise/Wwise/SDK` directory.
+* Copy the contents of the Android and Windows SDKs from `C:\Program Files (x86)\Audiokinetic\Wwise <build #>\SDK` into the `s3eWwise/Wwise/SDK` directory.
 
 Building s3eWwise
 =================
 
 Once the Wwise SDK is setup, each platform must be build
+
+As you build the library for each platform, make sure to follow the [EDK Guide](http://docs.madewithmarmalade.com/native/extensions/edkguides.html).
+The EDK Guide provides helpful instructions, i.e. mounting a the Windows directory
+on your Mac so the iOS and Mac versions can be built through SSH. It also contains other helpful tips for troubleshooting
+
+**Note**: Do not rebuild the extension using the s3eWwise.s4e file. This will re-generate some of the extension source code
+and cause compile errors.
 
 Windows
 -------
@@ -75,11 +75,32 @@ Double-click the s3eWwise_android.mkb file to launch the build.
 iOS
 ---
 
-Build the extension by running `mkb --arm --iphone s3eWwise_iphone.mkb` in the console on OSX.
-A Mac is needed to build the extension.
+The iOS extension must be built on a Mac. The easiest way to do this is to share the Marmalade/<version>/extensions
+folder and mount it on your Mac. Instructions to do this can be found in the [iOS EDK Guide](http://docs.madewithmarmalade.com/native/extensions/edkguides/iosedkguide.html)
+
+Build the extension in the terminal by navigating to the s3eWwise folder and running `mkb --arm --iphone s3eWwise_iphone.mkb`.
+The Wwise libraries will be copied to the appropriate locations and the build will run for debug and release.
 
 Mac OSX
 -------
+
+The Mac OSX extension must also be built on a Mac. In this case you must run the build in Xcode since some build settings must be manually changed.
+Marmalade doesn't have an mkb command for including frameworks into the build, so you must open the s3eWwise_osx.mkb file, which will launch Xcode.
+Once Xcode is running:
+
+* Click on the s3eWwise_osx project in the Project Navigator
+* Click the "Build Phases" tab
+* Expand the header marked "Link Binary with Libraries"
+* Click the little "+" icon in bottom left of the window
+* Add each of these frameworks one by one:
+	* AudioUnit.framework
+	* CoreAudio.framework
+	* AudioToolbox.framework
+	
+After the frameworks have been manually set up, build the project for debug and release.
+
+**Note**: You will have to repeat the above steps to include the framework every time you rebuild the extension. The xcode settings will not be saved in the MKB.
+
 
 Running the Example
 ===================
