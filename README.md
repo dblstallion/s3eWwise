@@ -70,13 +70,19 @@ Android
 On Android, make sure you have the Android SDK and NDK installed. These can be extracted anywhere on the drive.
 Make sure you have an environment variable called NDK_ROOT which points to the NDK installation folder.
 
-Double-click the s3eWwise_android.mkb file to launch the build.
+**Note**: As of 2013.1, Wwise is only compatible with the r8d version of the NDK. See the Wwise release notes for more details.
+
+**Note**: 
+
+Double-click the s3eWwise_android_release.mkb file to launch the build.
 
 iOS
 ---
 
 The iOS extension must be built on a Mac. The easiest way to do this is to share the Marmalade/<version>/extensions
 folder and mount it on your Mac. Instructions to do this can be found in the [iOS EDK Guide](http://docs.madewithmarmalade.com/native/extensions/edkguides/iosedkguide.html)
+
+Make sure you have the Marmalade SDK installed on your Mac, along with all its dependencies.
 
 Build the extension in the terminal by navigating to the s3eWwise folder and running `mkb --arm --iphone s3eWwise_iphone.mkb`.
 The Wwise libraries will be copied to the appropriate locations and the build will run for debug and release.
@@ -102,12 +108,32 @@ After the frameworks have been manually set up, build the project for debug and 
 **Note**: You will have to repeat the above steps to include the framework every time you rebuild the extension. The xcode settings will not be saved in the MKB.
 
 
-Running the Example
-===================
+Implementation Example
+======================
 
-An example of how to use s3eWwise is provided in the example directory. This is a standard Marmalade application
+An example of how to use s3eWwise is provided in the `s3eWwise/example` directory. This is a standard Marmalade application
 and is configured exactly the way your project should be when using s3eWwise.
 
-To run the example, begin by double-clicking the example/s3eWwise.mkb file. The example will copy the appropriate Wwise
-sound banks from the Wwise/SDK/samples directory and open your IDE. Once this is complete you can run the example in the
+Building the Example
+--------------------
+
+To build the example, begin by double-clicking the `example/s3eWwise.mkb` file. The example will copy the appropriate Wwise
+sound banks from the `s3eWwise/Wwise/SDK/samples` directory and open your IDE. Once this is complete you can run the example in the
 simulator to hear audio playing.
+
+**Note**: The example MKB must be executed at least once on Windows, since Wwise can only generate soundbanks on a Windows machine.
+The Wwise Authoring application must also be installed.
+
+Clicking on the screen should trigger the "Play Hello" event and you will hear a voice. Holding and moving the mouse and up down will rev
+the car engine sound.
+
+Deploying the Example
+---------------------
+
+To test the different platform versions of the extension, you must deploy the example to a device. To do this use the Marmalade Deploy Tool.
+You can follow instructions on how to deploy to each device in the [Marmalade Documentation](http://docs.madewithmarmalade.com/native/deployment/usingthedeploymenttool.html).
+
+Building the extension with Plugins
+===================================
+
+Coming soon: How to use Wwise plugins with the extension.
