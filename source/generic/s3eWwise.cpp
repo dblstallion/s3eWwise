@@ -23,17 +23,29 @@ This file should perform any platform-indepedentent functionality
 #include <AK/MusicEngine/Common/AkMusicEngine.h>
 #include <AK/Comm/AkCommunication.h>
 
-#define USE_AK_DEFAULT_IO 0
+// IO System
+#ifdef USE_AK_DEFAULT_IO
 
-#if USE_AK_DEFAULT_IO
 #include "AkDefaultIOHookBlocking.h"
-
 CAkDefaultIOHookBlocking g_lowLevelIO;
+
 #else
+
 #include "s3eIOHook.h"
 #include "AkFilePackageLowLevelIO.h"
-
 CAkFilePackageLowLevelIO<s3eIOHook> g_lowLevelIO;
+
+#endif
+
+// Plugins
+#ifdef WWISE_AK_AAC_PLUGIN
+#include <AK/Plugin/AkAACFactory.h>
+#endif
+#ifdef WWISE_AK_ROOM_VERB_PLUGIN
+#include <AK/Plugin/AkRoomVerbFXFactory.h>
+#endif
+#ifdef WWISE_AK_VORBIS_PLUGIN
+#include <AK/Plugin/AkVorbisFactory.h>
 #endif
 
 // Necessary memory hooks
@@ -128,7 +140,25 @@ s3eBool s3eWwiseSoundEngineIsInitialized()
 
 s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
-	return s3eWwiseSoundEngineInit_platform(in_pSettings, in_pPlatformSettings);
+	s3eWwiseResult result = s3eWwiseSoundEngineInit_platform(in_pSettings, in_pPlatformSettings);
+
+    if(result != s3eWwise_Success)
+        return result;
+
+    // Plugins
+#ifdef WWISE_AK_ROOM_VERB_PLUGIN
+    AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKCOMPANYID_AUDIOKINETIC, AKEFFECTID_ROOMVERB, CreateRoomVerbFX, CreateRoomVerbFXParams);
+#endif
+
+    // Codecs
+#ifdef WWISE_AK_AAC_PLUGIN
+    AK::SoundEngine::RegisterCodec(AKCOMPANYID_AUDIOKINETIC, AKCODECID_AAC, CreateAACFilePlugin, CreateAACBankPlugin);
+#endif
+#ifdef WWISE_AK_VORBIS_PLUGIN
+    AK::SoundEngine::RegisterCodec(AKCOMPANYID_AUDIOKINETIC, AKCODECID_VORBIS, CreateVorbisFilePlugin, CreateVorbisBankPlugin);
+#endif
+
+    return result;
 }
 
 void s3eWwiseSoundEngineGetDefaultInitSettings(s3eWwiseInitSettings* out_settings)

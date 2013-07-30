@@ -2,7 +2,7 @@ import shutil
 import os
 
 iOS_Lib_Folder = os.path.join('Wwise', 'SDK', 'iOS')
-iOS_Debug_Folder = os.path.join(iOS_Lib_Folder, 'Debug-iphoneos', 'lib')
+iOS_Debug_Folder = os.path.join(iOS_Lib_Folder, 'Profile-iphoneos', 'lib')
 iOS_Release_Folder = os.path.join(iOS_Lib_Folder, 'Release-iphoneos', 'lib')
 
 # Useful function

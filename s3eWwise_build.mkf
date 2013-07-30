@@ -15,6 +15,10 @@ defines
 
     #This macro indicates that this extension is being built
     S3E_EXT_WWISE
+
+    #Enable plugins for Wwise
+    WWISE_AK_VORBIS_PLUGIN
+    WWISE_AK_ROOM_VERB_PLUGIN
 }
 
 #NOTE: Don't run this because it will overwrite custom files
@@ -71,6 +75,10 @@ if {{defined I3D_OS_WINDOWS}}
 		AkSoundEngine.lib
 		AkStreamMgr.lib
 	}
+
+    if {{defined WWISE_AK_AAC_PLUGIN}}          library AkAACDecoder.lib
+    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    library AkRoomVerbFX.lib
+    if {{defined WWISE_AK_VORBIS_PLUGIN}}       library AkVorbisDecoder.lib
 }
 
 if {{defined S3E_ANDROID}}
@@ -97,6 +105,10 @@ if {{defined S3E_ANDROID}}
 		libAkStreamMgr.a
 		OpenSLES
 	}
+
+    if {{defined WWISE_AK_AAC_PLUGIN}}          library libAkAACDecoder.a
+    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    library libAkRoomVerbFX.a
+    if {{defined WWISE_AK_VORBIS_PLUGIN}}       library libAkVorbisDecoder.a
 }
 
 if {{defined I3D_OS_OSX}}
@@ -122,6 +134,10 @@ if {{defined I3D_OS_OSX}}
 	   AkMusicEngine
 	   AkStreamMgr
 	}
+
+    if {{defined WWISE_AK_AAC_PLUGIN}}          library AkAACDecoder
+    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    library AkRoomVerbFX
+    if {{defined WWISE_AK_VORBIS_PLUGIN}}       library AkVorbisDecoder
 }
 
 if {{defined I3D_OS_LINUX and not defined S3E_ANDROID}}

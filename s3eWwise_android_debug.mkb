@@ -16,5 +16,5 @@ define S3E_BUILD_EXT
 
 subproject s3eWwise_build
 
-librarypath "Wwise/SDK/android-9_armeabi/Debug/lib"
+librarypath "Wwise/SDK/android-9_armeabi/Profile/lib"
 library libCommunicationCentral.a
