@@ -117,7 +117,7 @@ and is configured exactly the way your project should be when using s3eWwise.
 Building the Example
 --------------------
 
-To build the example, begin by double-clicking the `example/s3eWwise.mkb` file. The example will copy the appropriate Wwise
+To build the example, begin by double-clicking the `example/s3eWwiseExample.mkb` file. The example will copy the appropriate Wwise
 sound banks from the `s3eWwise/Wwise/SDK/samples` directory and open your IDE. Once this is complete you can run the example in the
 simulator to hear audio playing.
 
