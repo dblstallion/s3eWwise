@@ -11,7 +11,7 @@ includepath Wwise/SDK/samples/SoundEngine/Common
 defines
 {
     #Define the verbose channel to be off by default (but controllable by icf)
-    IW_TRACE_CHANNEL_WWISE_VERBOSE=2
+    IW_TRACE_CHANNEL_WWISE_VERBOSE=0
 
     #This macro indicates that this extension is being built
     S3E_EXT_WWISE
@@ -19,6 +19,10 @@ defines
     #Enable plugins for Wwise
     WWISE_AK_VORBIS_PLUGIN
     WWISE_AK_ROOM_VERB_PLUGIN
+	WWISE_AK_COMPRESSOR_PLUGIN
+	WWISE_AK_PEAK_LIMITER_PLUGIN
+	WWISE_AK_METER_PLUGIN
+	WWISE_AK_SILENCE_PLUGIN
 }
 
 #NOTE: Don't run this because it will overwrite custom files
@@ -76,9 +80,13 @@ if {{defined I3D_OS_WINDOWS}}
 		AkStreamMgr.lib
 	}
 
-    if {{defined WWISE_AK_AAC_PLUGIN}}          library AkAACDecoder.lib
-    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    library AkRoomVerbFX.lib
-    if {{defined WWISE_AK_VORBIS_PLUGIN}}       library AkVorbisDecoder.lib
+    if {{defined WWISE_AK_AAC_PLUGIN}}          	library AkAACDecoder.lib
+    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    	library AkRoomVerbFX.lib
+    if {{defined WWISE_AK_VORBIS_PLUGIN}}       	library AkVorbisDecoder.lib
+	if {{defined WWISE_AK_COMPRESSOR_PLUGIN}}    	library AkCompressorFX.lib
+	if {{defined WWISE_AK_PEAK_LIMITER_PLUGIN}}    	library AkPeakLimiterFX.lib
+	if {{defined WWISE_AK_METER_PLUGIN}}    		library AkMeterFX.lib
+	if {{defined WWISE_AK_SILENCE_PLUGIN}}    		library AkSilenceSource.lib
 }
 
 if {{defined S3E_ANDROID}}
@@ -106,9 +114,13 @@ if {{defined S3E_ANDROID}}
 		OpenSLES
 	}
 
-    if {{defined WWISE_AK_AAC_PLUGIN}}          library libAkAACDecoder.a
-    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    library libAkRoomVerbFX.a
-    if {{defined WWISE_AK_VORBIS_PLUGIN}}       library libAkVorbisDecoder.a
+    if {{defined WWISE_AK_AAC_PLUGIN}}          	library libAkAACDecoder.a
+    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    	library libAkRoomVerbFX.a
+    if {{defined WWISE_AK_VORBIS_PLUGIN}}       	library libAkVorbisDecoder.a
+	if {{defined WWISE_AK_COMPRESSOR_PLUGIN}}    	library libAkCompressorFX.a
+	if {{defined WWISE_AK_PEAK_LIMITER_PLUGIN}}    	library libAkPeakLimiterFX.a
+	if {{defined WWISE_AK_METER_PLUGIN}}    		library libAkMeterFX.a
+	if {{defined WWISE_AK_SILENCE_PLUGIN}}    		library libAkSilenceSource.a
 }
 
 if {{defined I3D_OS_OSX}}
@@ -135,9 +147,13 @@ if {{defined I3D_OS_OSX}}
 	   AkStreamMgr
 	}
 
-    if {{defined WWISE_AK_AAC_PLUGIN}}          library AkAACDecoder
-    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    library AkRoomVerbFX
-    if {{defined WWISE_AK_VORBIS_PLUGIN}}       library AkVorbisDecoder
+    if {{defined WWISE_AK_AAC_PLUGIN}}          	library AkAACDecoder
+    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    	library AkRoomVerbFX
+    if {{defined WWISE_AK_VORBIS_PLUGIN}}       	library AkVorbisDecoder
+	if {{defined WWISE_AK_COMPRESSOR_PLUGIN}}    	library AkCompressorFX
+	if {{defined WWISE_AK_PEAK_LIMITER_PLUGIN}}    	library AkPeakLimiterFX
+	if {{defined WWISE_AK_METER_PLUGIN}}    		library AkMeterFX
+	if {{defined WWISE_AK_SILENCE_PLUGIN}}    		library AkSilenceSource
 }
 
 if {{defined I3D_OS_LINUX and not defined S3E_ANDROID}}

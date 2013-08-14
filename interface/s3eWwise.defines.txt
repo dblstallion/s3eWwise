@@ -11,3 +11,7 @@ AK_OPTIMIZED Defined in release mode when the Wwise engine should be optimized
 WWISE_AK_AAC_PLUGIN Enable the Wwise AAC plugin
 WWISE_AK_ROOM_VERB_PLUGIN Enable the Wwise RoomVerb plugin
 WWISE_AK_VORBIS_PLUGIN Enable the Wwise Vorbis plugin
+WWISE_AK_COMPRESSOR_PLUGIN Enable the Wwise Compressor plugin
+WWISE_AK_PEAK_LIMITER_PLUGIN Enable the Wwise Peak Limiter plugin
+WWISE_AK_METER_PLUGIN Enable the Wwise Meter plugin
+WWISE_AK_SILENCE_PLUGIN Enable the Wwise Silence Source plugin

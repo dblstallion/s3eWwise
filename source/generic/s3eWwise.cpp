@@ -47,6 +47,18 @@ CAkFilePackageLowLevelIO<s3eIOHook> g_lowLevelIO;
 #ifdef WWISE_AK_VORBIS_PLUGIN
 #include <AK/Plugin/AkVorbisFactory.h>
 #endif
+#ifdef WWISE_AK_COMPRESSOR_PLUGIN
+#include <AK/Plugin/AkCompressorFXFactory.h>
+#endif
+#ifdef WWISE_AK_PEAK_LIMITER_PLUGIN
+#include <AK/Plugin/AkPeakLimiterFXFactory.h>
+#endif
+#ifdef WWISE_AK_METER_PLUGIN
+#include <AK/Plugin/AkMeterFXFactory.h>
+#endif
+#ifdef WWISE_AK_SILENCE_PLUGIN
+#include <AK/Plugin/AkSilenceSourceFactory.h>
+#endif
 
 // Necessary memory hooks
 namespace AK
@@ -148,6 +160,18 @@ s3eWwiseResult s3eWwiseSoundEngineInit(s3eWwiseInitSettings* in_pSettings, s3eWw
     // Plugins
 #ifdef WWISE_AK_ROOM_VERB_PLUGIN
     AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKCOMPANYID_AUDIOKINETIC, AKEFFECTID_ROOMVERB, CreateRoomVerbFX, CreateRoomVerbFXParams);
+#endif
+#ifdef WWISE_AK_COMPRESSOR_PLUGIN
+    AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKCOMPANYID_AUDIOKINETIC, AKEFFECTID_COMPRESSOR, CreateCompressorFX, CreateCompressorFXParams);
+#endif
+#ifdef WWISE_AK_PEAK_LIMITER_PLUGIN
+    AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKCOMPANYID_AUDIOKINETIC, AKEFFECTID_PEAKLIMITER, CreatePeakLimiterFX, CreatePeakLimiterFXParams);
+#endif
+#ifdef WWISE_AK_METER_PLUGIN
+    AK::SoundEngine::RegisterPlugin(AkPluginTypeEffect, AKCOMPANYID_AUDIOKINETIC, AKEFFECTID_METER, CreateMeterFX, CreateMeterFXParams);
+#endif
+#ifdef WWISE_AK_SILENCE_PLUGIN
+    AK::SoundEngine::RegisterPlugin(AkPluginTypeSource, AKCOMPANYID_AUDIOKINETIC, AKSOURCEID_SILENCE, CreateSilenceSource, CreateSilenceSourceParams);
 #endif
 
     // Codecs
