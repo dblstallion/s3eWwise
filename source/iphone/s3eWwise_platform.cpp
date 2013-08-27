@@ -8,17 +8,28 @@
  */
 #include "s3eWwise_internal.h"
 
+#include "s3eDevice.h"
+
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
+
+int32 applicationUnpaused(void* systemData, void* userData)
+{
+	AK::SoundEngine::iOS::WakeupFromSuspend();
+
+	return 0;
+}
 
 s3eResult s3eWwiseInit_platform()
 {
-    // Add any platform-specific initialisation code here
+    if(s3eDeviceRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationUnpaused, NULL) != S3E_RESULT_SUCCESS)
+		return S3E_RESULT_ERROR;
+	
     return S3E_RESULT_SUCCESS;
 }
 
 void s3eWwiseTerminate_platform()
 {
-    // Add any platform-specific termination code here
+    s3eDeviceUnRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationUnpaused);
 }
 
 s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
