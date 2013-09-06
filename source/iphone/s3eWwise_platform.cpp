@@ -15,6 +15,15 @@
 int32 applicationUnpaused(void* systemData, void* userData)
 {
 	AK::SoundEngine::iOS::WakeupFromSuspend();
+	
+	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(false);
+
+	return 0;
+}
+
+int32 applicationPaused(void* systemData, void* userData)
+{
+	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(true);
 
 	return 0;
 }
@@ -23,6 +32,9 @@ s3eResult s3eWwiseInit_platform()
 {
     if(s3eDeviceRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationUnpaused, NULL) != S3E_RESULT_SUCCESS)
 		return S3E_RESULT_ERROR;
+		
+	if(s3eDeviceRegister(S3E_DEVICE_PAUSE, (s3eCallback)applicationPaused, NULL) != S3E_RESULT_SUCCESS)
+		return S3E_RESULT_ERROR;
 	
     return S3E_RESULT_SUCCESS;
 }
@@ -30,6 +42,7 @@ s3eResult s3eWwiseInit_platform()
 void s3eWwiseTerminate_platform()
 {
     s3eDeviceUnRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationUnpaused);
+	s3eDeviceUnRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationPaused);
 }
 
 s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
@@ -54,6 +67,7 @@ s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettin
 	platformInitSettings.uSampleRate						= in_pPlatformSettings->uSampleRate;
 	platformInitSettings.uNumRefillsInVoice					= in_pPlatformSettings->uNumRefillsInVoice;
 	platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
+	platformInitSettings.bAppListensToInterruption			= true;
 	
     return (s3eWwiseResult)AK::SoundEngine::Init(&initSettings, &platformInitSettings);
 }
