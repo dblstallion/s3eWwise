@@ -101,6 +101,7 @@ if {{defined S3E_ANDROID}}
         #Add any android-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
+        AkFileHelpers.cpp
     }
 	
 	librarypath "$NDK_ROOT/platforms/android-9/arch-arm/usr/lib"
@@ -112,6 +113,7 @@ if {{defined S3E_ANDROID}}
 		libAkMusicEngine.a
 		libAkStreamMgr.a
 		OpenSLES
+		android
 	}
 
     if {{defined WWISE_AK_AAC_PLUGIN}}          	library libAkAACDecoder.a

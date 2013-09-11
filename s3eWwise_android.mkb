@@ -13,8 +13,8 @@ options
     output-name-debug="lib/android/libs3eWwise_d.so"
 }
 define S3E_BUILD_EXT
+define AK_OPTIMIZED
 
 subproject s3eWwise_build
 
-librarypath "Wwise/SDK/android-9_armeabi/Profile/lib"
-library libCommunicationCentral.a
+librarypath "Wwise/SDK/android-9_armeabi-v7a/Release/lib"

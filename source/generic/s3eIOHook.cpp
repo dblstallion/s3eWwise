@@ -3,6 +3,19 @@
 #include "s3eFile.h"
 #include "string.h"
 
+#ifdef S3E_ANDROID
+#define USE_AK_FILE_HELPERS 1
+#endif
+
+#if USE_AK_FILE_HELPERS
+#include "AkFileHelpers.h"
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
+#include "s3eEdk.h"
+#include "s3eEdk_android.h"
+#include <jni.h>
+#endif
+
 #define DEVICE_NAME AKTEXT("S3E Device")
 
 s3eIOHook::s3eIOHook() : m_deviceID( AK_INVALID_DEVICE_ID )
@@ -20,6 +33,22 @@ AKRESULT s3eIOHook::Init(const AkDeviceSettings &in_deviceSettings)
 		AKASSERT( !"s3eIOHook I/O hook only works with AK_SCHEDULER_BLOCKING devices" );
 		return AK_Fail;
 	}
+
+#if USE_AK_FILE_HELPERS && defined(S3E_ANDROID)
+    // JNI Code to get access to the asset manager
+    JNIEnv *env = s3eEdkJNIGetEnv();
+
+    // Find the LoaderActivity class using the environment
+    jclass LoaderActivity = env->FindClass("com/ideaworks3d/marmalade/LoaderActivity");
+    jfieldID fActivity = env->GetStaticFieldID(LoaderActivity, "m_Activity", "Lcom/ideaworks3d/marmalade/LoaderActivity;");
+    jobject m_Activity = env->GetStaticObjectField(LoaderActivity, fActivity);
+
+    // Call getAssets
+    jmethodID getAssets = env->GetMethodID(LoaderActivity, "getAssets", "()Landroid/content/res/AssetManager;");
+    jobject assetManager = env->CallObjectMethod(m_Activity, getAssets);
+
+    CAkFileHelpers::SetAssetManager(AAssetManager_fromJava(env, assetManager));
+#endif
 
 	// If the Stream Manager's File Location Resolver was not set yet, set this object as the
 	// File Location Resolver (this I/O hook is also able to resolve file location).
@@ -70,6 +99,29 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 {
 	io_bSyncOpen = true;
 
+#if USE_AK_FILE_HELPERS
+    switch (in_eOpenMode)
+    {
+        case AK_OpenModeRead:
+            break;
+        default:
+            AKASSERT( !"Invalid open mode" );
+		    return AK_InvalidParameter;
+    }
+
+    if (CAkFileHelpers::OpenBlocking(in_pszFileName, out_fileDesc.hFile) == AK_Success)
+    {
+        out_fileDesc.iFileSize			= AAsset_getLength((AAsset*)out_fileDesc.hFile);
+		out_fileDesc.uSector			= 0;
+		out_fileDesc.deviceID			= m_deviceID;
+		out_fileDesc.pCustomParam		= NULL;
+		out_fileDesc.uCustomParamSize	= 0;
+
+        return AK_Success;
+    }
+
+    return AK_Fail;
+#else
     const char *mode;
     switch ( in_eOpenMode )
 	{
@@ -88,7 +140,6 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 		default:
 			AKASSERT( !"Invalid open mode" );
 			return AK_InvalidParameter;
-			break;
 	}
 
     char *filename;
@@ -108,10 +159,15 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 	}
 
 	return AK_Fail;
+#endif
 }
 
 AKRESULT s3eIOHook::Read(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void *out_pBuffer, AkIOTransferInfo &io_transferInfo)
 {
+#if USE_AK_FILE_HELPERS
+    AkUInt32 out_readSize = 0;
+	return CAkFileHelpers::ReadBlocking(in_fileDesc.hFile, out_pBuffer, io_transferInfo.uFilePosition, io_transferInfo.uRequestedSize, out_readSize);
+#else
     int32 position = (int32)io_transferInfo.uFilePosition;
 
 	if( s3eFileSeek((s3eFile *)in_fileDesc.hFile, position, S3E_FILESEEK_SET) == S3E_RESULT_SUCCESS )
@@ -121,10 +177,14 @@ AKRESULT s3eIOHook::Read(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void *
 		   return AK_Success;
 	}
 	return AK_Fail;
+#endif
 }
 
 AKRESULT s3eIOHook::Write(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void *in_pData, AkIOTransferInfo &io_transferInfo)
 {
+#if USE_AK_FILE_HELPERS
+    return AK_Fail;
+#else
 	int32 position = (int32)io_transferInfo.uFilePosition;
 
 	if( s3eFileSeek((s3eFile *)in_fileDesc.hFile, position, S3E_FILESEEK_SET) == S3E_RESULT_SUCCESS )
@@ -137,11 +197,16 @@ AKRESULT s3eIOHook::Write(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void 
 		}
 	}
 	return AK_Fail;
+#endif
 }
 
 AKRESULT s3eIOHook::Close(AkFileDesc & in_fileDesc)
 {
+#if USE_AK_FILE_HELPERS
+    return CAkFileHelpers::CloseFile( in_fileDesc.hFile );
+#else
 	return s3eFileClose( (s3eFile *)in_fileDesc.hFile ) == S3E_RESULT_SUCCESS ? AK_Success : AK_Fail;
+#endif
 }
 
 AkUInt32 s3eIOHook::GetBlockSize(AkFileDesc &)
