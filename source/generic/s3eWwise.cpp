@@ -11,7 +11,7 @@ This file should perform any platform-indepedentent functionality
 
 #include "s3eWwise_internal.h"
 
-#include "s3eMemory.h"
+#include "s3eEdk.h"
 
 #include <stdio.h>
 
@@ -65,11 +65,11 @@ namespace AK
 {
 	void * AllocHook( size_t in_size )
 	{
-        return malloc(in_size);
+        return s3eEdkMallocOS(in_size);
 	}
 	void FreeHook( void * in_ptr )
 	{
-		free(in_ptr);
+		s3eEdkFreeOS(in_ptr);
 	}
 }
 
