@@ -12,7 +12,7 @@
 
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
 
-int32 applicationUnpaused(void* systemData, void* userData)
+static int32 applicationUnpaused(void* systemData, void* userData)
 {
 	AK::SoundEngine::iOS::WakeupFromSuspend();
 	
@@ -21,7 +21,7 @@ int32 applicationUnpaused(void* systemData, void* userData)
 	return 0;
 }
 
-int32 applicationPaused(void* systemData, void* userData)
+static int32 applicationPaused(void* systemData, void* userData)
 {
 	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(true);
 
