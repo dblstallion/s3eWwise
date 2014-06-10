@@ -169,6 +169,68 @@ if {{defined I3D_OS_LINUX and not defined S3E_ANDROID}}
     }
 }
 
+if {{defined I3D_OS_WP8}}
+{
+    includepath Wwise/SDK/samples/SoundEngine/Win32
+    
+    files
+    {
+        ["source"]
+        (use_first_found, source/wp8, source/generic, Wwise/SDK/samples/SoundEngine/Win32)
+        s3eWwise_platform.cpp
+        #Add any wp8-specific files here
+        
+        AkDefaultIOHookBlocking.cpp
+    }
+    
+    librarys
+	{
+        xaudio2.lib
+		AkMemoryMgr.lib
+		AkMusicEngine.lib
+		AkSoundEngine.lib
+		AkStreamMgr.lib
+	}
+
+    if {{defined WWISE_AK_AAC_PLUGIN}}          	library AkAACDecoder.lib
+    if {{defined WWISE_AK_ROOM_VERB_PLUGIN}}    	library AkRoomVerbFX.lib
+    if {{defined WWISE_AK_VORBIS_PLUGIN}}       	library AkVorbisDecoder.lib
+	if {{defined WWISE_AK_COMPRESSOR_PLUGIN}}    	library AkCompressorFX.lib
+	if {{defined WWISE_AK_PEAK_LIMITER_PLUGIN}}    	library AkPeakLimiterFX.lib
+	if {{defined WWISE_AK_METER_PLUGIN}}    		library AkMeterFX.lib
+	if {{defined WWISE_AK_SILENCE_PLUGIN}}    		library AkSilenceSource.lib
+}
+
+if {{defined I3D_OS_WS8}}
+{
+    files
+    {
+        ["h"]
+        (source/ws8)
+        s3eWwise_shim.h
+        ["source"]
+        (use_first_found, source/ws8, source/generic)
+        s3eWwise_platform.cpp
+        s3eWwise_shim.cpp
+        #Add any ws8-specific files here
+    }
+}
+
+if {{defined I3D_OS_WS81}}
+{
+    files
+    {
+        ["h"]
+        (source/ws81)
+        s3eWwise_shim.h
+        ["source"]
+        (use_first_found, source/ws81, source/generic)
+        s3eWwise_platform.cpp
+        s3eWwise_shim.cpp
+        #Add any ws81-specific files here
+    }
+}
+
 files
 {
     # Add any platform-independent files here

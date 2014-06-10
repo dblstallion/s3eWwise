@@ -107,6 +107,11 @@ After the frameworks have been manually set up, build the project for debug and 
 
 **Note**: You will have to repeat the above steps to include the framework every time you rebuild the extension. The xcode settings will not be saved in the MKB.
 
+Windows Phone 8
+---------------
+
+To build the WP8 extension, you need to download the [Windows Phone 8 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=35471) from Microsoft.
+
 
 Implementation Example
 ======================

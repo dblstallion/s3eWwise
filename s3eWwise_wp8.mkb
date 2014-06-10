@@ -11,7 +11,9 @@ options
     output-name="lib/wp8/$(PlatformTarget)/$(Configuration)/s3eWwiseExtension.dll"
 }
 
-subproject s3eWwise_wp8_cs
 define S3E_BUILD_EXT
+define AK_OPTIMIZED
+
+librarypath "Wwise/SDK/WinPhone_ARM_vc110/Release/lib"
 
 subproject s3eWwise_build

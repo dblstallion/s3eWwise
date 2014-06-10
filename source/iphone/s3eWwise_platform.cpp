@@ -16,14 +16,14 @@ static int32 applicationUnpaused(void* systemData, void* userData)
 {
 	AK::SoundEngine::iOS::WakeupFromSuspend();
 	
-	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(false);
+	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(false, false);
 
 	return 0;
 }
 
 static int32 applicationPaused(void* systemData, void* userData)
 {
-	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(true);
+	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(true, false);
 
 	return 0;
 }
@@ -67,7 +67,6 @@ s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettin
 	platformInitSettings.uSampleRate						= in_pPlatformSettings->uSampleRate;
 	platformInitSettings.uNumRefillsInVoice					= in_pPlatformSettings->uNumRefillsInVoice;
 	platformInitSettings.bMuteOtherApps						= in_pPlatformSettings->bMuteOtherApps;
-	platformInitSettings.bAppListensToInterruption			= true;
 	
     return (s3eWwiseResult)AK::SoundEngine::Init(&initSettings, &platformInitSettings);
 }

@@ -3,12 +3,7 @@
 #include "s3eFile.h"
 #include "string.h"
 
-#ifdef S3E_ANDROID
-#define USE_AK_FILE_HELPERS 1
-#endif
-
 #if USE_AK_FILE_HELPERS
-#include "AkFileHelpers.h"
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 #include "s3eEdk.h"
@@ -47,7 +42,7 @@ AKRESULT s3eIOHook::Init(const AkDeviceSettings &in_deviceSettings)
     jmethodID getAssets = env->GetMethodID(LoaderActivity, "getAssets", "()Landroid/content/res/AssetManager;");
     jobject assetManager = env->CallObjectMethod(m_Activity, getAssets);
 
-    CAkFileHelpers::SetAssetManager(AAssetManager_fromJava(env, assetManager));
+    m_helper.SetAssetManager(AAssetManager_fromJava(env, assetManager));
 #endif
 
 	// If the Stream Manager's File Location Resolver was not set yet, set this object as the
@@ -109,10 +104,8 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 		    return AK_InvalidParameter;
     }
 
-    if (CAkFileHelpers::OpenBlocking(in_pszFileName, out_fileDesc.hFile) == AK_Success)
+    if (m_helper.OpenBlocking(in_pszFileName, out_fileDesc) == AK_Success)
     {
-        out_fileDesc.iFileSize			= AAsset_getLength((AAsset*)out_fileDesc.hFile);
-		out_fileDesc.uSector			= 0;
 		out_fileDesc.deviceID			= m_deviceID;
 		out_fileDesc.pCustomParam		= NULL;
 		out_fileDesc.uCustomParamSize	= 0;
@@ -166,7 +159,7 @@ AKRESULT s3eIOHook::Read(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void *
 {
 #if USE_AK_FILE_HELPERS
     AkUInt32 out_readSize = 0;
-	return CAkFileHelpers::ReadBlocking(in_fileDesc.hFile, out_pBuffer, io_transferInfo.uFilePosition, io_transferInfo.uRequestedSize, out_readSize);
+	return m_helper.ReadBlocking(in_fileDesc, out_pBuffer, io_transferInfo.uFilePosition, io_transferInfo.uRequestedSize, out_readSize);
 #else
     int32 position = (int32)io_transferInfo.uFilePosition;
 
@@ -203,7 +196,7 @@ AKRESULT s3eIOHook::Write(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void 
 AKRESULT s3eIOHook::Close(AkFileDesc & in_fileDesc)
 {
 #if USE_AK_FILE_HELPERS
-    return CAkFileHelpers::CloseFile( in_fileDesc.hFile );
+    return m_helper.CloseFile( in_fileDesc );
 #else
 	return s3eFileClose( (s3eFile *)in_fileDesc.hFile ) == S3E_RESULT_SUCCESS ? AK_Success : AK_Fail;
 #endif

@@ -1,6 +1,14 @@
 #ifndef S3E_IO_HOOK_H
 #define S3E_IO_HOOK_H
 
+#ifdef S3E_ANDROID
+#define USE_AK_FILE_HELPERS 1
+#endif
+
+#if USE_AK_FILE_HELPERS
+#include "AkFileHelpers.h"
+#endif
+
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
 #include "AkFileLocationBase.h"
 
@@ -33,6 +41,9 @@ protected:
     AKRESULT OpenInternal(const AkOSChar *in_pszFileName, AkOpenMode in_eOpenMode, AkFileSystemFlags *in_pFlags, bool &io_bSyncOpen, AkFileDesc &out_fileDesc);
 
 	AkDeviceID	m_deviceID;
+#if USE_AK_FILE_HELPERS
+    CAkFileHelpers m_helper;
+#endif
 };
 
 #endif

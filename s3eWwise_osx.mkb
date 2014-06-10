@@ -14,8 +14,8 @@ options
     output-name-debug="lib/osx/libs3eWwise_d.dylib"
 }
 define S3E_BUILD_EXT
+define AK_OPTIMIZED
 
 subproject s3eWwise_build
 
-librarypath "Wwise/SDK/Mac/Profile(StaticCRT)/Lib"
-library CommunicationCentral
+librarypath "Wwise/SDK/Mac/Release(StaticCRT)/lib"
