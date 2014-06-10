@@ -180,6 +180,7 @@ if {{defined I3D_OS_WP8}}
         s3eWwise_platform.cpp
         #Add any wp8-specific files here
         
+        ThreadEmulation.cpp
         AkDefaultIOHookBlocking.cpp
     }
     
