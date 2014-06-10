@@ -1,0 +1,14 @@
+# Builder mkf file for the c# portion of the s3eWwise extension on wp8
+
+options
+{
+    csproj=s3eWwiseManaged
+}
+
+files
+{
+    (source/wp8)
+    AssemblyInfo.cs
+    s3eWwise.cs
+    
+}
