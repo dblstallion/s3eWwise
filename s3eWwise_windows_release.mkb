@@ -12,6 +12,6 @@ options
 define S3E_BUILD_EXT
 define AK_OPTIMIZED
 
-librarypath "Wwise/SDK/Win32_vc100/Release(StaticCRT)/lib"
+librarypath "Wwise/SDK/Win32_vc110/Release(StaticCRT)/lib"
 
 subproject s3eWwise_build

@@ -2,6 +2,11 @@
 # Builder mkb file for the s3eWwise extension on wp8
 platform WP8LOADER
 
+commands
+{
+	"setup_libs.py"
+}
+
 options
 {
     buildenv=vc11
@@ -12,8 +17,8 @@ options
 }
 
 define S3E_BUILD_EXT
+define AK_OPTIMIZED
 
 librarypath "Wwise/SDK/WinPhone_ARM_vc110/Debug/lib"
-library CommunicationCentral.lib
 
 subproject s3eWwise_build

@@ -21,3 +21,6 @@ iOSDispScaleFactor=200
 
 [TRACE]
 WWISE_VERBOSE=0
+
+[GL]
+PreCompileShaderBinaries=1

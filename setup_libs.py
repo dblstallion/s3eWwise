@@ -5,6 +5,10 @@ iOS_Lib_Folder = os.path.join('Wwise', 'SDK', 'iOS')
 iOS_Debug_Folder = os.path.join(iOS_Lib_Folder, 'Profile-iphoneos', 'lib')
 iOS_Release_Folder = os.path.join(iOS_Lib_Folder, 'Release-iphoneos', 'lib')
 
+Wp8_Lib_Folder = os.path.join('Wwise', 'SDK', 'WinPhone_ARM_vc110')
+Wp8_Debug_Folder = os.path.join(Wp8_Lib_Folder, 'Profile', 'lib')
+Wp8_Release_Folder = os.path.join(Wp8_Lib_Folder, 'Release', 'lib')
+
 # Useful function
 def forEachFile(dir, fn):
 	for file in os.listdir(dir):
@@ -31,3 +35,8 @@ print 'Copying from', iOS_Debug_Folder, 'to', iOS_Lib_Folder
 forEachFile(iOS_Debug_Folder, copyToWithDebug(iOS_Lib_Folder))
 print 'Copying from', iOS_Release_Folder, 'to', iOS_Lib_Folder
 forEachFile(iOS_Release_Folder, copyTo(iOS_Lib_Folder))
+
+print 'Copying from', Wp8_Debug_Folder, 'to', Wp8_Lib_Folder
+forEachFile(Wp8_Debug_Folder, copyToWithDebug(Wp8_Lib_Folder))
+print 'Copying from', Wp8_Release_Folder, 'to', Wp8_Lib_Folder
+forEachFile(Wp8_Release_Folder, copyTo(Wp8_Lib_Folder))

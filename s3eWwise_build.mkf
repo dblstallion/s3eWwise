@@ -186,6 +186,7 @@ if {{defined I3D_OS_WP8}}
     
     librarys
 	{
+        ws2_32.lib
         xaudio2.lib
 		AkMemoryMgr.lib
 		AkMusicEngine.lib

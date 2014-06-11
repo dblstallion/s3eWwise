@@ -11,7 +11,7 @@ options
 }
 define S3E_BUILD_EXT
 
-librarypath "Wwise/SDK/Win32_vc100/Profile(StaticCRT)/lib"
+librarypath "Wwise/SDK/Win32_vc110/Profile(StaticCRT)/lib"
 library CommunicationCentral.lib
 
 subproject s3eWwise_build

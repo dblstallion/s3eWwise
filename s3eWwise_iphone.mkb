@@ -12,6 +12,7 @@ options
     lib
     output-name="lib/iphone/libs3eWwise.a"
     output-name-debug="lib/iphone/libs3eWwise_d.a"
+    arm-arch=armv6
 }
 define S3E_BUILD_EXT
 
