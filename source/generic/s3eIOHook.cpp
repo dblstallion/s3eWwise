@@ -28,23 +28,23 @@ AKRESULT s3eIOHook::Init(const AkDeviceSettings &in_deviceSettings)
 		AKASSERT( !"s3eIOHook I/O hook only works with AK_SCHEDULER_BLOCKING devices" );
 		return AK_Fail;
 	}
-
+	
 #if USE_AK_FILE_HELPERS && defined(S3E_ANDROID)
     // JNI Code to get access to the asset manager
     JNIEnv *env = s3eEdkJNIGetEnv();
-
+	
     // Find the LoaderActivity class using the environment
     jclass LoaderActivity = env->FindClass("com/ideaworks3d/marmalade/LoaderActivity");
     jfieldID fActivity = env->GetStaticFieldID(LoaderActivity, "m_Activity", "Lcom/ideaworks3d/marmalade/LoaderActivity;");
     jobject m_Activity = env->GetStaticObjectField(LoaderActivity, fActivity);
-
+	
     // Call getAssets
     jmethodID getAssets = env->GetMethodID(LoaderActivity, "getAssets", "()Landroid/content/res/AssetManager;");
     jobject assetManager = env->CallObjectMethod(m_Activity, getAssets);
-
+	
     m_helper.SetAssetManager(AAssetManager_fromJava(env, assetManager));
 #endif
-
+	
 	// If the Stream Manager's File Location Resolver was not set yet, set this object as the
 	// File Location Resolver (this I/O hook is also able to resolve file location).
 	if ( !AK::StreamMgr::GetFileLocationResolver() )
@@ -103,17 +103,16 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
             AKASSERT( !"Invalid open mode" );
 		    return AK_InvalidParameter;
     }
-
-    if (m_helper.OpenBlocking(in_pszFileName, out_fileDesc) == AK_Success)
+	
+	//s3eDebugOutputString(in_pszFileName);
+	AKRESULT res = m_helper.OpenBlocking(in_pszFileName, out_fileDesc);
+    if (res == AK_Success)
     {
 		out_fileDesc.deviceID			= m_deviceID;
-		out_fileDesc.pCustomParam		= NULL;
-		out_fileDesc.uCustomParamSize	= 0;
-
-        return AK_Success;
+	    return AK_Success;
     }
-
-    return AK_Fail;
+	
+	return AK_Fail;
 #else
     const char *mode;
     switch ( in_eOpenMode )
@@ -133,6 +132,7 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 		default:
 			AKASSERT( !"Invalid open mode" );
 			return AK_InvalidParameter;
+			break;
 	}
 
     char *filename;
@@ -158,7 +158,8 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 AKRESULT s3eIOHook::Read(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void *out_pBuffer, AkIOTransferInfo &io_transferInfo)
 {
 #if USE_AK_FILE_HELPERS
-    AkUInt32 out_readSize = 0;
+	
+	AkUInt32 out_readSize = 0;
 	return m_helper.ReadBlocking(in_fileDesc, out_pBuffer, io_transferInfo.uFilePosition, io_transferInfo.uRequestedSize, out_readSize);
 #else
     int32 position = (int32)io_transferInfo.uFilePosition;
@@ -196,7 +197,8 @@ AKRESULT s3eIOHook::Write(AkFileDesc &in_fileDesc, const AkIoHeuristics &, void 
 AKRESULT s3eIOHook::Close(AkFileDesc & in_fileDesc)
 {
 #if USE_AK_FILE_HELPERS
-    return m_helper.CloseFile( in_fileDesc );
+    m_helper.CloseFile( in_fileDesc );
+	return AK_Success;
 #else
 	return s3eFileClose( (s3eFile *)in_fileDesc.hFile ) == S3E_RESULT_SUCCESS ? AK_Success : AK_Fail;
 #endif

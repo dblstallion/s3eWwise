@@ -48,6 +48,7 @@ void s3eWwiseTerminate_platform()
 s3eWwiseResult s3eWwiseSoundEngineInit_platform(s3eWwiseInitSettings* in_pSettings, s3eWwisePlatformInitSettings* in_pPlatformSettings)
 {
 	AkInitSettings initSettings;
+    AK::SoundEngine::GetDefaultInitSettings(initSettings);
 	initSettings.pfnAssertHook					= in_pSettings->pfnAssertHook;
 	initSettings.uMaxNumPaths					= in_pSettings->uMaxNumPaths;
 	initSettings.uMaxNumTransitions				= in_pSettings->uMaxNumTransitions;

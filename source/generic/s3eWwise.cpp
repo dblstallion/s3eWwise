@@ -13,8 +13,6 @@ This file should perform any platform-indepedentent functionality
 
 #include "s3eEdk.h"
 
-#include <stdio.h>
-
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
 #include <AK/SoundEngine/Common/AkModule.h>
 #include <AK/SoundEngine/Common/AkStreamMgrModule.h>
@@ -33,7 +31,7 @@ CAkDefaultIOHookBlocking g_lowLevelIO;
 
 #include "s3eIOHook.h"
 #include "AkFilePackageLowLevelIO.h"
-CAkFilePackageLowLevelIO<s3eIOHook> g_lowLevelIO;
+s3eFilePackageLowLevelIO g_lowLevelIO;
 
 #endif
 
@@ -65,11 +63,11 @@ namespace AK
 {
 	void * AllocHook( size_t in_size )
 	{
-        return s3eEdkMallocOS(in_size);
+        return malloc(in_size);
 	}
 	void FreeHook( void * in_ptr )
 	{
-		s3eEdkFreeOS(in_ptr);
+		free(in_ptr);
 	}
 }
 
