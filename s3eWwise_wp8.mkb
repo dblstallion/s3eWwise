@@ -21,4 +21,8 @@ define AK_OPTIMIZED
 
 librarypath "Wwise/SDK/WinPhone_ARM_vc110/Debug/lib"
 
+includepath Wwise/SDK/include
+includepath Wwise/SDK/samples/SoundEngine/Common
+includepath Wwise/SDK/samples/SoundEngine/Win32
+
 subproject s3eWwise_build

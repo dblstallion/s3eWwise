@@ -10,8 +10,13 @@ options
     output-name-debug="lib/win32/s3eWwise_d.dll"
 }
 define S3E_BUILD_EXT
+define UNICODE
 
 librarypath "Wwise/SDK/Win32_vc110/Profile(StaticCRT)/lib"
 library CommunicationCentral.lib
+
+includepath Wwise/SDK/include
+includepath Wwise/SDK/samples/SoundEngine/Common
+includepath Wwise/SDK/samples/SoundEngine/Win32
 
 subproject s3eWwise_build

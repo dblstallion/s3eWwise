@@ -47,7 +47,7 @@ deployments
 {
 	iphone-link-opts="-framework AudioToolbox -framework CoreAudio" #Use this to bring in any additional link options needed
 	iphone-link-libdir="lib/iphone"
-	iphone-link-libdir="Wwise/SDK/iOS"
+	iphone-link-libdir="Wwise/SDK-Apple/iOS"
 	iphone-link-lib="s3eWwise"
 	iphone-link-lib="AkMemoryMgr"
 	iphone-link-lib="AkMusicEngine"

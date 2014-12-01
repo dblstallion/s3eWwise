@@ -2,18 +2,21 @@
 # Builder mkb file for the s3eWwise extension on iphone
 platform IPHONE
 
-commands
-{
-	"setup_libs.py"
-}
+#commands
+#{
+#	"setup_libs.py"
+#}
 
 options
 {
     lib
     output-name="lib/iphone/libs3eWwise.a"
     output-name-debug="lib/iphone/libs3eWwise_d.a"
-    arm-arch=armv6
 }
 define S3E_BUILD_EXT
+
+includepath Wwise/SDK-Apple/include
+includepath Wwise/SDK-Apple/samples/SoundEngine/Common
+includepath Wwise/SDK-Apple/samples/SoundEngine/POSIX
 
 subproject s3eWwise_build

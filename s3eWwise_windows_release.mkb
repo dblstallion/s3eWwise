@@ -11,7 +11,12 @@ options
 }
 define S3E_BUILD_EXT
 define AK_OPTIMIZED
+define UNICODE
 
 librarypath "Wwise/SDK/Win32_vc110/Release(StaticCRT)/lib"
+
+includepath Wwise/SDK/include
+includepath Wwise/SDK/samples/SoundEngine/Common
+includepath Wwise/SDK/samples/SoundEngine/Win32
 
 subproject s3eWwise_build

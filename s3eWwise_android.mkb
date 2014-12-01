@@ -15,6 +15,10 @@ options
 define S3E_BUILD_EXT
 define AK_OPTIMIZED
 
-subproject s3eWwise_build
-
 librarypath "Wwise/SDK/android-9_armeabi-v7a/Release/lib"
+
+includepath Wwise/SDK/include
+includepath Wwise/SDK/samples/SoundEngine/Common
+includepath Wwise/SDK/samples/SoundEngine/Android
+
+subproject s3eWwise_build

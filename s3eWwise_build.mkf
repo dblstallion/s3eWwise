@@ -3,10 +3,8 @@
 # be overwritten (unless --force is specified) and is intended to be modified.
 display_name "Extensions/s3eWwise"
 
-includepath Wwise/SDK/include
 includepath source/h
 includepath h
-includepath Wwise/SDK/samples/SoundEngine/Common
 
 defines
 {
@@ -39,30 +37,48 @@ subproject "$MARMALADE_ROOT/s3e/edk"
 
 if {{defined I3D_OS_IPHONE}}
 {
-	includepath Wwise/SDK/samples/SoundEngine/POSIX
-	
     files
     {
         ["source"]
-        (use_first_found, source/iphone, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
+        (use_first_found, source/iphone, source/generic, Wwise/SDK-Apple/samples/SoundEngine/POSIX, Wwise/SDK-Apple/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
 		
 		AkDefaultIOHookBlocking.cpp
+        
+        AkDefaultLowLevelIODispatcher.cpp
+        AkFileLocationBase.cpp
+        AkFilePackage.cpp
+        AkFilePackageLUT.cpp
+    
+        ["h"]
+        AkDefaultLowLevelIODispatcher.h
+        AkFileLocationBase.h
+        AkFilePackage.h
+        AkFilePackageLUT.h
     }
 }
 
 if {{defined I3D_OS_WINDOWS}}
 {
-	includepath Wwise/SDK/samples/SoundEngine/Win32
-	
     files
     {
         ["source"]
-        (use_first_found, source/windows, source/generic, Wwise/SDK/samples/SoundEngine/Win32)
+        (use_first_found, source/windows, source/generic, Wwise/SDK/samples/SoundEngine/Win32, Wwise/SDK/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any windows-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
+        
+        AkDefaultLowLevelIODispatcher.cpp
+        AkFileLocationBase.cpp
+        AkFilePackage.cpp
+        AkFilePackageLUT.cpp
+    
+        ["h"]
+        AkDefaultLowLevelIODispatcher.h
+        AkFileLocationBase.h
+        AkFilePackage.h
+        AkFilePackageLUT.h
     }
 	
 	librarypath source/lib/win32
@@ -91,17 +107,26 @@ if {{defined I3D_OS_WINDOWS}}
 
 if {{defined S3E_ANDROID}}
 {
-	includepath Wwise/SDK/samples/SoundEngine/Android
-
     files
     {
         ["source"]
-        (use_first_found, source/android, source/generic, Wwise/SDK/samples/SoundEngine/Android)
+        (use_first_found, source/android, source/generic, Wwise/SDK/samples/SoundEngine/Android, Wwise/SDK/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any android-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
         AkFileHelpers.cpp
+        
+        AkDefaultLowLevelIODispatcher.cpp
+        AkFileLocationBase.cpp
+        AkFilePackage.cpp
+        AkFilePackageLUT.cpp
+    
+        ["h"]
+        AkDefaultLowLevelIODispatcher.h
+        AkFileLocationBase.h
+        AkFilePackage.h
+        AkFilePackageLUT.h
     }
 	
 	librarypath "$NDK_ROOT/platforms/android-9/arch-arm/usr/lib"
@@ -127,16 +152,25 @@ if {{defined S3E_ANDROID}}
 
 if {{defined I3D_OS_OSX}}
 {
-	includepath Wwise/SDK/samples/SoundEngine/POSIX
-	
     files
     {
         ["source"]
-        (use_first_found, source/osx, source/generic, Wwise/SDK/samples/SoundEngine/POSIX)
+        (use_first_found, source/osx, source/generic, Wwise/SDK-Apple/samples/SoundEngine/POSIX, Wwise/SDK-Apple/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any osx-specific files here
 		
 		AkDefaultIOHookBlocking.cpp
+        
+        AkDefaultLowLevelIODispatcher.cpp
+        AkFileLocationBase.cpp
+        AkFilePackage.cpp
+        AkFilePackageLUT.cpp
+    
+        ["h"]
+        AkDefaultLowLevelIODispatcher.h
+        AkFileLocationBase.h
+        AkFilePackage.h
+        AkFilePackageLUT.h
     }
 	
 	librarypath "/System/Library/Frameworks"
@@ -171,17 +205,26 @@ if {{defined I3D_OS_LINUX and not defined S3E_ANDROID}}
 
 if {{defined I3D_OS_WP8}}
 {
-    includepath Wwise/SDK/samples/SoundEngine/Win32
-    
     files
     {
         ["source"]
-        (use_first_found, source/wp8, source/generic, Wwise/SDK/samples/SoundEngine/Win32)
+        (use_first_found, source/wp8, source/generic, Wwise/SDK/samples/SoundEngine/Win32, Wwise/SDK/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any wp8-specific files here
         
         ThreadEmulation.cpp
         AkDefaultIOHookBlocking.cpp
+        
+        AkDefaultLowLevelIODispatcher.cpp
+        AkFileLocationBase.cpp
+        AkFilePackage.cpp
+        AkFilePackageLUT.cpp
+    
+        ["h"]
+        AkDefaultLowLevelIODispatcher.h
+        AkFileLocationBase.h
+        AkFilePackage.h
+        AkFilePackageLUT.h
     }
     
     librarys
@@ -241,24 +284,12 @@ files
     s3eWwise_register.cpp
     s3eWwise.cpp
 	s3eIOHook.cpp
-	
-    (Wwise/SDK/samples/SoundEngine/Common)
-    AkDefaultLowLevelIODispatcher.cpp
-    AkFileLocationBase.cpp
-	AkFilePackage.cpp
-	AkFilePackageLUT.cpp
 
     ["h"]
     (source/h)
     s3eWwise_internal.h
     s3eWwise_autodefs.h
     s3eIOHook.h
-    
-	(WWise/SDK/samples/SoundEngine/Common)
-    AkDefaultLowLevelIODispatcher.h
-    AkFileLocationBase.h
-    AkFilePackage.h
-    AkFilePackageLUT.h
 	
     ["docs"]
     (interface)
