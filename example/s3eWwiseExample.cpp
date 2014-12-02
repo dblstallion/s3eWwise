@@ -30,8 +30,11 @@ void initWwise()
     s3eWwiseMemSettings memSettings;
     memSettings.uMaxNumPools = 10;
 
-    s3eWwiseMemoryMgrInit(&memSettings);
-    s3eDebugOutputString("Wwise memory manager init");
+    s3eWwiseResult memoryMgr = s3eWwiseMemoryMgrInit(&memSettings);
+    if(memoryMgr  != s3eWwise_Success )
+        s3eDebugTracePrintf("Failed to init Wwise memory manager. Error code = %d", memoryMgr);
+    else
+        s3eDebugOutputString("Wwise memory manager init");
 
     s3eWwiseStreamMgrSettings streamSettings;
     s3eWwiseStreamMgrGetDefaultSettings(&streamSettings);
