@@ -72,37 +72,14 @@ namespace AK
 	}
 }
 
-static int32 applicationUnpaused(void* systemData, void* userData)
-{
-	AK::SoundEngine::WakeupFromSuspend();
-
-	return 0;
-}
-
-static int32 applicationPaused(void* systemData, void* userData)
-{
-	AK::SoundEngine::Suspend();
-
-	return 0;
-}
-
 s3eResult s3eWwiseInit()
 {
-    if(s3eDeviceRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationUnpaused, NULL) != S3E_RESULT_SUCCESS)
-		return S3E_RESULT_ERROR;
-		
-	if(s3eDeviceRegister(S3E_DEVICE_PAUSE, (s3eCallback)applicationPaused, NULL) != S3E_RESULT_SUCCESS)
-		return S3E_RESULT_ERROR;
-
     //Add any generic initialisation code here
     return s3eWwiseInit_platform();
 }
 
 void s3eWwiseTerminate()
 {
-    s3eDeviceUnRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationUnpaused);
-	s3eDeviceUnRegister(S3E_DEVICE_UNPAUSE, (s3eCallback)applicationPaused);
-
     //Add any generic termination code here
     s3eWwiseTerminate_platform();
 }

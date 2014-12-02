@@ -12,11 +12,11 @@ options
 define S3E_BUILD_EXT
 define UNICODE
 
-librarypath "Wwise/Wwise_v2014.1.1_build_5179/SDK/Win32_vc110/Profile(StaticCRT)/lib"
+librarypath "Wwise/Wwise_v2013.2.10_build_4884/SDK/Win32_vc110/Profile(StaticCRT)/lib"
 library CommunicationCentral.lib
 
-includepath Wwise/Wwise_v2014.1.1_build_5179/SDK/include
-includepath Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Common
-includepath Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Win32
+includepath Wwise/Wwise_v2013.2.10_build_4884/SDK/include
+includepath Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Common
+includepath Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Win32
 
 subproject s3eWwise_build

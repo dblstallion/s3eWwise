@@ -58,6 +58,7 @@ public:
 	{
 		//On android, pCustomParam must point to the location object.
 		io_fileDesc.pCustomParam = in_pPackage->GetFileDesc()->pCustomParam;
+        io_fileDesc.uCustomParamSize = in_pPackage->GetFileDesc()->uCustomParamSize;
 	}
 };
 

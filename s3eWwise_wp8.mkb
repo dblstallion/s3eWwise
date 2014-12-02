@@ -19,10 +19,10 @@ options
 define S3E_BUILD_EXT
 define AK_OPTIMIZED
 
-librarypath "Wwise/Wwise_v2014.1.1_build_5179/SDK/WinPhone_ARM_vc110/Debug/lib"
+librarypath "Wwise/Wwise_v2013.2.10_build_4884/SDK/WinPhone_ARM_vc110/Debug/lib"
 
-includepath Wwise/Wwise_v2014.1.1_build_5179/SDK/include
-includepath Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Common
-includepath Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Win32
+includepath Wwise/Wwise_v2013.2.10_build_4884/SDK/include
+includepath Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Common
+includepath Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Win32
 
 subproject s3eWwise_build

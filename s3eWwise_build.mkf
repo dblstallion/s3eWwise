@@ -40,7 +40,7 @@ if {{defined I3D_OS_IPHONE}}
     files
     {
         ["source"]
-        (use_first_found, source/iphone, source/generic, Wwise/Wwise_v2014.1.1_build_5179/SDK-Apple/samples/SoundEngine/POSIX, Wwise/Wwise_v2014.1.1_build_5179/SDK-Apple/samples/SoundEngine/Common)
+        (use_first_found, source/iphone, source/generic, Wwise/Wwise_v2013.2.10_build_4884/SDK-Apple/samples/SoundEngine/POSIX, Wwise/Wwise_v2013.2.10_build_4884/SDK-Apple/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
 		
 		AkDefaultIOHookBlocking.cpp
@@ -63,7 +63,7 @@ if {{defined I3D_OS_WINDOWS}}
     files
     {
         ["source"]
-        (use_first_found, source/windows, source/generic, Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Win32, Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Common)
+        (use_first_found, source/windows, source/generic, Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Win32, Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any windows-specific files here
 		
@@ -110,7 +110,7 @@ if {{defined S3E_ANDROID}}
     files
     {
         ["source"]
-        (use_first_found, source/android, source/generic, Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Android, Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Common)
+        (use_first_found, source/android, source/generic, Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Android, Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any android-specific files here
 		
@@ -155,7 +155,7 @@ if {{defined I3D_OS_OSX}}
     files
     {
         ["source"]
-        (use_first_found, source/osx, source/generic, Wwise/Wwise_v2014.1.1_build_5179/SDK-Apple/samples/SoundEngine/POSIX, Wwise/Wwise_v2014.1.1_build_5179/SDK-Apple/samples/SoundEngine/Common)
+        (use_first_found, source/osx, source/generic, Wwise/Wwise_v2013.2.10_build_4884/SDK-Apple/samples/SoundEngine/POSIX, Wwise/Wwise_v2013.2.10_build_4884/SDK-Apple/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any osx-specific files here
 		
@@ -208,7 +208,7 @@ if {{defined I3D_OS_WP8}}
     files
     {
         ["source"]
-        (use_first_found, source/wp8, source/generic, Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Win32, Wwise/Wwise_v2014.1.1_build_5179/SDK/samples/SoundEngine/Common)
+        (use_first_found, source/wp8, source/generic, Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Win32, Wwise/Wwise_v2013.2.10_build_4884/SDK/samples/SoundEngine/Common)
         s3eWwise_platform.cpp
         #Add any wp8-specific files here
         

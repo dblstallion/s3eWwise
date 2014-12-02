@@ -2,6 +2,7 @@
 #include "s3eTypes.h"
 #include "s3eFile.h"
 #include "string.h"
+#include "s3eDebug.h"
 
 #if USE_AK_FILE_HELPERS
 #include <android/asset_manager.h>
@@ -104,7 +105,7 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 		    return AK_InvalidParameter;
     }
 	
-	//s3eDebugOutputString(in_pszFileName);
+	s3eDebugOutputString(in_pszFileName);
 	AKRESULT res = m_helper.OpenBlocking(in_pszFileName, out_fileDesc);
     if (res == AK_Success)
     {
