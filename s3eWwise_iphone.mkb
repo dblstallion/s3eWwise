@@ -15,8 +15,8 @@ options
 }
 define S3E_BUILD_EXT
 
-includepath Wwise/SDK-Apple/include
-includepath Wwise/SDK-Apple/samples/SoundEngine/Common
-includepath Wwise/SDK-Apple/samples/SoundEngine/POSIX
+includepath Wwise/Wwise_v2014.1.1_build_5179/SDK-Apple/include
+includepath Wwise/Wwise_v2014.1.1_build_5179/SDK-Apple/samples/SoundEngine/Common
+includepath Wwise/Wwise_v2014.1.1_build_5179/SDK-Apple/samples/SoundEngine/POSIX
 
 subproject s3eWwise_build

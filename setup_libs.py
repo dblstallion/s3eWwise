@@ -1,11 +1,11 @@
 import shutil
 import os
 
-iOS_Lib_Folder = os.path.join('Wwise', 'SDK-Apple', 'iOS')
+iOS_Lib_Folder = os.path.join('Wwise', 'Wwise_v2014.1.1_build_5179', 'SDK-Apple', 'iOS')
 iOS_Debug_Folder = os.path.join(iOS_Lib_Folder, 'Profile-iphoneos', 'lib')
 iOS_Release_Folder = os.path.join(iOS_Lib_Folder, 'Release-iphoneos', 'lib')
 
-Wp8_Lib_Folder = os.path.join('Wwise', 'SDK', 'WinPhone_ARM_vc110')
+Wp8_Lib_Folder = os.path.join('Wwise', 'Wwise_v2014.1.1_build_5179', 'SDK', 'WinPhone_ARM_vc110')
 Wp8_Debug_Folder = os.path.join(Wp8_Lib_Folder, 'Profile', 'lib')
 Wp8_Release_Folder = os.path.join(Wp8_Lib_Folder, 'Release', 'lib')
 
