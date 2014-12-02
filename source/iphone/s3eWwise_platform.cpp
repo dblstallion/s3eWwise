@@ -14,16 +14,14 @@
 
 static int32 applicationUnpaused(void* systemData, void* userData)
 {
-	AK::SoundEngine::iOS::WakeupFromSuspend();
-	
-	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(false, false);
+	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(false);
 
 	return 0;
 }
 
 static int32 applicationPaused(void* systemData, void* userData)
 {
-	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(true, false);
+	AK::SoundEngine::iOS::ListenToAudioSessionInterruption(true);
 
 	return 0;
 }

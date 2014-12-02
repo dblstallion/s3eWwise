@@ -133,9 +133,9 @@ if {{defined S3E_ANDROID}}
 
 	library
 	{
+        libAkMusicEngine.a
 		libAkSoundEngine.a
 		libAkMemoryMgr.a
-		libAkMusicEngine.a
 		libAkStreamMgr.a
 		OpenSLES
 		android
