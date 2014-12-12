@@ -51,6 +51,9 @@ AKRESULT s3eIOHook::Init(const AkDeviceSettings &in_deviceSettings)
 	if ( !AK::StreamMgr::GetFileLocationResolver() )
 		AK::StreamMgr::SetFileLocationResolver( this );
 
+    // Init the file locations
+    m_helper.Init();
+    
 	// Create a device in the Stream Manager, specifying this as the hook.
 	m_deviceID = AK::StreamMgr::CreateDevice( in_deviceSettings, this );
 	if ( m_deviceID != AK_INVALID_DEVICE_ID )
@@ -113,7 +116,7 @@ AKRESULT s3eIOHook::OpenInternal(const AkOSChar* in_pszFileName, AkOpenMode in_e
 	    return AK_Success;
     }
 	
-	return AK_Fail;
+	return res;
 #else
     const char *mode;
     switch ( in_eOpenMode )
