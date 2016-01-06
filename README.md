@@ -87,6 +87,8 @@ Make sure you have the Marmalade SDK installed on your Mac, along with all its d
 Build the extension in the terminal by navigating to the s3eWwise folder and running `mkb --arm --iphone s3eWwise_iphone.mkb`.
 The Wwise libraries will be copied to the appropriate locations and the build will run for debug and release.
 
+**NOTE:** If encountering weird linker errors related to AK::SoundEngine - AudioKinetic changed the type of certain functions and it may be necessary to change the type of AkUIntPtr from "unsigned int" to "unsigned long" in order for these functions to link correctly
+
 Mac OSX
 -------
 
@@ -106,6 +108,8 @@ Once Xcode is running:
 After the frameworks have been manually set up, build the project for debug and release.
 
 **Note**: You will have to repeat the above steps to include the framework every time you rebuild the extension. The xcode settings will not be saved in the MKB.
+
+**NOTE:** If encountering weird linker errors related to AK::SoundEngine - AudioKinetic changed the type of certain functions and it may be necessary to change the type of AkUIntPtr from "unsigned int" to "unsigned long" in order for these functions to link correctly
 
 Windows Phone 8
 ---------------
